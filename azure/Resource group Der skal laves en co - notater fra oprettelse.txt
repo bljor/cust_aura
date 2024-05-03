@@ -1,0 +1,38 @@
+Resource group: Der skal laves en container resource som på hes integrationen... Alt skal ligge i en resource group, så den kan oprettes.
+
+		Infrastruktur skal ligge i en resource group for sig selv.
+
+
+
+
+Dokumentation af hvad scripts laver:
+
+
+CreateSubscription
+==================
+Krævede parametre:
+- landingZoneName	:	navnet på den nye landing zone som skal oprettes
+- environmentType	:	hvilken type af miljø indeholder den?
+- organization		:	hvilken del af virksomheden skal landing zone ejes af
+
+
+
+Trin for trin, hvad sker der
+1. Registrer et subscription hos Crayon
+
+
+
+Beskrivelse i ord:
+
+Subscriptions oprettes via Crayon (API integration), så først hentes credentials til at tilgå Crayons API fra IT-Drifts Key Vault i Azure (itdriftsecrets-kv-p-aura).
+
+Der etableres forbindelse (hentes et token) fra Crayon.
+
+Ud fra de parametre som dette script tager, kaldes et andet script (SubscriptionName.ps1) som danner det navn som subscription skal oprettes med.
+
+Navnet som blev genereret i seneste request, bliver sendt til Crayon for oprettelse af det nye subscription.
+
+Crayons API må der findes noget dokumentation på (ikke et akut behov, men der kan vel opstå noget).
+
+Oprettelsen sker via et POST til et API som Crayon sandsynligvis har noget dokumentation på?
+

@@ -1,0 +1,10 @@
+Name:					Address space:		Address range:			Address count:	Peered?
+aks-vnet-10268309			10.0.0.0/8		10.0.0.0-10.255.255.255		16,777,216	
+aks-vnet-11998959			10.0.0.0/8		10.0.0.0-10.255.255.255		16,777,216	
+aks-vnet-39957017			10.244.0.0/12		10.244.0.0-10.239.255.255	1,048,576	
+AuraVeeamVNET				172.18.0.0/16		172.18.0.0-172.18.255.255	65,536		
+dataplatform-snowflake-vnet-001-p-aura	10.132.128.0/22		10.132.128.0-10.132.131.255	1,024		Yes
+dataplatform-snowflake-vnet-001-p-dinel	10.199.0.0/22		10.199.0.0-10.199.3.255		1,024		Yes
+dataplatform-snowflake-vnet-001-t-aura	10.162.128.0/22		10.162.128.0-10.162.131.255	1,024		Yes
+dataplatform-snowflake-vnet-001-t-dinel	10.224.128.0/22		10.224.128.0-10.224.131.255	1,024		Yes
+

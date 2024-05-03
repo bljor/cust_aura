@@ -1,0 +1,54 @@
+Beskrivelse:
+Kortfattet vejledning til hvordan man opretter en app registration som kan sende mails via Graph API'et, og som yderligere begrænses til kun at kunne sende mail fra udvalgte bruger(es) mailbox.
+
+Først oprettes en App Registration, hvor man tildeler API rettigheden i Graph APIet som Mail.Send - denne rettigheder giver mulighed for at app registration kan sende mail på vegne af alle brugere.
+
+For at begrænse denne rettighed oprettes en Application Access Policy, som hjælper med at definere hvilke mailbokse app registration må tilgå.
+
+
+
+0. Oplysninger der skal anvendes
+- Application ID (på den nyligt oprettede app registration):	
+- Email adresse (på den nyligt oprettede (eller eksisterende) mail enablede security group)
+
+
+1. Opret MailEnabled Security Group
+- du kan også genbruge en eksisternde gruppe, hvis du allerede har en der er anvendelig til formålet
+- skal indeholde mail-adressen på den mailbox app registration skal have adgang til
+
+oprettelse:
+-----------
+New-DistributionGroup
+  -Name "AppRegistration-UserOnboardingWorkflow-ITHelpdeskMailboxAccess"
+  -Displayname "AppRegistration-UserOnboardingWorkflow-ITHelpdeskMailboxAccess"
+  -Type Security
+  -Members ithelpdesk@aura.dk
+  -PrimarySmtpAddress "AppRegistration-UserOnboardingWorkflow-ITHelpdeskMailboxAccess@aura.dk"
+
+
+2. Opret din app registration
+- laves som normalt
+- rettigheder der tildeles:
+   -> API Permissions, Add a permission
+	- Microsofdt Graph
+		Vælg "Application permissions"
+	- I select permissions, skriv Mail.Send og vælg den
+- slutteligt skal der laves "admin consent" for mail.send rettigheden
+
+
+3. Opret en Application Access Policy
+
+oprettelse:
+-----------
+New-ApplicationAccessPolicy
+  -AppId c80d4b67-e5b4-4460-ad63-44913300da80
+  -PolicyScopeGroupId AppRegistration-UserOnboardingWorkflow-ITHelpdeskMailboxAccess@aura.dk
+  -AccessRight RestrictAccess
+  -Description "Restrict this app to members of distribution group AppRegistration-UserOnboardingWorkflow-ITHelpdeskMailboxAccess"
+
+
+
+4. Test din Application Access Policy
+
+Test-ApplicationAccessPolicy -Identity ithelpdesk@aura.dk -AppId c80d4b67-e5b4-4460-ad63-44913300da80
+

@@ -1,0 +1,12 @@
+az ad group create --display-name AZ-ENTERPRISE-APPLICATION-DA-U-MDAS-dev-aura -description "This group gives access to the MDAS Enterprise APP Dev"
+
+
+
+az ad group create --display-name AZ-ENTERPRISE-APPLICATION-DA-U-MDAS-test-aura -description "This group gives access to the MDAS Enterprise APP Test" --security-enabled-only
+az ad group create --display-name AZ-ENTERPRISE-APPLICATION-DA-U-MDAS-pre-prod-aura -description "This group gives access to the MDAS Enterprise APP Pre-Prod" --security-enabled-only
+az ad group create --display-name AZ-ENTERPRISE-APPLICATION-DA-U-MDAS-prod-aura -description "This group gives access to the MDAS Enterprise APP Prod" --security-enabled-only
+
+az ad group create --display-name AZ-ENTERPRISE-APPLICATION-DA-U-refeed-dev-aura -description "This group gives access to the Refeed APP Dev" --security-enabled-only
+az ad group create --display-name AZ-ENTERPRISE-APPLICATION-DA-U-refeed-test-aura -description "This group gives access to the Refeed APP Test" --security-enabled-only
+az ad group create --display-name AZ-ENTERPRISE-APPLICATION-DA-U-refeed-pre-prod-aura -description "This group gives access to the Refeed APP Pre-Prod" --security-enabled-only
+az ad group create --display-name AZ-ENTERPRISE-APPLICATION-DA-U-refeed-prod-aura -description "This group gives access to the Refeed APP Prod" --security-enabled-only
