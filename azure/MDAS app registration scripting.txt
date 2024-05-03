@@ -1,0 +1,89 @@
+# Vis detaljer for App Registration med navnet sign-in-mdas
+$lookfor = "sign-in-mdas*"
+az ad app show --id (az ad app list --all | convertfrom-json | where-object {$_.displayname -like $lookfor} | select id).id
+
+
+
+az ad app show --id (az ad app list --all | convertfrom-json | where-object {$_.displayname -like $lookfor} | select id).id
+
+
+az ad app show --id b0f3b4ff-af13-46e1-8415-36e08acbf4fc | convertfrom-json
+
+
+KOMMANDO TIL OPRETTELSE, TROR DEN VIRKER - SER FORNUFTIGT UD VED SAMMENLIGNING I AZURE AD
+az ad app create --display-name test0001-ext-bjo-slettes --app-roles @app-roles.json --enable-id-token-issuance --required-resource-access @resource-access.json --web-redirect-uris "https://localhost:44368/signin-oidc" "https://mdas.dev.aura.dk:44369/signin-oidc"
+
+
+Mangler oprettelse af Enterprise Application, den skal måske oprettes manuelt via
+
+az ad sp create --id (
+
+
+Hent kun app ID ud i en variabel via ap
+$appid = $(az ad app list --displayname $newapp --query [].appId -o tsv)
+
+
+
+OPRETTELSE AF BÅDE APP REGISTRATION OG ENTERPRISE APPLICATION - START HER:
+
+$newapp = "test0001-ext-bjo-slettes"
+$apiid = "00000003-0000-0000-c000-000000000000"			# Microsoft Entra API
+$apiperm = "e1fe6dd8-ba31-4d61-89e7-88639da4683d=Scope"		# Hvilke rettigheder der skal tildeles
+$permscope = "User.Read"					# På hvilket niveau skal adgang til deles
+
+$appid = (az ad app create --display-name $newapp --app-roles @app-roles.json --enable-id-token-issuance --required-resource-access @resource-access.json --web-redirect-uris "https://localhost:44368/signin-oidc" "https://mdas.dev.aura.dk:44369/signin-oidc" | convertfrom-json | select appid).appid
+
+
+az ad sp create-for-rbac -n $newapp 
+
+az ad app permission add --id $appid --api $apiid --api-permissions $apiperm
+
+az ad app permission grant --id $appid --api $apiid --scope $permscope
+
+
+#az ad sp list --display-name $newapp
+
+
+
+
+
+-------------------------
+Indhold af app-roles.json
+-------------------------
+[{
+    "allowedMemberTypes": [
+      "User"
+    ],
+    "description": "Members will be granted access to? Rasmus needs to specify)",
+    "displayName": "AZ-ENTERPRISE-APPLICATION-DA-U-MDAS-D-DINEL",
+    "isEnabled": "true",
+    "value": "AZ-ENTERPRISE-APPLICATION-DA-U-MDAS-D-DINEL"
+}]
+
+
+-------------------------------
+Indhold af resource-access.json
+-------------------------------
+[{
+    "resourceAccess": [
+        {
+            "id": "e1fe6dd8-ba31-4d61-89e7-88639da4683d",
+            "type": "Scope"
+        }
+    ],
+    "resourceAppId": "00000003-0000-0000-c000-000000000000",
+    }
+]
+
+
+
+
+----------------------------------------
+servicePrincipalLockConfiguration	: skal konfigureres
+
+tags					: bør vel konfigureres
+
+web: implicitGrantSettings/enableIdTokenIssuance	= true				Svarer til "Implicit grant and hybrid flows, ID tokens (used for implicit and hybrid flows)						sandsynligvis = --enable-id-token-issuance
+     redirectUriSettings/uri = "https://localhosts:44368/signin-oidc"
+     redirectUriSettings/uri = "https://mdas.dev.aura.dk:44369/signin-oidc"
+     redirectUris:	https://localhost:44368/signin-oidc https://mdas.dev.aura.dk:44369/signin-oidc			--web-redirect-uris

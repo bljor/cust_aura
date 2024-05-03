@@ -1,0 +1,24 @@
+App Registration for MDAS:
+
+
+0. Opret Gruppe i Entra AD (gruppen som skal have adgang til app registration / enterprise application)
+1. Opret App Registration
+- az ad app create
+2. Opret Enterprise Application
+- az ad sp create
+3. Tildel API rettigheder til Enterprise Application
+- az ad app permission add
+- az ad app permission grant
+4. Giv gruppen adgang til Enterprise Application
+
+
+
+
+
+To Do:
+------
+1. Enterprise Application: Der er noget galt med Permissions, på test-app tror jeg det ser rigtigt ud (som det hele tiden har gjort),
+   men i drift har noget måske ændret sig? Hvis det har, så ser spørgsmålet om det er disse rettigheder som
+   skal afspejles?
+
+2. App Registration: 
