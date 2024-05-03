@@ -1,0 +1,83 @@
+Application (client) ID:	c80d4b67-e5b4-4460-ad63-44913300da80
+Directory (tenant) ID:		3edc1f09-0806-41b0-af0b-50944799113a
+
+Client secrets:
+
+Description:	loginsecret
+Expires:	2/7/2026
+Value:		(removed)
+Secret ID:	7e69b387-199a-4c5b-85c2-ba1ec00f7492
+
+Security group:	AppRegistration-UserOnboardingWorkflow-ITHelpdeskMailboxAccess
+Sec.group mail:	AppRegistration-UserOnboardingWorkflow-ITHelpdeskMailboxAccess@aura.dk
+
+
+
+https://learn.microsoft.com/en-us/graph/auth-limit-mailbox-access
+
+
+
+New-ApplicationAccessPolicy -AppId e7e4dbfc-046f-4074-9b3b-2ae8f144f59b -PolicyScopeGroupId EvenUsers@contoso.com -AccessRight RestrictAccess -Description "Restrict this app to members of distribution group EvenUsers."
+
+Test-ApplicationAccessPolicy -Identity user1@contoso.com -AppId e7e4dbfc-046-4074-9b3b-2ae8f144f59b
+
+Get-DistributionGroup -ResultSize unlimited -Filter "RecipientTypeDetails -eq 'MailUniversalSecurityGroup'"
+
+
+Test-ApplicationAccessPolicy -Identity ithelpdesk@aura.dk -AppId c80d4b67-e5b4-4460-ad63-44913300da80
+
+
+New-ApplicationAccessPolicy -AppId c80d4b67-e5b4-4460-ad63-44913300da80 -PolicyScopeGroupId AppRegistration-UserOnboardingWorkflow-ITHelpdeskMailboxAccess@aura.dk -AccessRight RestrictAccess -Description "Restrict this app to members of distribution group AppRegistration-UserOnboardingWorkflow-ITHelpdeskMailboxAccess"
+
+
+New-DistributionGroup -Name "AppRegistration-UserOnboardingWorkflow-ITHelpdeskMailboxAccess" -DisplayName "AppRegistration-UserOnboardingWorkflow-ITHelpdeskMailboxAccess" -Type Security -Members ithelpdesk@aura.dk -PrimarySmtpAddress "AppRegistration-UserOnboardingWorkflow-ITHelpdeskMailboxAccess@aura.dk"
+
+
+New-DistributionGroup
+   [-Name] <String>
+   [-Alias <String>]
+   [-ArbitrationMailbox <MailboxIdParameter>]
+   [-BccBlocked <Boolean>]
+   [-BypassNestedModerationEnabled <Boolean>]
+   [-Confirm]
+   [-CopyOwnerToMember]
+   [-Description <MultiValueProperty>]
+   [-DisplayName <String>]
+   [-DomainController <Fqdn>]
+   [-HiddenGroupMembershipEnabled]
+   [-IgnoreNamingPolicy]
+   [-ManagedBy <MultiValuedProperty>]
+   [-MemberDepartRestriction <MemberUpdateType>]
+   [-MemberJoinRestriction <MemberUpdateType>]
+   [-Members <MultiValuedProperty>]
+   [-ModeratedBy <MultiValuedProperty>]
+   [-ModerationEnabled <Boolean>]
+   [-Notes <String>]
+   [-OrganizationalUnit <OrganizationalUnitIdParameter>]
+   [-PrimarySmtpAddress <SmtpAddress>]
+   [-RequireSenderAuthenticationEnabled <Boolean>]
+   [-RoomList]
+   [-SamAccountName <String>]
+   [-SendModerationNotifications <TransportModerationNotificationFlags>]
+   [-Type <GroupType>]
+   [-WhatIf]
+   [<CommonParameters>]
+
+
+
+
+Slet gruppen AppReg-UserOnboardingWorkflow-ITHelpdeskMailboxAccess (can only be performed by the manager)
+
+
+
+SharePoint adgang:
+Tilføjet Graph API access til Sites.Selected.
+
+Dernæst følgende:
+
+https://techcommunity.microsoft.com/t5/microsoft-sharepoint-blog/develop-applications-that-use-sites-selected-permissions-for-spo/ba-p/3790476
+
+
+https://devblogs.microsoft.com/microsoft365dev/controlling-app-access-on-specific-sharepoint-site-collections/
+
+
