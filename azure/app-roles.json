@@ -1,0 +1,9 @@
+[{
+    "allowedMemberTypes": [
+      "User"
+    ],
+    "description": "Members will be granted access to? Rasmus needs to specify)",
+    "displayName": "AZ-ENTERPRISE-APPLICATION-DA-U-MDAS-D-DINEL",
+    "isEnabled": "true",
+    "value": "AZ-ENTERPRISE-APPLICATION-DA-U-MDAS-D-DINEL"
+}]
