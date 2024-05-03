@@ -1,0 +1,129 @@
+Defender - anbefalede indstillinger
+
+
+
+MICROSOFT DEFENDER XDR:
+- Email notofications		(manglende opsætning for hhv. Incidents, Actions og Threat Analytics)
+
+- Alert service settings:
+  - High-impace alerts only (Default) og den nuværende setting. Også anbefalet til en start.
+  - All alerts (Default) og den nuværende setting. Også anbefalet til en start.
+
+- Permissions and roles
+
+- Streaming API
+
+- Multi-tenant content source
+
+- Asset rule management
+
+- Alert tuning
+
+- Identity automated response
+
+
+ENDPOINTS:
+- Advanced features
+- Licenses
+- Email notifications
+- Auto remediation
+
+- Roles
+- Device groups
+
+- SIEM
+
+- Alert suppression
+- Indicators
+- Process Memory Indicators
+- Web content filtering
+- Automation uploads
+- Automation folder exclusions
+- Asset rule management
+
+- Enforcement scope
+- Intune Permissions
+
+- Onboarding
+- Offboarding
+
+- Assessment jobs
+
+
+EMAIL AND COLLABORATION:
+
+- User reported settings
+- User tags
+- Priority account protection
+- Microsoft Teams protection
+
+
+IDENTITIES:
+
+- Sensors
+- Directory services accounts
+- Manage action accounts
+- VPN
+- Health issues
+- Advanced settings
+- About
+
+- Sensitive
+- Honeytoken
+- Exchangeserver
+
+- Global excluded entities
+- Exclusions by detection rule
+- Automated response exclusions
+
+- Health issues notifications
+- Alert notifications
+- Syslog notifications
+
+
+DEVICE DISCOVERY:
+
+- Discovery setup
+- Exclusions
+- Monitored networks
+- Enterprise IoT
+- Authenticated scans
+
+
+CLOUD APPS:
+
+- About
+- Organization details
+- Mail settings
+- Scoped deployment and privacy
+- IP address ranges
+- User groups
+- API tokens
+- SIEM agents
+- Playbooks
+
+- My email notifications
+
+- Score metrics
+- Snapshot reports
+- Continuous reports
+- Automatic log upload
+- App Tags
+- Exclude entities
+- Microsoft Defender for Endpoint
+- User enrichment
+- Anonymization
+- Delete data
+
+- App Connectors
+Conditional Access App Control apps
+
+- Admin quarantine
+- Microsoft Information Protection
+- Files
+
+- General settings
+- User monitoring
+- Device identification
+- App onboarding / maintenance
+- Service status

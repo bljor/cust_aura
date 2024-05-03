@@ -1,0 +1,28 @@
+"C:\Program Files\ImageMagick-7.0.8-Q16\convert" "\\mgmt01\prtg\D3\D03.tif" "\\mgmt01\prtg\D3\D3.png"
+"C:\Program Files\ImageMagick-7.0.8-Q16\convert" -background none -gravity Center "\\mgmt01\prtg\D3\D3-0.png" "\\mgmt01\prtg\D3\D3-1.png" "\\mgmt01\prtg\D3\D3-2.png" -append "\\mgmt01\prtg\D3\D03.png"
+"C:\Program Files\ImageMagick-7.0.8-Q16\convert" -crop 624x600+96+0 "\\mgmt01\prtg\D3\D3-0.png" "\\mgmt01\prtg\D3\D3-0-ny.png"
+"C:\Program Files\ImageMagick-7.0.8-Q16\convert" -crop 624x600+96+0 "\\mgmt01\prtg\D3\D3-1.png" "\\mgmt01\prtg\D3\D3-1-ny.png"
+"C:\Program Files\ImageMagick-7.0.8-Q16\convert" -crop 624x600+96+0 "\\mgmt01\prtg\D3\D3-2.png" "\\mgmt01\prtg\D3\D3-2-ny.png"
+"C:\Program Files\ImageMagick-7.0.8-Q16\convert" -background none -gravity Center "\\mgmt01\prtg\D3\D3-0-ny.png" "\\mgmt01\prtg\D3\D3-1-ny.png" "\\mgmt01\prtg\D3\D3-2-ny.png" +append "\\mgmt01\prtg\D3\D03.png"
+del "\\mgmt01\prtg\D3\D3-0-ny.png"
+del "\\mgmt01\prtg\D3\D3-1-ny.png"
+del "\\mgmt01\prtg\D3\D3-2-ny.png"
+del "\\mgmt01\prtg\D3\D3-0.png"
+del "\\mgmt01\prtg\D3\D3-1.png"
+del "\\mgmt01\prtg\D3\D3-2.png"
+
+
+"C:\Program Files\ImageMagick-7.0.8-Q16\convert" "\\mgmt01\prtg\D4\D04.tif" "\\mgmt01\prtg\D4\D4.png"
+"C:\Program Files\ImageMagick-7.0.8-Q16\convert" -background none -gravity Center "\\mgmt01\prtg\D4\D4-0.png" "\\mgmt01\prtg\D4\D4-1.png" "\\mgmt01\prtg\D4\D4-2.png" -append "\\mgmt01\prtg\D4\D04.png"
+"C:\Program Files\ImageMagick-7.0.8-Q16\convert" -crop 624x600+96+0 "\\mgmt01\prtg\D4\D4-0.png" "\\mgmt01\prtg\D4\D4-0-ny.png"
+"C:\Program Files\ImageMagick-7.0.8-Q16\convert" -crop 624x600+96+0 "\\mgmt01\prtg\D4\D4-1.png" "\\mgmt01\prtg\D4\D4-1-ny.png"
+"C:\Program Files\ImageMagick-7.0.8-Q16\convert" -crop 624x600+96+0 "\\mgmt01\prtg\D4\D4-2.png" "\\mgmt01\prtg\D4\D4-2-ny.png"
+"C:\Program Files\ImageMagick-7.0.8-Q16\convert" -background none -gravity Center "\\mgmt01\prtg\D4\D4-0-ny.png" "\\mgmt01\prtg\D4\D4-1-ny.png" "\\mgmt01\prtg\D4\D4-2-ny.png" +append "\\mgmt01\prtg\D4\D04.png"
+del "\\mgmt01\prtg\D4\D4-0-ny.png"
+del "\\mgmt01\prtg\D4\D4-1-ny.png"
+del "\\mgmt01\prtg\D4\D4-2-ny.png"
+del "\\mgmt01\prtg\D4\D4-0.png"
+del "\\mgmt01\prtg\D4\D4-1.png"
+del "\\mgmt01\prtg\D4\D4-2.png"
+
+

@@ -1,0 +1,165 @@
+Plan for flytning af CA fra PKI01 og PKI02 (Windows Server 2012 R2) til nye servere (Windows Server 2022)
+
+
+1. Verificer at %SYSTEMROOT% ligger placeret samme sted på de gamle og de nye servere:
+-  PKI01 = C:\Windows
+-  PKI02 = C:\Windows
+
+2. Verificer at kilde-servere begge er 64-bit operativsystemer (typisk ikke et problem fra 2008 og nyere)
+-  PKI01 = OK
+-  PKI02 = OK
+
+3. Check Certificate Templates (kun på Enterprise CA)
+-  PKI01 = Stand-alone, så ingen Templates
+-  PKI02 = Templates, (ligger i AD'et, kan ses på både AD01 og AD02)
+
+
+PKI01
+=====
+4. Backup CA konfiguration på PKI01
+-  Opret folder til backup filer (c:\pki01_backup)
+-  Højreklik på "Aura Root CA" i certsrv.msc
+-  Vælg "All tasks", "Back up CA..."
+   - Klik Next
+   - Vælg export af:
+     - Private key and CA Certificate
+     - Certificate database and certificate database log
+       (Der skal ikke sættes kryds i "Perform incremental backup")
+     - Back up to this location: c:\pki01_backup\
+     - Klik Next
+   - Angiv et password til kryptering af backup filer (brug lokal administrator password fra KeePass)
+   - Klik Next
+   - Du bliver bedt om at bekræfte backuppen
+   - Klik Finish
+   - Kopier backup data til en delt lokation \\aura.dk\services\Deployment\pki_backup\pki01_backup
+
+   #- PowerShell : Backup-CaRoleService -Path c:\pki01_backup -Password (ConvertTo-SecureString "password1" -AsPlainText -Force) -Force -KeepLog
+
+
+6. Lav backup af Registry Settings for CA'en på PKI01
+  - Brug Registry Editor, og eksportér følgende subkey:
+    HKLM\SYSTEM\CurrentControlSet\Services\CertSvc\Configuration
+  - Gem filen i \\aura.dk\services\Deployment\pki_backup\pki01_backup\pki01_reg_backup.reg
+
+7. Eksporter CRL Distribution Point fra den PKI01. Disse indstillinger skal laves på den nye server.
+-  cmd.exe
+-  pkiview
+-  Eksportér konfigurationen (men hvordan? Kan ikke finde det)
+
+8. Afinstaller Certificate Services på PKI01
+
+9. Omdøb PKI01 til OLDPKI01
+
+10. Omdøb den nye server til PKI01
+
+11. Installer Certificate Services på den nye server
+-  Add-Remove Programs, Add/Remove Windows Components
+   - Vælg Certificate Services" og klik Next
+   - Vælg den rette CA Type (sandsynligvis Stand-alone eller Enterprise?)
+   - Vælg "Use custom settings to generate the key pari and CA certificate"
+   - Klik Next
+   - Klik Import, og indtast stien hvor backuppen fra PKI01 er placeret:
+     \\aura.dk\services\Deployment\pki_backup\pki01_backup
+   - Klik OK
+   - Verificér at der er kryds i "Use existing keys" i dialogboksen "Public and Private Key Pair".
+   - Klik Next
+   - Klik Next (for 2. gang)
+   - Acceptér Certificate Database Settings default, og klik Next - derefter Finish
+
+12. Stop Certificate Services servicen
+
+13. Importér registry filen med backup fra:
+    \\aura.dk\services\Deployment\pki_backup\pki01_backup\pki01_reg_backup.reg
+
+14. Brug Certificate Authority snap-in til at lave restore af CA databasen:
+-  In the snap in: Right click CA name, select All Tasks and Restore CA
+-  Klik Next, og vælg "Private key and CA certificate"
+-  Klik "Certificate database and certificate database log"
+-  Indtast backup lokation:
+   \\aura.dk\services\Deployment\pki_backup\pki01_backup
+-  Verificér backup indstillinger. Den bør vise "The Issued Log" og "Pending Requests"
+-  Klik Finish, og Yes for at genstarte Certificate Services efter databasen er restored.
+
+
+
+
+PKI02
+=====
+4. Backup CA konfiguration på PKI02
+-  Opret folder til backup filer (c:\pki02_backup)
+-  Højreklik på "Aura Issuingt CA" i certsrv.msc
+-  Vælg "All tasks", "Back up CA..."
+   - Klik Next
+   - Vælg export af:
+     - Private key and CA Certificate
+     - Certificate database and certificate database log
+       (Der skal ikke sættes kryds i "Perform incremental backup")
+     - Back up to this location: c:\pki02_backup\
+     - Klik Next
+   - Angiv et password til kryptering af backup filer (brug bjoadmin password)
+   - Klik Next
+   - Du bliver bedt om at bekræfte backuppen
+   - Klik Finish
+   - Kopier backup data til en delt lokation \\aura.dk\services\Deployment\pki_backup\pki02_backup
+
+   #- PowerShell : Backup-CaRoleService -Path c:\pki02_backup -Password (ConvertTo-SecureString "password1" -AsPlainText -Force) -Force -KeepLog
+
+5. Eksporter liste over templates, der skal publiceres/enrolles på den nye server
+  - I certsrv.msc, højreklik på "Certificate Templates" folderen
+  - Vælg "Export list" og gem filen i \\aura.dk\services\Deployment\pki_backup\pki02_backup\templates_list.txt
+
+6. Lav backup af Registry Settings for CA'en på PKI01
+  - Brug Registry Editor, og eksportér følgende subkey:
+    HKLM\SYSTEM\CurrentControlSet\Services\CertSvc\Configuration
+  - Gem filen i \\aura.dk\services\Deployment\pki_backup\pki02_backup\pki02_reg_backup.reg
+
+7. Eksporter CRL Distribution Point fra den PKI01. Disse indstillinger skal laves på den nye server.
+-  cmd.exe
+-  pkiview
+-  Eksportér konfigurationen (men hvordan? Kan ikke finde det)
+
+8. Afinstaller Certificate Services på PKI02
+
+9. Omdøb PKI02 til OLDPKI02
+
+10. Omdøb den nye server til PKI02
+
+11. Installer Certificate Services på den nye server
+-  Add-Remove Programs, Add/Remove Windows Components
+   - Vælg Certificate Services" og klik Next
+   - Vælg den rette CA Type (sandsynligvis Stand-alone eller Enterprise?)
+   - Vælg "Use custom settings to generate the key pari and CA certificate"
+   - Klik Next
+   - Klik Import, og indtast stien hvor backuppen fra PKI01 er placeret:
+     \\aura.dk\services\Deployment\pki_backup\pki02_backup
+   - Klik OK
+   - Verificér at der er kryds i "Use existing keys" i dialogboksen "Public and Private Key Pair".
+   - Klik Next
+   - Klik Next (for 2. gang)
+   - Acceptér Certificate Database Settings default, og klik Next - derefter Finish
+
+12. Stop Certificate Services servicen
+
+13. Importér registry filen med backup fra:
+    \\aura.dk\services\Deployment\pki_backup\pki02_backup\pki02_reg_backup.reg
+
+14. Brug Certificate Authority snap-in til at lave restore af CA databasen:
+-  In the snap in: Right click CA name, select All Tasks and Restore CA
+-  Klik Next, og vælg "Private key and CA certificate"
+-  Klik "Certificate database and certificate database log"
+-  Indtast backup lokation:
+   \\aura.dk\services\Deployment\pki_backup\pki02_backup
+-  Verificér backup indstillinger. Den bør vise "The Issued Log" og "Pending Requests"
+-  Klik Finish, og Yes for at genstarte Certificate Services efter databasen er restored.
+
+15. Brug Certificate Authority snap-in til at "aktivere" Certificate Templates igen:
+-  Kig i filen \\aura.dk\services\Deployment\pki_backup\pki02_backup\templates_list.txt
+   indeholder en oversigt over hvilke Templates der skal re-enrolles
+- Højreklik på Certificate Templates folderen, og vælg "New - Certificate Template to Reissue"
+- Sidste step skal gentages for hver template der skal aktiveres.
+
+
+16. Scheduled Tasks på PKI02 der laver backup (.cmd fil) ... Jobs kører ikke på PKI01 (ikke nødvendig),
+    serveren er slukket - så der vil altid blive taget en konsistent backup af PKI databasen, når Veeam
+    tager backup.
+

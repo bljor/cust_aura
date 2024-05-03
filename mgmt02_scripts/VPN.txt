@@ -1,0 +1,12 @@
+
+
+enable
+ArGB3suwAzKE4752
+
+term pager 0
+
+show vpn-sessiondb anyconnect | include (Username|Duration|Bytes Tx|Bytes Rx|Public IP)
+
+
+exit
+

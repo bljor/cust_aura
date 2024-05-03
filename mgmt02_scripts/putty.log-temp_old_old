@@ -1,0 +1,22 @@
+AURAFW1# term pager 0
+
+AURAFW1# 
+
+AURAFW1# show vpn-sessiondb anyconnect | include (Username|Duration|Bytes Tx|By$ct | include (Username|Duration|Bytes Tx|Byt                         es Rx|Public IP)show vpn-sessiondb anyconnect | include (Username|Duration|Bytes Tx|B$
+Username     : rni@aura.dk            Index        : 61452
+Assigned IP  : 192.168.80.114         Public IP    : 85.191.71.147
+Bytes Tx     : 79246424               Bytes Rx     : 25900896
+Duration     : 7h:19m:21s
+Username     : csl                    Index        : 64320
+Assigned IP  : 192.168.80.101         Public IP    : 87.49.45.157
+Bytes Tx     : 42576414               Bytes Rx     : 13494625
+Duration     : 0h:28m:30s
+
+AURAFW1# 
+
+AURAFW1# 
+
+AURAFW1# exit
+
+Logoff
+

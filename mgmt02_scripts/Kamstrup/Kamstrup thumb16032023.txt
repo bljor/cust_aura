@@ -1,0 +1,5 @@
+Kamstrup Certifikat thumb:
+
+SHA-256: 01:7d:8a:5f:98:a0:a4:e7:d3:d4:0d:c3:56:7b:00:f8:e3:42:b5:d2:58:d9:6a:fd:75:67:ef:6c:5e:2e:14:6b
+
+SHA-1: 79:c8:3c:39:f8:8a:a6:2c:d2:d0:f1:93:be:e8:10:43:ba:16:df:f3

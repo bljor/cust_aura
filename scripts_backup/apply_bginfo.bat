@@ -1,0 +1,1 @@
+\\aura.dk\Services\Deployment\GPO\BGInfo\Bginfo64.exe \\aura.dk\Services\Deployment\GPO\BGInfo\bginfo_config.bgi /silent /nolicprompt /timer:0

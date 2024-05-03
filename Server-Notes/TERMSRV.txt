@@ -1,0 +1,35 @@
+Scheduled Task: KILL DAX
+
+General:
+- Author    AURA\sdkadmin
+- Security Options:
+            - Run as user:  AURA\serviceuser
+            - Run whether user is logged on or not
+            - Run with highest privileges
+
+- Trigger:  At 09:50 every day, and repeat every 5 minutes for at duration of 1 day
+
+Actions:
+- Start a program
+    - Program/script:   powershell.exe
+    - Add arguments:    -ExecutionPolicy Bypass c:\script\Kill-DAX.ps1
+
+Conditions:
+- Power
+    - Start the task only if the computer is on AC powershell
+        - Stop if the computer switches to battery power
+
+Settings:
+- Allow task to be run on demand
+- Stop the task if it runs longer than: 3 days
+- If the running task fdoes not end when requested, force it to Stop
+
+
+
+Scriptet logger til en lokal fil, hvis en bruger smides af... Det er sidst sket 13. Januar 2023 (bruger: STO) - så antagelsen er, at serveren nok ikke anvendes længere.
+
+Hvis man kigger på indhold i C:\users - så er det også kun admin konti som har en date modified senere end 13. Juni 2023... Den 13. Juni 2023 er sidst modified
+for brugeren MAN.
+
+
+Lavet et script der checker Event Loggen igennem, og finder brugere der har logget en "Winlogon" hændelse... c:\script\who-has-loggedon.ps1

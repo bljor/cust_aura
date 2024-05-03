@@ -1,0 +1,11 @@
+
+
+enable
+
+term pager 0
+
+show vpn-sessiondb anyconnect | include (Username|Duration)
+
+
+exit
+

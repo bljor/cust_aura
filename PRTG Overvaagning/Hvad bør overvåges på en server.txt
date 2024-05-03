@@ -1,0 +1,79 @@
+Hvad bør overvåges på en server:
+
+- Ping	(general availability)
+- CPU load
+- Memory load
+- Disk usage (All disks)
+
+- Services (all with automatic startup)				-> Kræver et script, men det findes allerede https://kb.paessler.com/en/topic/62319-how-do-i-monitor-all-services-on-a-server-set-to-automatic
+- Specific network ports (related to services)
+- Dedicated monitors to test a service (e.g. SQL, DNS or DHCP, HTTP/S)
+- Certificates installed and their expiry date / validity
+
+- Hyper-v Cluster Shared Volume Disk Freee
+
+- Fileshares
+- Printers? (on print servers)
+
+
+- AD replikering (status og fejl, på domain controllere)
+- LDAP opslag (på domain controllere)
+- AD -> Entra ID connect status og synkronisering
+- Event Log på servere (fejl og warnings)
+- System Log på servere (fejl og warnings)
+- Scheduled Tasks på servere (fejl og jobs der ikke kører)
+- SQL Jobs
+
+
+- Terminal Services (antal samtidige sessioner)
+  - sessioner der hænger eller ikke logges af
+  - automatisk logge brugere af
+
+
+
+
+
+Tilføj overvågning af Azure / Office365?
+- der findes 6 sensorer i PRTG:
+- M365 Service Status
+- M365 Service Status Advanced
+- Microsoft Azure SQL Database
+- Microsoft Azure Storage
+- Microsoft Azure Subscription Cost
+- Microsoft Azure Virtual Machine
+
+
+
+Hvad bør overvåges på en printer:
+- Ping (general availability)
+- SNMP properties (hvad der nu giver mening):
+  - downtime
+  - black cartridge
+  - cyan cartridge
+  - magenta cartridge
+  - yellow cartridge
+
+
+
+Network Switch
+- Ping
+- CPU Load
+- Memory Load
+- Individual port status (up/down)
+- Individual port throughput
+- Etc. hvis der er mere der giver mening
+
+
+- Firewall
+- Ping
+- CPU Load
+- Memory Load
+- ??
+
+
+
+SNMP overvågning:
+- lav evt. særskilt community string pr. enhed der overvåges ... Giver lidt større administration, men samtidig betyder det
+  også at hvis én enheds password kompromiteres - så kan man ikke bruge det til at se oplysninger fra andre enheder, eftersom
+  de bruger deres egen community string + password.
+

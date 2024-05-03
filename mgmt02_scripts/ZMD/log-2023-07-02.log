@@ -1,0 +1,1 @@
+[2023-07-02 09:16:39:924]: Move-Item \\sftp01\c$\Share\landisgyr\Monthly\monthly_report_20230702.mdp -Destination \\aura.dk\DAX\DAXarkiv\DAXNET\DataUdveksling\Aflaesninger\AIM\monthly_report_20230702.mdp

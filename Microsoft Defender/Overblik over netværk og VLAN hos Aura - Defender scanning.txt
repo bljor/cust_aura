@@ -1,0 +1,33 @@
+192.168.199.148		JESPERKAYSEN
+192.168.199.123		IMMEO-281172		(devhyperv005)
+
+
+
+192.168.1.81		CANONCW3600		(devhyperv005)
+
+192.168.2.50		DESKTOP-3HA999V		(devhyperv005)
+
+192.168.8.115		IMMEO-PF31JAK2		(devhyperv005)
+192.168.8.140		LAPTOP-ANG6000R		(devhyperv005)
+
+192.168.9.87		IMMEO-PF401RSC		(devhyperv005)
+
+
+
+
+
+192.168.199.0		Gæstenetværk
+
+
+
+
+192.168.1.0		Default
+192.168.2.0		Odder
+192.168.7.0		Aura
+192.168.8.0		Guest
+192.168.10.0		Kazoom (disabled (på DHCP01 - men ikke DHCP02??), under udfasning)
+192.168.15.0		Telefon (disabled - men ikke DHCP02??), under udfasning)
+192.168.16.0		Galten
+192.168.33.0		Brabrand (disabled - men ikke DHCP02??), under udfasning)
+192.168.48.0		Viby
+192.168.49.0		Viby Tower

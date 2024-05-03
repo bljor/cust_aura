@@ -1,0 +1,16 @@
+administrator
+[Password i KeePass canon)
+
+IP address:		Device Name:	Product Name (Serial):		Location:
+192.168.5.210		1. sal		iR-ADV C3730 (22D15837)		Viby
+192.168.5.211		2. sal		iR-ADV C3730 (22D15838)		Viby
+192.168.5.212		3. sal		iR-ADV C3730 (22D15998)		Viby
+192.168.5.213		iR-ADV C3730	iR-ADV C3730 (22D23192)		Viby, Reception
+192.168.5.214		Installation	iR-ADV C3730 (22D16000)		Viby
+192.168.16.20		Elkunde		iR-ADV C3730 (22D15999)		Galten
+192.168.5.216		N/A
+192.168.5.217		Dinel		iR-ADV C3730 (22D15993)		Odder
+192.168.5.218		Fiber		iR-ADV C3730 (22D16001)		Odder
+192.168.5.219		Lager		iR-ADV C3730 (22D15840)		Odder
+192.168.5.220		Drift		iR-ADV C3730 (22D15833)		Odder
+192.168.5.221		N/A

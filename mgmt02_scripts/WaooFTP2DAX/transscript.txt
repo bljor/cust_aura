@@ -1,0 +1,22 @@
+﻿**********************
+Windows PowerShell transcript start
+Start time: 20240103140001
+Username: AURA\serviceuser
+RunAs User: AURA\serviceuser
+Machine: MGMT02 (Microsoft Windows NT 10.0.14393.0)
+Host Application: powershell.exe -ExecutionPolicy Bypass C:\Scripts\WaooFTP2DAX\FTPs-download.ps1
+Process ID: 16876
+PSVersion: 5.1.14393.6343
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.14393.6343
+BuildVersion: 10.0.14393.6343
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+Transcript started, output file is C:\Scripts\WaooFTP2DAX\transscript.txt
+**********************
+Windows PowerShell transcript end
+End time: 20240103140008
+**********************
