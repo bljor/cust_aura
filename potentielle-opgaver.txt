@@ -1,0 +1,267 @@
+1. Server: DINEL-HYPERV001 er ikke aktiveret
+2. Implementering af Cluster Aware updates (Windows Update - Hyper-v servere genstartede i dagtiden d. 11. december)
+3. DC01.DINEL.LOCAL - opgradering fra Windows Server 2012 R2 til Windows Server 2022
+4. DC02.DINEL.Local - opgradering fra Windows Server 2012 R2 til Windows Server 2022
+5. Løft af Domain functional level til nyeste niveau
+6. Server DINEL-TEK, Windows er ikke aktiveret
+
+7. Hele Dinel.local domænet ser noget misligholdt ud
+
+
+
+8. Fejl vedr. Certifikater på AD01
+- CertificateServicesClient-CertEnroll (nsmadmin failed to enrolle for a AuraUser certificate from PKI02.aura.dk)
+- Serveren PKI01 er slukket (sandsynligvis under udfasning).
+- Skal denne evt. løses ved at lave en Certificate Template til Admin Accounts ... så kan almindelige brugere, der rent faktisk har en mail - få inkluderet deres mailadresse i certifikatet.
+
+9. "Warning" i Event Log på AD01
+During the past 4.25 hours there have been 672 connections to this Domain Controller from client machines whose IP addresses don't map to any of the existing sites in the enterprise. Those clients, therefore, have undefined sites and may connect to any Domain Controller including those that are in far distant locations from the clients. A client's site is determined by the mapping of its subnet to one of the existing sites. To move the above clients to one of the sites, please consider creating subnet object(s) covering the above IP addresses with mapping to one of the existing sites.  The names and IP addresses of the clients in question have been logged on this computer in the following log file '%SystemRoot%\debug\netlogon.log' and, potentially, in the log file '%SystemRoot%\debug\netlogon.bak' created if the former log becomes full. The log(s) may contain additional unrelated debugging information. To filter out the needed information, please search for lines which contain text 'NO_CLIENT_SITE:'. The first word after this string is the client name and the second word is the client IP address. The maximum size of the log(s) is controlled by the following registry DWORD value 'HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters\LogFileMaxSize'; the default is 20000000 bytes.  The current maximum size is 20000000 bytes.  To set a different maximum size, create the above registry value and set the desired maximum size in bytes.
+
+10. Oprydning i GPO'er (samt oprydning på  \\aura.dk\services\deployment - der ligger ting til software distribution her - som måske kaldes fra et script?))
+11. Ensretning og standardisering
+12. Hvad er strategien / politikken? Hvad er første prioritet når nyt skal implementeres?
+13. Skal vi ikke få efter at få udnyttet / implementeret så meget som muligt fra de licenser som er indkøbt. Det giver ikke mening at købe andre løsninger / implementere mere teknologi, hvis noget som haves i forvejen kan løse problemet.
+
+
+
+Diverse
+=======
+2. Gennemgang af forskellige deployment scenarier som anvendes ... og ikke samme teknologi eller metodik.
+-- SCCM, GPO, Batch-filer, Start Menu shortcuts.
+
+Forsøg at konsolidere på SCCM
+
+
+3. Når der køres nye servere op, så bliver de ikke konfigureret korrekt. Eks. nogle af Christians maskiner hvor tidssynkronisering ikke fungerer?
+
+Opgave på at lave image til server installation
+
+
+OPGRADERING AF SERVER OS
+100. AD01 opgraderes fra Windows Server 2019 til Windows Server 2022
+101. AD02 opgraderes fra Windows Server 2019 til Windows Server 2022
+102. RODC02 opgraderes fra Windows Server 2019 til Windows Server 2022
+103. ADFS01 opgraderes fra Windows Server 2016 til Windows Server 2022
+104. ADFS02 opgraderes fra Windows Server 2016 til Windows Server 2022
+105. Aktiver ExtranetLockout i ADFS, alternativt - så migrer løsninger der kører ADFS til Entra ID?
+106. På ADFS01, checket Security Log - synes det er underligt der ikke er nogen "Audit Failure" Events siden april måned? Bliver det ikke brugt måske?
+107. Opgrader DHCP01 fra Windows Server 2016 til Windows Server 2022 (redundant med DHCP02)
+108. Opgrader DHCP02 fra Windows Server 2016 til Windows Server 2022 (redundant med DHCP01)
+109. Opgrader fil-print.oestjysk-energi.dk fra Windows Server 2008 R2 til Windows Server 2022
+
+110. 
+111. Hvorfor findes MailRelay01 og MailRelay02 serverne? Kunne de fjernes eller erstattes af noget andet i Cloud?
+
+
+
+
+
+
+
+Uddybning af opgave nr. 8 omkring certifikater, nedenstående er et eksempel på det der logges:
+- <Event xmlns="http://schemas.microsoft.com/win/2004/08/events/event">
+- <System>
+  <Provider Name="Microsoft-Windows-CertificationAuthority" Guid="{6A71D062-9AFE-4F35-AD08-52134F85DFB9}" /> 
+  <EventID>53</EventID> 
+  <Version>0</Version> 
+  <Level>3</Level> 
+  <Task>0</Task> 
+  <Opcode>0</Opcode> 
+  <Keywords>0x8000000000000000</Keywords> 
+  <TimeCreated SystemTime="2023-12-18T09:07:15.876846200Z" /> 
+  <EventRecordID>1354577</EventRecordID> 
+  <Correlation /> 
+  <Execution ProcessID="1172" ThreadID="920" /> 
+  <Channel>Application</Channel> 
+  <Computer>PKI02.aura.dk</Computer> 
+  <Security UserID="S-1-5-18" /> 
+  </System>
+- <EventData Name="MSG_DN_CERT_DENIED_WITH_INFO">
+  <Data Name="RequestId">1006684</Data> 
+  <Data Name="Reason">The EMail name is unavailable and cannot be added to the Subject or Subject Alternate name. 0x80094812 (-2146875374 CERTSRV_E_SUBJECT_EMAIL_REQUIRED)</Data> 
+  <Data Name="SubjectName">AURA\CHKIadmin</Data> 
+  <Data Name="AdditionalInformation">Denied by Policy Module</Data> 
+  </EventData>
+  </Event>
+
+
+
+
+=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
+KERBEROS FEJL PÅ DOMAIN CONTROLLER:
+(AD01, 20-12-2023 08:40:17)
+The Kerberos client received a KRB_AP_ERR_MODIFIED error from the server pc-00128$. The target name used was cifs/PC-00061.aura.dk. This indicates that the target server failed to decrypt the ticket provided by the client. This can occur when the target server principal name (SPN) is registered on an account other than the account the target service is using. Ensure that the target SPN is only registered on the account used by the server. This error can also happen if the target service account password is different than what is configured on the Kerberos Key Distribution Center for that target service. Ensure that the service on the server and the KDC are both configured to use the same password. If the server name is not fully qualified, and the target domain (AURA.DK) is different from the client domain (AURA.DK), check if there are identically named server accounts in these two domains, or use the fully-qualified name to identify the server.
+
+(AD01, 20-12-2023 08:45:48)
+The Kerberos client received a KRB_AP_ERR_MODIFIED error from the server pc-00140$. The target name used was cifs/PC-00147.aura.dk. This indicates that the target server failed to decrypt the ticket provided by the client. This can occur when the target server principal name (SPN) is registered on an account other than the account the target service is using. Ensure that the target SPN is only registered on the account used by the server. This error can also happen if the target service account password is different than what is configured on the Kerberos Key Distribution Center for that target service. Ensure that the service on the server and the KDC are both configured to use the same password. If the server name is not fully qualified, and the target domain (AURA.DK) is different from the client domain (AURA.DK), check if there are identically named server accounts in these two domains, or use the fully-qualified name to identify the server.
+
+(AD01, 20-12-2023 08:19:51)
+The Kerberos client received a KRB_AP_ERR_MODIFIED error from the server rni-9058$. The target name used was cifs/MWH-0021.aura.dk. This indicates that the target server failed to decrypt the ticket provided by the client. This can occur when the target server principal name (SPN) is registered on an account other than the account the target service is using. Ensure that the target SPN is only registered on the account used by the server. This error can also happen if the target service account password is different than what is configured on the Kerberos Key Distribution Center for that target service. Ensure that the service on the server and the KDC are both configured to use the same password. If the server name is not fully qualified, and the target domain (AURA.DK) is different from the client domain (AURA.DK), check if there are identically named server accounts in these two domains, or use the fully-qualified name to identify the server.
+
+(AD01, 20-12-2023 08:16:15)
+The Kerberos client received a KRB_AP_ERR_MODIFIED error from the server aurapc-lager02$. The target name used was cifs/PC-00012.aura.dk. This indicates that the target server failed to decrypt the ticket provided by the client. This can occur when the target server principal name (SPN) is registered on an account other than the account the target service is using. Ensure that the target SPN is only registered on the account used by the server. This error can also happen if the target service account password is different than what is configured on the Kerberos Key Distribution Center for that target service. Ensure that the service on the server and the KDC are both configured to use the same password. If the server name is not fully qualified, and the target domain (AURA.DK) is different from the client domain (AURA.DK), check if there are identically named server accounts in these two domains, or use the fully-qualified name to identify the server.
+
+(AD01, 20-12-2023 08:04:51)
+The Kerberos client received a KRB_AP_ERR_MODIFIED error from the server pc-00171$. The target name used was cifs/JEH-1083.aura.dk. This indicates that the target server failed to decrypt the ticket provided by the client. This can occur when the target server principal name (SPN) is registered on an account other than the account the target service is using. Ensure that the target SPN is only registered on the account used by the server. This error can also happen if the target service account password is different than what is configured on the Kerberos Key Distribution Center for that target service. Ensure that the service on the server and the KDC are both configured to use the same password. If the server name is not fully qualified, and the target domain (AURA.DK) is different from the client domain (AURA.DK), check if there are identically named server accounts in these two domains, or use the fully-qualified name to identify the server.
+
+
+==================================
+
+
+=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
+TRUST ISSUE MED WEB-DMZ-AD01
+
+(AD01, 20-12-2023 07:27:35)
+The computer WEB-DMZ-AD01 tried to connect to the server \\AD01 using the trust relationship established by the AURA domain. However, the computer lost the correct security identifier (SID) when the domain was reconfigured. Reestablish the trust relationship.
+
+==================================
+
+=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
+KORREKT DEFINITION AF SITES AND SERVICES I AD
+
+(AD01, 20-12-2023 06:27:16)
+During the past 4.24 hours there have been 153 connections to this Domain Controller from client machines whose IP addresses don't map to any of the existing sites in the enterprise. Those clients, therefore, have undefined sites and may connect to any Domain Controller including those that are in far distant locations from the clients. A client's site is determined by the mapping of its subnet to one of the existing sites. To move the above clients to one of the sites, please consider creating subnet object(s) covering the above IP addresses with mapping to one of the existing sites.  The names and IP addresses of the clients in question have been logged on this computer in the following log file '%SystemRoot%\debug\netlogon.log' and, potentially, in the log file '%SystemRoot%\debug\netlogon.bak' created if the former log becomes full. The log(s) may contain additional unrelated debugging information. To filter out the needed information, please search for lines which contain text 'NO_CLIENT_SITE:'. The first word after this string is the client name and the second word is the client IP address. The maximum size of the log(s) is controlled by the following registry DWORD value 'HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters\LogFileMaxSize'; the default is 20000000 bytes.  The current maximum size is 20000000 bytes.  To set a different maximum size, create the above registry value and set the desired maximum size in bytes.
+
+
+==================================
+
+
+=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
+MICROSOFT/WINDOWS/AAD/OPERATIONAL:
+
+(AD01, 20-12-2023 09:09:09)
+Error: 0x800706BA The RPC server is unavailable.
+Exception of type 'class DSRegException' at acquiretokencontext.cpp, line: 208, method: AcquireTokenContext::GetFallbackDomain.
+
+Log: 0xcaac03f1 Failed to get the DC registration data. Cannot get the domain name.
+Logged at acquiretokencontext.cpp, line: 208, method: AcquireTokenContext::GetFallbackDomain.
+
+(AD01, 20-12-2023 09:09:10)
+Error: 0xCAA90014 Server WS-Trust response reported fault exception and it failed to get assertion
+Error message from WS-Trust response: The requested resource requires user authentication.
+Logged at wstrusttokenrequest.cpp, line: 105, method: WSTrustTokenRequest::AcquireToken.
+
+Request: authority: https://login.microsoftonline.com/common, client: d3590ed6-52b3-4102-aeff-aad2292ab01c, redirect URI: ms-appx-web://Microsoft.AAD.BrokerPlugin/d3590ed6-52b3-4102-aeff-aad2292ab01c, resource: https://dataservice.o365filtering.com, correlation ID (request): ed41df76-0403-47e5-8400-445b3430352d
+
+(AD01, 20-12-2023 09:00:54)
+Device is not cloud domain joined: 0xC00484B2
+
+(AD01, 20-12-2023 09:00:54)
+AAD Cloud AP plugin call Plugin initialize returned error: 0xC00484B2
+
+
+
+
+==================================
+
+
+
+
+
+
+==================================
+
+=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
+WSUS DER IKKE KØRES PÅ - SKAL DEN DET? HVIS JA = FEJL, HVIS NEJ = UPDATE SKAL IKKE KOMME
+
+(HYPERV002, 19-12-2023 01:31:25)
+Installation Failure: Windows failed to install the following update with error 0x80073701: 2023-12 Cumulative Update for Microsoft server operating system version 21H2 for x64-based Systems (KB5033118).
+
+==================================
+
+=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
+LAPS ISSUES PÅ HYPERV002
+
+(HYPERV002, 20-12-2023 09:08:40)
+The machine is configured with legacy LAPS policy settings but a legacy LAPS product appears to be installed. The configured account's password will not be managed by Windows until the legacy product is uninstalled. Alternatively you may consider configuring the newer LAPS policy settings.
+ 
+ See https://go.microsoft.com/fwlink/?linkid=2220550 for more information.
+
+==================================
+
+=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
+ISSUES MED DHCP FAILOVER
+
+DHCP01, 20-12-2023 09:59:49
+A BINDING-ACK message with transaction id: 19432 was sent for IP address: 192.168.2.142 with reject reason: (Fatal conflict exists: address in use by other client) to partner server: dhcp02.aura.dk for failover relationship: dhcp01.aura.dk-dhcp02.aura.dk.
+
+DHCP01, 20-12-2023 09:59:49
+A BINDING-ACK message with transaction id: 19431 was sent for IP address: 192.168.2.142 with reject reason: (Fatal conflict exists: address in use by other client) to partner server: dhcp02.aura.dk for failover relationship: dhcp01.aura.dk-dhcp02.aura.dk.
+
+==================================
+
+=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
+ISSUES MED DHCP POINTER RECORDS (der er flere end de 2 listede)
+
+DHCP01, 20-12-2023 10:00:42
+PTR record registration for IPv4 address [[192.168.8.96]] and FQDN ISEMBED-PC.aura.dk failed with error 10054 (An existing connection was forcibly closed by the remote host.
+).
+
+DHCP01, 20-12-2023 10:00:09
+PTR record registration for IPv4 address [[192.168.49.123]] and FQDN PC-00063.aura.dk failed with error 10054 (An existing connection was forcibly closed by the remote host.
+).
+
+==================================
+
+=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
+ADFS KDFv2 feature is not enabled on AD FS farm
+
+ADFS01, 19-12-2023 20:00:44
+KDFv2 feature is not enabled on AD FS farm. Please make sure that all the farm nodes are patched with latest Windows Updates and the KDFv2 feature is enabled to enhance the security of the farm. For more information on this, please see https://go.microsoft.com/fwlink/?linkid=2153807.
+
+==================================
+
+=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
+AD FS SHOULD REJECT SPECIFIC JWT TOKENS
+
+ADFS01, 14-12-2023 20:00:32
+AD FS server is not configured to reject JWT tokens that did not have nonce in the assertion. The corresponding setting (EnforceNonceInJWT) should be enabled for security reasons after making sure that all the clients are patched with the latest Windows Updates. 
+The event 187 indicates the instances where AD FS received such tokens and accepted due to the current setting of EnforceNonceInJWT. 
+For more information on this, please see https://go.microsoft.com/fwlink/?linkid=2238156.
+
+==================================
+
+=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
+NO REMOTE DESKTOP LICENSE SERVER IS AVAILABLE
+
+Besked der poppede op på TERMSRV... det er nok bare et tilfælde for den gamle server ... mon ikke de 5 nye (TERMSRV1 -> TERMSRV5) er OK?
+
+==================================
+
+=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
+AFINSTALLERE / FJERNE RESTER AF EN GAMMEL TS-ENTERPRISE-LICENSE-SERVER
+
+I "Active Directory Sites and Services" - under Default-First-Site-Name, ligger TS-Enterprise-License-Server
+
+Bør fjernes, da den henviser til en server som ikke længere findes... Der findes en artikel på nettet om hvordan
+det bør gøres:
+
+https://techcommunity.microsoft.com/t5/security-compliance-and-identity/manually-publishing-and-un-publishing-terminal-server-license/ba-p/246492
+
+
+==================================
+
+=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
+(OVERSKRIFT HER)
+
+==================================
+
+=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
+(OVERSKRIFT HER)
+
+==================================
+
+=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
+(OVERSKRIFT HER)
+
+==================================
+
+=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
+(OVERSKRIFT HER)
+
+==================================
+
+=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
+(OVERSKRIFT HER)
+
+==================================

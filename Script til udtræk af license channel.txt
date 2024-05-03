@@ -1,0 +1,138 @@
+<#
+.SYNOPSIS
+<Script-Name.ps1> - Returnerer en liste over servere med angivelse af om de er online, samt hvilke licenserede (Microsoft) produkter der er installeret.
+Servere udvælges på baggrund af attributten OperatingSystem.
+
+.DESCRIPTION
+Dette script finder alle servere i Active Directory. Der er mulighed for at tilføje parametre, så der kun returneres antal for de servere som rent faktisk også er tilgængelige på netværket (svarer på en ping).
+
+Der kan også returneres en liste over servernavne.
+
+Der er mulighed for at lave WMI forespørgsler mod hver enkelt server, for at hente oplysninger om installerede, licenserede (Microsoft) produkter der findes på serveren.
+
+.OUTPUTS
+Afhængigt af parametre returneres forskellige former for output.
+
+Ved afvikling uden brug af parametre returneres antallet af servere fundet i Active Directory.
+
+Se nærmere under de enkelte parametre, hvordan de påvirker output af dette script.
+
+.PARAMETER ListServers
+Når parametren angives, returneres ikke længere et antal servere - men derimod en liste over servere (kun navnet) fundet i Active Directory.
+
+.PARAMETER ListServersWithOs
+Når parametren angives, returneres ikke længere et antal se4rvere - men derimod en liste over servere samt det operativsystem, de står angiv et til at køre med i Active Directory.
+
+.PARAMETER ListServersFull
+Når parametren angives, checkes hvilken license channel den enkelte server er købt til, og vil kunne afsløre servere der er installeret med forkert OS.
+
+.EXAMPLE
+<Script-Name.ps1>
+
+[number of servers] - the value is returned as just a number, no leading or trailing text or information.
+
+.EXAMPLE
+<Script-Name.ps1> -ListServers
+
+Servername
+----------
+SERVER1
+SERVER2
+SERVER3
+
+.EXAMPLE
+Get-CountOfServersFromAd.ps1 -ListServersWithOs
+
+Number   Servername    OperatingSystem
+-------  ----------    ---------------
+1        SERVER1       Windows Server 2022
+2        SERVER2       Windows Server 2016
+3        SERVER3       Windows Server 2019
+
+.NOTES
+Version:	1.0
+Author:		Brian Lie Jørgensen (brian@wipe.dk)
+For:		MySelf
+Creation date:	14/02/2024
+Last update:	14/02/2024
+
+Change Log:
+v1.0	14/02/2024		- Brian Lie Jørgensen, Wipe.dk
+#>
+
+param (
+    [Parameter(Mandatory=$false)]
+    [switch]$ListServers = $false,
+    [Parameter(Mandatory=$false)]
+    [switch]$ListServersWithOs = $false,
+    [Parameter(Mandatory=$false)]
+    [switch]$ListServersFull=$false,
+    [Parameter(Mandatory=$false)]
+    [switch]$IncludeServerLicenseChannel=$false
+)
+
+$output = @()
+$srv = ""
+
+$comps = Get-AdComputer -Filter * -Properties OperatingSystem
+$x = 0
+$i = 0
+$total_comps = $comps.count
+Write-Progress -Activity "Generating data for list of servers, this may take some time... please be patient."
+
+ForEach ($comp in $comps) {
+    $comp_name = $comp.Name
+    $x += 1
+
+    $percent = $x / $total_comps * 100
+
+    Write-Progress -Activity "Generating data for list of servers" -Status "Processing server: $comp_name" -PercentComplete $percent
+
+    If ($comp.OperatingSystem -like '*server*') {
+
+        $i += 1
+        Write-Progress -Activity "Generating data for list of servers" -Status "Processing server: $comp_name" -PercentComplete $percent -CurrentOperation "Checking if computer is online..."
+        $comp_online = Test-Connection -Count 1 $comp_name -Quiet
+        If ($comp_online) { $ip4_address = $comp_online.IPV4Address.IPAddressToString }
+
+        If ($IncludeServerLicenseChannel)
+        {
+
+            If ($comp_online)
+            {
+                Write-Progress -Activity "Generating data for list of servers" -Status "Processing server: $comp_name" -PercentComplete $percent -CurrentOperation "Retrieving licensing channel..."
+                $lic = Get-WmiObject -Class SoftwareLicensingProduct -ErrorAction SilentlyContinue -ComputerName $comp_name | Where-Object {$_.PartialProductKey -ne $null}
+
+                If ($lic)
+                {
+                    $index = 0             # Nulstil tæller til at identificere nummer i listen
+
+                    ForEach ($licenstype in $lic.ProductKeyChannel) {
+
+		        $srv = [pscustomobject]@{Number=$i;Server=$comp_name;OperatingSystem=$comp.OperatingSystem;Online=$comp_online;Product=$lic.Description[$index];LicenseChannel=$licenstype;IPV4Address=$ip4_address}
+			$output += $srv
+			$index = $index + 1
+                    }
+                }
+            }
+        }
+    }
+
+    $comp_name = ""
+    $comp_online = ""
+    $license_channel = ""
+}
+
+
+$output
+
+# If ($ListServers) {
+#     $output |select Number,Server
+# } elseif ($ListServersWithOs) {
+#     $output | select Number,Server,OperatingSystem
+# } elseif ($ListServersFull) {
+#   $output
+# } else {
+#     $output.count
+# }
+

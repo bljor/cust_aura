@@ -1,0 +1,38 @@
+Det endelige script ligger i c:\git\nhc\powershell-scripts\get-hyperv-licensedetails.ps1
+
+
+
+# $cores = (Get-ComputerInfo -Property CsProcessors).CsProcessors.NumberOfCores
+# ($cores | Measure-Object -Sum).Sum
+
+
+
+
+
+$output = @()
+$servers = 'HYPERV001','HYPERV002','HYPERV003','HYPERV005','HYPERV006','HYPERV007'
+
+# Write-Host "Server          Physical cores      Virtual c½ores used"
+ForEach ($server in $servers) {
+	$result = Invoke-Command -ComputerName $server -ScriptBlock {
+		$cores = (Get-ComputerInfo -Property CsProcessors).CsProcessors.NumberOfCores
+		($cores | Measure-Object -Sum).Sum
+	}
+#	write-host $server $result
+
+	$vms = Get-Vm -ComputerName $server
+	
+	ForEach ($vm in $vms) {
+#		Write-Host " - " $vm.VmName $vm.ProcessorCount
+	}
+#	Write-Host "Total number of virtual cores:" ($vms | Measure-Object -Sum -Property ProcessorCount).Sum
+	$vcores = ($vms | Measure-Object -Sum -Property ProcessorCount).Sum
+# 	Write-Host $server $result ($vms | Measure-Object -Sum -Property ProcessorCount).Sum
+	$srv = [pscustomobject]@{ServerName=$server;pcores=$result;vcores=$vcores}
+#	$srv = [pscustomobject]@{ServerName=$server;pcores=$result;vcores=0}
+
+	$output += $srv
+	$srv = ""
+}
+
+$output.count

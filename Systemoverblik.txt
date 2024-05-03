@@ -1,0 +1,204 @@
+Hyper-V miljøer
+===============
+
+Cluster001.aura.dk:
+- HYPERV001
+- HYPERV002
+- HYPERV003
+- HYPERV004     <---- findes ikke, er der en historik?
+- HYPERV005
+- HYPERV006
+- HYPERV007
+
+
+- DEVHYPERV001
+- DEVHYPERV002
+- DEVHYPERV003
+- DEVHYPERV004
+- DEVHYPERV005
+
+Systemoverblik
+==============
+SAN
+- all flash?
+
+Servere
+- fysiske
+- virtuelle (vist de fleste?)
+
+Netværk (er det Wingmen der kører det hele?)
+- access punkter
+- switche
+- firewalls
+- routere
+
+Info-skærme:
+- anvender Rasperry Pi (som laver en remote desktop session)
+
+Overvågning (principper for overvågning? hvad med rapportering af servicevinduer eks. ifm. genstart af servere?)
+- PRTG
+
+Cloud
+- Azure DevOps
+- Github
+- Intune
+- Azure infrastruktur
+
+Virtualisering:
+- Hyper-V
+
+Authelia
+- open-source authentication and authorization server and portal fulfilling the
+  identity and access management (IAM) role of information security in providing
+  multi-factor authentication and single sign-on (SSO) for your applications via a
+  web portal.
+
+  Hvad bruges den til?
+
+Applikationer:
+- Dynamics AX
+- DocuNote
+- Exchange
+- Expandit
+- Oracle
+- Uniflow (print)
+- UniLock (måske dørlås?)
+- SQL Servers
+  - Expandit, hvad anvendes det til?
+  - Business Intelligence (nogen platform?)
+  - CRM (hvilket bruges?)
+  - Milestone - hvad overvåges?
+  - Miralix - omstillingsbord?
+  - Masterdata?
+  - Unilock?
+- Terminal Services
+- File Servers
+- GIS løsninger, hvilke?
+- Management løsninger:
+  - PC Schematic (LIC) - måske en licensserver?
+  - PKI02
+  - PRTG
+  - RDSLIC
+  - SAN Monitor?
+  - SCCM
+  - Veeam (backup)
+  - ADFS (adfs01 og adfs02)
+- Umbrella DNS??
+- Wallboard
+- Unlock ??
+- Winautomation (PowerAutomate + plugins)
+- Xclarrity
+
+  
+
+Directory Services:
+- AD01
+- AD02
+- Azure AD Connect er installeret på MGMT02
+
+
+
+
+Netværks-info
+=============
+PC vlan = 192.168.2.x
+Gateway = 192.168.2.3
+DHCP server = 192.168.5.130
+
+DNS server = 192.168.5.10
+DNS server = 192.168.5.11
+
+w32tm time source = ad01.aura.dk	(ip: 192.168.5.36)
+
+
+Windows Domains
+===============
+aura.dk		(Primary domain)	(Windows Server 2016 Functional level)
+
+ostjysk-energi.dk	(trusted domain, transitive forest trust)
+
+
+UPN suffixes:
+adagreenenergy.dk
+dinel.dk
+
+
+Windows Sites and Services
+==========================
+
+Subnets:
+172.21.1.0/24
+192.168.1.0/24
+192.168.16.0/24
+192.168.186.0/24
+195.168.188.0/24        (tror det er DMZ, Authelia kører her)
+192.168.190.0/24
+192.168.192.0/24
+192.168.2.0/24
+192.168.31.0/24
+192.168.4.0/24
+192.168.48.0/24
+192.168.5.0/24
+192.168.50.0/24
+192.168.7.0/24
+192.168.80.0/24
+
+
+Site names:
+- Default-Fiurst Site-names   (AD01 og AD02)
+- DMZ                         (RODC02)
+
+DNS
+===
+Forwarders:
+208.67.222.222    (resolver1.opendns.com)
+208.67.220.220    (dns.umbrella.com)
+9.9.9.9           (dns9.quad9.net)
+
+Forward Lookup Zones:
+- aura.dk
+- aura.local
+- aurafiber.dk
+- aura-net.dk
+- dinel.dk
+- le-sam.dk
+- web.local
+
+DFS
+===
+Namespaces:
+- \\aura.dk\$EDB
+- \\aura.dk\DAX
+- \\aura.dk\Filer
+- \\aura.dk\GIS
+- \\aura.dk\Services
+
+Data ligger på flere forskellige servere og NAS bokse... Ikke dokumenteret her, men kan ses i DFS Management console
+
+ADFS
+====
+2 servere
+ADFS01 + ADFS02
+
+DHCP
+====
+2 servere
+DHCP01 + DHCP02
+
+
+
+
+DINEL - Hyper-V Hosts
+======================
+172.21.1.18
+172.21.1.19
+
+Domain = dinel.local
+
+
+dinel.local domæne:
+Domain Controllere: DC01 og DC02
+
+
+I aura.local anvendes ntp.aura.dk - vil sætte den samme NTP server for dinel.local domænet.
+

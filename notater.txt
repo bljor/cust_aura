@@ -1,0 +1,15 @@
+PowerShell Execution Policy:
+
+- unrestricted? Test på PC-00187, virker den så fremover?
+
+
+
+Windows Defender Application Control / AppLocker
+
+
+
+
+OpenSSL
+- SHA256 er den nye standard, understøttes ikke af Windows Server 2016 og tidligere
+- 
+

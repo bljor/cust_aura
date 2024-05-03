@@ -1,0 +1,39 @@
+Al kode og infrastruktur ligger i subscription:	smile-hesintegration-sub-sandbox-dinel
+
+
+
+VPN til Kamstrup
+- VPN til Kamstrup er færdig og tunnelen er kørende.
+- Vi mangler test med Kamstrup (inbound og outbound). 
+- Outbound testes d. 12.03.2024
+- Vi er afhængige af en kontakt til Kamstrup (vi rækker ud til ham i dag)
+- Inbound test afhænger af tilbagemelding fra Kamstrup.
+
+VPN til L+G
+- VPN konfigurationen er færdig, og tunnelen er kørende.
+- Her skal ikke være nogen inbound forbindelser.
+- Mangler test af outbound forbindelser.
+- Test udføres d. 12.03.2024
+
+Cert / Https til SMILE (inbound + outbound)’
+- DinEL certifikater er leveret til KMD
+- Vi mangler at få KMD certifikater tilbage (afventer Nikolai Juretzka)
+- Afklaring af den overordnede arkitektur for infrastrukturen, netværk og sikkerhed forventes færdig d. 25.03.2024
+
+
+Mulighed for at tilgå Azure fra en udvikler maskine eller en VM maskine i Azure så vi kan teste forbindelserne.
+- Der klargøres en Jump Host i Azure (midlertidigt) den er færdig d. 13.03.2024
+- Efterfølgende finder får vi afklaret hvornår der kan være adgang fra udviklermaskinerne. Forventet færdig d. 22.03.2024
+
+Vi skal anvende en DNS overfor Kamstrup og Smile
+- Ja, har I navne på de endpoints som skal oprettes?
+
+
+
+
+"Projektet" her lægger op til at alt er dynamisk. Det kan også lade sig gøre, men eftersom vi er meget tæt på deadline så er det ikke sikkert
+der kan være styr på det hele når vi "går live".
+
+Vi mener at projektet vil kunne gå live, og kan "holdes kørende" - men hvis ikke alle detaljer er helt på plads, så kan det være at en ny deployment
+af kode og infrastruktur også i en periode vil skulle omfatte manuelle ændringer i infrastrukturen. Det er ikke optimalt, men må være sådan i en overgangsperiode.
+

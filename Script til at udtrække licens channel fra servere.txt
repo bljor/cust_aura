@@ -1,0 +1,25 @@
+$comps = Get-AdComputer -Filter * -Properties OperatingSystem
+
+ForEach ($comp in $comps) {
+If ($comp.OperatingSystem -like '*server*') {
+$lic = Get-WmiObject -Class SoftwareLicensingProduct -ErrorAction SilentlyContinue -ComputerName $comp.Name | Where-Object {$_.PartialProductKey -ne $null}
+
+If ($lic) {
+write-host $comp.Name $lic.ProductKeyChannel
+}
+else
+{
+write-host $comp.Name "No license details"
+}
+$lic = ""
+}
+
+
+If ($comp.operatingsystem -like '*server*') {
+$lic = Get-WmiObject -Class SoftwareLicensingProduct -ErrorAction SilentlyContinue -ComputerName $comp.Name | Where-Object {$_.PartialProductKey -ne $null}
+if ($lic) {
+Write-Host $comp.Name $lic.ProductKeyChannel
+} else {
+Write-Host $comp.Name "No data retrieved"
+}
+}

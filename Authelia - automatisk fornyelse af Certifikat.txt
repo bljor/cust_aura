@@ -1,0 +1,135 @@
+Authelia - automatisk fornyelse af et certifikat...
+
+Script der kalder Lets Encrypt klient (lego)
+
+Lets Encrypt fejler (loggen er /var/log/letsencrypt/letsencrypt.log)
+
+Authelia (automatisk fornyelse af certifikat):
+
+- anvender Let's Encrypt og en ACME klient (kaldet lego)
+- dokumentation: https://go-acme.github.io/lego/usage/cli/options/
+
+- Cron settings:
+
+
+Reel afvikling - som set i /var/log/letsencrypt/letsencrypt.log:
+- 2023-12-03  13:50:35
+- 2023-12-04  05:25:40
+- 2023-12-04  05:28:20
+- 2023-12-04  05:28:23,396
+- 2023-12-04  13:43:10
+- 2023-12-04  13:49:57
+- 2023-12-04  13:50:00,217
+- 2023-12-05  05:25:40,750
+- 2023-12-05  13:43:10,583
+
+
+
+
+
+
+
+Fra letsencrypt.log
+
+
+
+
+
+chmod 655 /usr/local/bin/lego_wrapper, før ændring var den
+
+chmod 600 /usr/local/bin/lego_wrapper
+
+
+Rettet i /etc/cron.hourly/lego_wrapper:
+Tilføjet
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin:
+
+efter linjen PERSISTENT=yes
+
+
+
+
+
+
+******************************************
+
+Konfiguration af hvilke certifikater der skal fornyes:
+/etc/letsencrypt/renewal/
+- authelia.aura.dk.conf
+- traefik-authelia.aura.dk.conf
+
+
+
+Placering af certifikater:
+/etc/lego/certificatees
+
+Placering af script til opdatering af certifikat:
+/usr/local/bin/lego_wrapper
+
+
+Verifikation af rettigheder på filen:
+chmod 755 lego_wrapper		(RWX for owner, RX for group, RX for all others)
+
+
+Logs ligger i
+/var/log/syslog
+/var/log/letsencrypt/letsencrypt.log
+
+
+Søg efter cron entries
+grep cron /var/log/syslog
+
+
+
+
+
+
+
+Authelia kører i en docker container på en virtuel Linux server der ligger på HYPERV002.
+
+Docker-YML = /opt/authelia/docker-compose.yml
+
+Docker container mounter en volume - /etc/lego/certificates:/ssl
+
+
+lego_wrapper - er et shell script som kalder lego kommandoen med de parametre der skal til... Hvem har lavet lego_wrapper scriptet? Det kan jo være der er fejl i det.
+
+
+certbot renew --dry-run		(test fornyelse, her kan man se at authelia.aura.dk bliver fornyet, men traefik-authelia.aura.dk fejler).
+
+
+
+
+
+
+
+
+
+docker ps		# Vis aktive containers på denne host
+
+
+
+Authelia		En form for Identity Management løsning (SSO, MFA, Password Reset, etc. etc.)
+Traefik		En reverse proxy?? Eller hvad .. ihvertfald et særskilt produkt - så gad vide hvad traefik-authelia.aura.dk har været brugt til????
+
+
+
+
+
+Certbot
+- vedligeholder certifikater der er specificeret her:    /etc/letsencrypt/renewal
+  I folderen ligger der en .conf fil for hvert certifikat som skal vedligeholdes. (Eks. authelia.aura.dk.conf og traefik-authelia.aura.dk.conf)
+
+  .Conf filen beskriver hvordan certifikatet skal fornyes, samt hvor forskellige udagaver af det skal gemmes (i hvilke biblioteker de gemmes).
+
+  Certbot forventer at certifikaterne bliver liggende i folderen, så certifikater må ikke slettes fra folderne. Der kan laves kopier af dem hvis
+  der er brug for det.
+
+LEGO klienten
+- LEGO står for Lets Encrypt GO (værktøjet er skrevet i Go).
+Startes med scriptet /usr/local/bin/lego_wrapper
+
+- LEGO klienten opdaterer certifikater som specificeret scriptet. Der er 4 filer i mappen
+/etc/lego/certificates/*
+
+

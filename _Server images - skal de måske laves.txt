@@ -1,0 +1,11 @@
+Server images:
+
+
+Windows Server 2022 Standard (standalone):
+- meldes ikke ind i domæne
+- får tilføjet "DNS suffix for this connection = aura.dk" i Advanced TCP/IP Settings
+- får ændret timezone til at være "Romance Standard Time"
+- 
+
+Windows Server 2022 Standard (Domain Joined):
+- 
