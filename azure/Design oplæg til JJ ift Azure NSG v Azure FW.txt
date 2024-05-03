@@ -1,0 +1,2 @@
+Design oplæg til JJ ift Azure NSG vs Azure Firewall etc.
+

@@ -1,0 +1,416 @@
+Anbefalinger angående Azure:
+
+
+Sikkerhed: Overvej at implementere Security baselines for Azure
+https://learn.microsoft.com/en-us/security/benchmark/azure/security-baselines-overview
+
+az command reference
+https://learn.microsoft.com/en-us/cli/azure/reference-index?view=azure-cli-latest
+
+
+
+Shared infrastructure:
+
+- Azure Firewall
+-- koordinering mellem udviklere og IT-Drift, når der skal deployes - ihvertfald hvis deployment medfører ændringer i infrastrukturen.
+   udarbejdelse af change request, koordinering og implementering
+
+- Service Bus
+-- 
+
+
+
+Well-Architected Framework - Security design principles
+https://learn.microsoft.com/en-us/azure/well-architected/security/principles
+
+Well-Architected Framework - Security Pillar
+https://learn.microsoft.com/en-us/azure/well-architected/security/
+
+Well-Architected Framework - Security Pillar - Recommendations for building a segmentation strategy
+https://learn.microsoft.com/en-us/azure/well-architected/security/segmentation
+
+Azure security baseline for Service Bus
+https://learn.microsoft.com/en-us/security/benchmark/azure/baselines/service-bus-security-baseline
+
+
+-----------------
+Azure Service Bus
+-----------------
+
+Hvem opretter queues, topics og subscriptions? Afhængigt af strategi og krav i virksomheden.
+
+1-vejs kommunikation, der er altså én der ejer selve køen.
+
+queue = 1:1 udveksling af beskeder
+topics + subscriptions = 1:n udveksling af beskeder. Beskeder leveres ikke automatisk, modtager systemer vælger at abonnere på
+beskeder og data.
+
+Nogle steder er det infrastruktur som håndterer, andre steder er det data ejer (altså det system som skriver
+data til en kø, som selv kan oprette og administrere disse)
+
+Dead Letter Queue
+- hvem holder øje med, og agerer på disse?
+
+
+
+Well-Architected Framework - Security design principles
+https://learn.microsoft.com/en-us/azure/well-architected/security/principles
+
+Well-Architected Framework - Security Pillar
+https://learn.microsoft.com/en-us/azure/well-architected/security/
+
+Well-Architected Framework - Security Pillar - Recommendations for building a segmentation strategy
+https://learn.microsoft.com/en-us/azure/well-architected/security/segmentation
+
+Azure security baseline for Service Bus
+https://learn.microsoft.com/en-us/security/benchmark/azure/baselines/service-bus-security-baseline
+
+
+
+--------------
+API Management
+--------------
+Hvilke quota og rate limits skal gælde som standard, hvis ikke udviklerne har et specifikt behov / krav?
+
+Backup kan laves via Management REST API (udløber efter 30 dage, og noget tages der ikke backup af):
+https://learn.microsoft.com/en-us/azure/api-management/api-management-howto-disaster-recovery-backup-restore?tabs=powershell
+
+Udløb af backup: den kan ikke restores når den er 30 dage+ ... så ingen grund til lang retention etc.
+
+Der kan ikke laves retore til en anden pricing-tier end den der er taget backup af.
+
+Understøttelse af RBAC roller:
+- API Developer
+- Product Manager
+- andre
+
+How to use role-based access control in Azure API Management
+https://learn.microsoft.com/en-us/azure/api-management/api-management-role-based-access-control
+
+Azure security baseline for API Management
+https://learn.microsoft.com/en-us/security/benchmark/azure/baselines/api-management-security-baseline
+
+API Management and operational excellence
+https://learn.microsoft.com/en-us/azure/well-architected/service-guides/api-management/operational-excellence
+
+Security considerations for the API Management landing zone accelerator
+https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/scenarios/app-platform/api-management/security
+
+
+
+
+----------------
+Azure Key Vaults
+----------------
+Der oprettes en key vault per applikation, per miljø (dev, test, pre-prod, prod) og per-region, hvis der er tale om applikationer der kører i flere regioner.
+
+Hvordan skal udviklerne definere rettigheder på dem? Og hvordan sikrer vi at de er sat korrekt?
+
+Aktiver "data protection" (soft-delete); hvordan sikrer vi at det er lavet rigtigt?
+
+Aktiver "logning"; hvordan sikrer vi at det er lavet rigtigt?
+
+Sørg for at der tages backup af dem; hvordan sikrer vi det?
+
+Sørg for at der sker en løbende udskiftning / fornyelse af koder, secrets og certifikater.
+
+Azure Key Vault service limits
+https://learn.microsoft.com/en-us/azure/key-vault/general/service-limits
+
+Azure Key Vault Best Practices
+https://learn.microsoft.com/en-us/azure/key-vault/general/best-practices
+
+Well-Architected Framework - Pillars - Security: Recommendations for protecting application secrets
+https://learn.microsoft.com/en-us/azure/well-architected/security/application-secrets
+
+Azure security baseline for Key Vault
+https://learn.microsoft.com/en-us/security/benchmark/azure/baselines/key-vault-security-baseline
+
+
+
+
+
+Azure Bastion
+-------------
+
+
+Azure security baseline for Azure Bastion
+https://learn.microsoft.com/en-us/security/benchmark/azure/baselines/azure-bastion-security-baseline
+
+
+
+
+
+Azure DNS
+---------
+
+
+Azure security baseline for Azure DNS
+https://learn.microsoft.com/en-us/security/benchmark/azure/baselines/azure-dns-security-baseline
+
+
+
+
+
+
+Azure Firewall
+--------------
+Etabler backup af konfigurationen og lav den efter behov (scheduleret - som en automation runbook)
+
+Definer retention for disse backups, og etablerer procedurer for hvordan der laves restore.
+
+Kan der laves restore af politikkerne enkeltstående?
+
+
+<<<<<<< HEAD
+
+API Management
+--------------
+Hvilke quota og rate limits skal gælde som standard, hvis ikke udviklerne har et specifikt behov / krav?
+=======
+>>>>>>> ed6f3dd6e72ddf83a0d415cf5b6ac181b9ac690e
+
+
+Azure Firewall known issues and limitations
+https://learn.microsoft.com/en-us/azure/firewall/firewall-known-issues
+
+Azure Firewall limits
+https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/azure-subscription-service-limits#azure-firewall-limits
+
+Best practices for Azure Firewall performance
+https://learn.microsoft.com/en-us/azure/firewall/firewall-best-practices
+
+Azure Well-Architected Framework review - Azure Firewall
+https://learn.microsoft.com/en-us/azure/well-architected/service-guides/azure-firewall
+
+Firewall and Application Gateway for virtual networks
+https://learn.microsoft.com/en-us/azure/architecture/example-scenario/gateway/firewall-application-gateway
+
+Azure security baseline for Azure Firewall
+https://learn.microsoft.com/en-us/security/benchmark/azure/baselines/azure-firewall-security-baseline
+
+Azure security baseline for Azure Firewall Manager
+https://learn.microsoft.com/en-us/security/benchmark/azure/baselines/azure-firewall-manager-security-baseline
+
+
+
+
+
+
+
+
+Application Gateway
+-------------------
+
+
+ 
+<<<<<<< HEAD
+=======
+Azure Well-Architected Framework review - Azure Application Gateway v2
+https://learn.microsoft.com/en-us/azure/well-architected/service-guides/azure-application-gateway
+
+Azure security baseline for Application Gateway
+https://learn.microsoft.com/en-us/security/benchmark/azure/baselines/application-gateway-security-baseline
+
+Best practices for Azure Web Application Firewall (WAF) on Azure Application Gateway
+https://learn.microsoft.com/en-us/azure/web-application-firewall/ag/best-practices
+
+Firewall and Application Gateway for virtual networks
+https://learn.microsoft.com/en-us/azure/architecture/example-scenario/gateway/firewall-application-gateway
+
+
+
+Azure Load Balancer
+-------------------
+
+Azure security baseline for Azure Load Balancer
+https://learn.microsoft.com/en-us/security/benchmark/azure/baselines/azure-load-balancer-security-baseline
+
+
+
+
+Cosmos Db
+---------
+
+
+
+Overview of database security in Azure Cosmos DB
+https://learn.microsoft.com/en-us/azure/cosmos-db/database-security?tabs=sql-api
+
+Azure security baseline for Azure Cosmos DB
+https://learn.microsoft.com/en-us/security/benchmark/azure/baselines/azure-cosmos-db-security-baseline
+
+
+Azure Well-Architected Framework review - Azure Cosmos DB for NoSQL
+https://learn.microsoft.com/en-us/azure/well-architected/service-guides/cosmos-db
+
+
+
+
+Container Apps
+--------------
+Anvendes som standard container teknologien hos Aura.
+
+Container Apps er principielt managed K8s.
+
+Her får du "automatisk" skalering samt load balancering.
+
+
+Container Instance
+------------------
+En enkeltstående container, hvor du selv skal bygge load balancing og scaling, hvis der er brug for det.
+
+
+Azure security baseline for COntainer Instances
+https://learn.microsoft.com/en-us/security/benchmark/azure/baselines/container-instances-security-baseline
+
+
+
+Container Registry
+------------------
+
+
+Azure security baseline for Container Registry
+https://learn.microsoft.com/en-us/security/benchmark/azure/baselines/container-registry-security-baseline
+
+
+
+
+
+Virtual Network
+---------------
+
+Backup
+Sker via IaC, alle ændringer laves via scripting - ingen manuelle ændringer, og backup ligger i koden.
+
+
+
+Reliability and Azure Virtual Network
+https://learn.microsoft.com/en-us/azure/well-architected/service-guides/azure-virtual-network/reliability
+
+Azure best practices for network security
+https://learn.microsoft.com/en-us/azure/security/fundamentals/network-best-practices
+
+Azure Virtual Network concepts and best practices
+https://learn.microsoft.com/en-us/azure/virtual-network/concepts-and-best-practices
+
+Well-Architected Framework - Recommendations for networking and connectivity
+https://learn.microsoft.com/en-us/azure/well-architected/security/networking
+
+Azure security baseline for Virtual Network
+https://learn.microsoft.com/en-us/security/benchmark/azure/baselines/virtual-network-security-baseline
+
+
+Storage
+-------
+
+Backup via Azure Backup.
+
+
+Azure security baseline for Storage
+https://learn.microsoft.com/en-us/security/benchmark/azure/baselines/storage-security-baseline
+
+
+
+
+
+Virtual Machines
+----------------
+
+
+Azure security baseline for Virtual Machines - Windows Virtual Machines
+https://learn.microsoft.com/en-us/security/benchmark/azure/baselines/virtual-machines-windows-virtual-machines-security-baseline
+
+
+
+
+
+
+BACKUP
+
+Azure security baseline for Backup
+https://learn.microsoft.com/en-us/security/benchmark/azure/baselines/backup-security-baseline
+
+
+
+Log Analytics Workspace
+- der findes ikke en backup som sådan, men der er mulighed for at duplikere data til andre lokationer
+--- Med Diagnostic Settings kan man definere flere destinationer for data
+--- Der kan laves en data export rule, som eksporterer udvalgte tabeller til en storage account, eller som
+    streamer data til en Event Hub (og videre derfra)
+--- Brug Logic Apps til at eksportere workspace til en storage account
+--- Enkeltstående export til en lokal maskine via PowerShell
+
+Azure DNS
+- Bicep til både oprettelse af zone og records
+--- vedligehold af DNS zonen sker så udelukkende via Bicep fremover, og du har dermed backup
+
+App Registrations
+- Oprettes og vedligeholdes via PowerShell scripts eller Azure CLI
+--- az ad app list --all |convertfrom-json | where-object {$_.displayName -like "SIGN-IN-MDAS*"}
+    viser en liste over alle app registrations startende med SIGN-IN-MDAS
+
+Virtual Machines
+- Backup vha Azure Backup, eller brug IaC til at deploye maskinen fra scratch - og så lave restore af data
+--- hvilken procedure foretrækkes hos AURA?
+
+
+Network Security Groups
+- Backup via IaC, alt opbygges og laves via kode - så er koden backup for konfigurationen
+
+
+
+
+
+
+Azure Well-Architected Framework
+--------------------------------
+https://learn.microsoft.com/en-us/azure/well-architected/
+
+
+Reliability design principles
+https://learn.microsoft.com/en-us/azure/well-architected/reliability/principles
+
+Reliability tradeoffs
+https://learn.microsoft.com/en-us/azure/well-architected/reliability/tradeoffs
+
+Cloud design patterns that support reliability
+https://learn.microsoft.com/en-us/azure/well-architected/reliability/design-patterns
+
+
+Security design principles
+https://learn.microsoft.com/en-us/azure/well-architected/security/principles
+
+Security tradeoffs
+https://learn.microsoft.com/en-us/azure/well-architected/security/tradeoffs
+
+Cloud design patterns that support security
+https://learn.microsoft.com/en-us/azure/well-architected/security/design-patterns
+
+
+
+
+Operational Excellence design principles
+https://learn.microsoft.com/en-us/azure/well-architected/operational-excellence/principles
+
+Operational Excellence tradeoffs
+https://learn.microsoft.com/en-us/azure/well-architected/operational-excellence/tradeoffs
+
+Cloud design patterns that support operational excellence
+https://learn.microsoft.com/en-us/azure/well-architected/operational-excellence/design-patterns
+
+
+Performance Efficiency design principles
+https://learn.microsoft.com/en-us/azure/well-architected/performance-efficiency/principles
+
+Performance Efficiency tradeoffs
+https://learn.microsoft.com/en-us/azure/well-architected/performance-efficiency/tradeoffs
+
+Cloud design patterns that support performance efficiency
+https://learn.microsoft.com/en-us/azure/well-architected/performance-efficiency/design-patterns
+
+
+
+
+
+>>>>>>> ed6f3dd6e72ddf83a0d415cf5b6ac181b9ac690e
