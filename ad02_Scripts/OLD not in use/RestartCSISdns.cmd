@@ -1,0 +1,2 @@
+net stop CSISDNSLogAgent
+net start CSISDNSLogAgent

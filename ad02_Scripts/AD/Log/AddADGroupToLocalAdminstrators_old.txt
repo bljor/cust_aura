@@ -1,0 +1,525 @@
+﻿**********************
+Windows PowerShell transcript start
+Start time: 20211201143409
+Username: AURA\jehadmin
+RunAs User: AURA\jehadmin
+Configuration Name: 
+Machine: AD02 (Microsoft Windows NT 10.0.17763.0)
+Host Application: C:\WINDOWS\system32\WindowsPowerShell\v1.0\PowerShell_ISE.exe
+Process ID: 5184
+PSVersion: 5.1.17763.2183
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.17763.2183
+BuildVersion: 10.0.17763.2183
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+Transcript started, output file is C:\Scripts\AD\Log\AddADGroupToLocalAdminstrators.txt
+PS>TerminatingError(New-ADGroup): "Cannot process command because of one or more missing mandatory parameters: GroupScope."
+>> TerminatingError(): "The pipeline has been stopped."
+PS C:\WINDOWS\system32> Start-Transcript -Path "C:\Scripts\AD\Log\AddADGroupToLocalAdminstrators.txt" -Append
+
+
+
+#$cred = (Get-Credential)
+$servers = Get-ADComputer -Filter 'operatingsystem -like "*server*" -and enabled -eq "true"' -Properties Name,DNSHostName | Select-Object Name,DNSHostName
+
+Foreach ($server in $servers[10]) 
+{
+    $GroupName = "$($server.Name)-Admin"
+    $OUPath    = "CN=$groupName,OU=Server Admin Users,OU=AURA Groups,DC=aura,DC=dk"
+
+    New-ADGroup -DisplayName $GroupName -GroupScope Global -GroupCategory Security -Name $GroupName -Path $OUPath -SamAccountName "$groupName"
+}
+
+Foreach ($server in $servers[10])
+{
+    $GroupName = "$($server.Name)-Admin"
+    
+    Invoke-Command -ComputerName $server.DNSHostName -ScriptBlock {
+        Param ($server)
+        $adminGroup = Get-LocalGroup -SID "S-1-5-32-544"
+        Add-LocalGroupMember -Group $adminGroup -Member "$server-Admin" -Confirm:$false
+    } -ArgumentList $server.Name <#-Credential $Cred #>
+}
+
+Stop-Transcript
+Write-Host "Script finished, check log file."
+Transcript started, output file is C:\Scripts\AD\Log\AddADGroupToLocalAdminstrators.txt
+PS C:\WINDOWS\system32> TerminatingError(New-ADGroup): "Directory object not found"
+New-ADGroup : Directory object not found
+At line:13 char:5
++     New-ADGroup -DisplayName $GroupName -GroupScope Global -GroupCate ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (CN=APPL-MIDAS02...s,DC=aura,DC=dk:String) [New-ADGroup], ADIdentityNotFou
+ndException
+    + FullyQualifiedErrorId : ActiveDirectoryCmdlet:Microsoft.ActiveDirectory.Management.ADIdentityNotFoundException,Mic
+rosoft.ActiveDirectory.Management.Commands.NewADGroup
+New-ADGroup : Directory object not found
+At line:13 char:5
++     New-ADGroup -DisplayName $GroupName -GroupScope Global -GroupCate ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (CN=APPL-MIDAS02...s,DC=aura,DC=dk:String) [New-ADGroup], ADIdentityNotFoundException
+    + FullyQualifiedErrorId : ActiveDirectoryCmdlet:Microsoft.ActiveDirectory.Management.ADIdentityNotFoundException,Microsoft.ActiveDirectory.Management.Commands.NewADGroup
+
+The term 'Get-LocalGroup' is not recognized as the name of a cmdlet, function, script file, or operable program. Check t
+he spelling of the name, or if a path was included, verify that the path is correct and try again.
+    + CategoryInfo          : ObjectNotFound: (Get-LocalGroup:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+    + PSComputerName        : APPL-MIDAS02.aura.dk
+The term 'Get-LocalGroup' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+    + CategoryInfo          : ObjectNotFound: (Get-LocalGroup:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+    + PSComputerName        : APPL-MIDAS02.aura.dk
+
+The term 'Add-LocalGroupMember' is not recognized as the name of a cmdlet, function, script file, or operable program. C
+heck the spelling of the name, or if a path was included, verify that the path is correct and try again.
+    + CategoryInfo          : ObjectNotFound: (Add-LocalGroupMember:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+    + PSComputerName        : APPL-MIDAS02.aura.dk
+The term 'Add-LocalGroupMember' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+    + CategoryInfo          : ObjectNotFound: (Add-LocalGroupMember:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+    + PSComputerName        : APPL-MIDAS02.aura.dk
+
+Transcript stopped, output file is C:\Scripts\AD\Log\AddADGroupToLocalAdminstrators.txt
+Script finished, check log file.
+PS C:\WINDOWS\system32>     $OUPath    = "CN=$groupName,OU=Server Admin Users,OU=AURA Groups,DC=aura,DC=dk"
+PS C:\WINDOWS\system32> Get-ADObject $OUPath
+>> TerminatingError(Get-ADObject): "Directory object not found"
+Get-ADObject : Directory object not found
+At line:1 char:1
++ Get-ADObject $OUPath
++ ~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (CN=APPL-MIDAS02...s,DC=aura,DC=dk:ADObject) [Get-ADObject], ADIdentityNot
+FoundException
+    + FullyQualifiedErrorId : ActiveDirectoryCmdlet:Microsoft.ActiveDirectory.Management.ADIdentityNotFoundException,Mic
+rosoft.ActiveDirectory.Management.Commands.GetADObject
+Get-ADObject : Directory object not found
+At line:1 char:1
++ Get-ADObject $OUPath
++ ~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (CN=APPL-MIDAS02...s,DC=aura,DC=dk:ADObject) [Get-ADObject], ADIdentityNotFoundException
+    + FullyQualifiedErrorId : ActiveDirectoryCmdlet:Microsoft.ActiveDirectory.Management.ADIdentityNotFoundException,Microsoft.ActiveDirectory.Management.Commands.GetADObject
+
+PS C:\WINDOWS\system32> $GroupName
+APPL-MIDAS02-Admin
+PS C:\WINDOWS\system32> $OU = "OU=Server Admin Users,OU=AURA Groups,DC=aura,DC=dk"
+PS C:\WINDOWS\system32> Get-ADObject $OU
+
+DistinguishedName                                  Name               ObjectClass        ObjectGUID
+-----------------                                  ----               -----------        ----------
+OU=Server Admin Users,OU=AURA Groups,DC=aura,DC=dk Server Admin Users organizationalUnit 301d8564-fbec-4bba-b6d2-5550aa4a8330
+
+
+PS C:\WINDOWS\system32>     $OUPath    = "OU=Server Admin Users,OU=AURA Groups,DC=aura,DC=dk"
+PS C:\WINDOWS\system32> $servers = Get-ADComputer -Filter 'operatingsystem -like "*server*" -and enabled -eq "true"' -Properties Name,DNSHostName | Select-Object Name,DNSHostName
+PS C:\WINDOWS\system32>     $GroupName = "$($server.Name)-Admin"
+PS C:\WINDOWS\system32> $GroupName = "$($servers[5].Name)-Admin"
+PS C:\WINDOWS\system32> $GroupName
+PKI02-Admin
+PS C:\WINDOWS\system32> Write-Host New-ADGroup -DisplayName $GroupName -GroupScope Global -GroupCategory Security -Name $GroupName -Path $OUPath -SamAccountName "$groupName"
+New-ADGroup -DisplayName PKI02-Admin -GroupScope Global -GroupCategory Security -Name PKI02-Admin -Path OU=Server Admin Users,OU=AURA Groups,DC=aura,DC=dk -SamAccountName PKI02-Admin
+PS C:\WINDOWS\system32> $GroupName 
+PKI02-Admin
+PS C:\WINDOWS\system32>     New-ADGroup -DisplayName $GroupName -GroupScope Global -GroupCategory Security -Name $GroupName -Path $OUPath -SamAccountName "$groupName"
+PS C:\WINDOWS\system32>     New-ADGroup -DisplayName $GroupName -GroupScope Global -GroupCategory Security -Name $GroupName -Path $OUPath -SamAccountName "$groupName"
+>> TerminatingError(New-ADGroup): "The specified group already exists"
+New-ADGroup : The specified group already exists
+At line:1 char:5
++     New-ADGroup -DisplayName $GroupName -GroupScope Global -GroupCate ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (CN=PKI02-Admin,...s,DC=aura,DC=dk:String) [New-ADGroup], ADException
+    + FullyQualifiedErrorId : ActiveDirectoryServer:1318,Microsoft.ActiveDirectory.Management.Commands.NewADGroup
+New-ADGroup : The specified group already exists
+At line:1 char:5
++     New-ADGroup -DisplayName $GroupName -GroupScope Global -GroupCate ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (CN=PKI02-Admin,...s,DC=aura,DC=dk:String) [New-ADGroup], ADException
+    + FullyQualifiedErrorId : ActiveDirectoryServer:1318,Microsoft.ActiveDirectory.Management.Commands.NewADGroup
+
+PS C:\WINDOWS\system32> Get-ADGroup $GroupName
+
+
+DistinguishedName : CN=PKI02-Admin,OU=Server Admin Users,OU=AURA Groups,DC=aura,DC=dk
+GroupCategory     : Security
+GroupScope        : Global
+Name              : PKI02-Admin
+ObjectClass       : group
+ObjectGUID        : b640c062-0643-4a7b-b730-66e9b930f8fd
+SamAccountName    : PKI02-Admin
+SID               : S-1-5-21-3375157439-597610381-3527669982-8428
+
+
+
+PS C:\WINDOWS\system32> (Get-ADGroup $GroupName).Count
+PS C:\WINDOWS\system32> If (Get-ADGroup $GroupName){"test"}
+test
+PS C:\WINDOWS\system32> Get-ADUser -Identity jeh -Properties *
+
+
+AccountExpirationDate                :
+accountExpires                       : 9223372036854775807
+AccountLockoutTime                   :
+AccountNotDelegated                  : False
+adminCount                           : 1
+AllowReversiblePasswordEncryption    : False
+AuthenticationPolicy                 : {}
+AuthenticationPolicySilo             : {}
+BadLogonCount                        : 0
+badPasswordTime                      : 132829876412044665
+badPwdCount                          : 0
+c                                    : DK
+CannotChangePassword                 : False
+CanonicalName                        : aura.dk/AURA Users/AURA/Forretningsservice/IT/IT drift/Jacob Enggard Heeager
+Certificates                         : {System.Security.Cryptography.X509Certificates.X509Certificate, System.Security.Cryptography.X509Certificates.X509Certificate, System.Security.Cryptography.X509Certificates.X509Certificate, Syst
+                                       em.Security.Cryptography.X509Certificates.X509Certificate...}
+City                                 : Odder
+CN                                   : Jacob Enggard Heeager
+co                                   : Denmark
+codePage                             : 0
+Company                              : AURA Energi
+CompoundIdentitySupported            : {}
+Country                              : DK
+countryCode                          : 208
+Created                              : 11-12-2020 13:35:12
+createTimeStamp                      : 11-12-2020 13:35:12
+Deleted                              :
+Department                           : IT-drift
+Description                          : JEH
+DisplayName                          : Jacob Heeager
+DistinguishedName                    : CN=Jacob Enggard Heeager,OU=IT drift,OU=IT,OU=Forretningsservice,OU=AURA,OU=AURA Users,DC=aura,DC=dk
+Division                             :
+DoesNotRequirePreAuth                : False
+dSCorePropagationData                : {18-08-2021 11:35:07, 01-06-2021 10:57:42, 25-05-2021 08:51:46, 06-05-2021 15:15:27...}
+EmailAddress                         : jeh@aura.dk
+EmployeeID                           :
+EmployeeNumber                       :
+Enabled                              : True
+Fax                                  :
+GivenName                            : Jacob Enggaard
+HomeDirectory                        :
+HomedirRequired                      : False
+HomeDrive                            :
+HomePage                             : aura.dk
+HomePhone                            :
+Initials                             : JEH
+instanceType                         : 4
+isDeleted                            :
+KerberosEncryptionType               : {}
+l                                    : Odder
+LastBadPasswordAttempt               : 03-12-2021 07:47:21
+LastKnownParent                      :
+lastLogoff                           : 0
+lastLogon                            : 132829946378233232
+LastLogonDate                        : 27-11-2021 09:41:36
+lastLogonTimestamp                   : 132824760962985174
+legacyExchangeDN                     : /o=Aura/ou=External (FYDIBOHF25SPDLT)/cn=Recipients/cn=7480355e4e4644e6b57982bf025bffb7
+LockedOut                            : False
+lockoutTime                          : 0
+logonCount                           : 2232
+logonHours                           : {255, 255, 255, 255...}
+LogonWorkstations                    :
+mail                                 : jeh@aura.dk
+mailNickname                         : jeh
+Manager                              : CN=Jesper Blak Eskjær Mathiesen,OU=IT drift,OU=IT,OU=Forretningsservice,OU=AURA,OU=AURA Users,DC=aura,DC=dk
+MemberOf                             : {CN=GPO_M365-Outlook,OU=GPO Groups,OU=AURA Groups,DC=aura,DC=dk, CN=Lic-EXO-E5,OU=Azure,OU=AURA Groups,DC=aura,DC=dk, CN=Lic-Microsoft365-E5,OU=Azure,OU=AURA Groups,DC=aura,DC=dk, CN=DG_Azure-Se
+                                       curityBaselines-O365ATP,OU=Azure,OU=AURA Groups,DC=aura,DC=dk...}
+MNSLogonAccount                      : False
+mobile                               : +45 51 60 31 41
+MobilePhone                          : +45 51 60 31 41
+Modified                             : 01-12-2021 14:56:56
+modifyTimeStamp                      : 01-12-2021 14:56:56
+mS-DS-ConsistencyGuid                : {211, 246, 46, 126...}
+msDS-AuthenticatedAtDC               : {CN=RODC01,OU=Domain Controllers,DC=aura,DC=dk}
+msDS-ExternalDirectoryObjectId       : User_df81d208-0e6f-4232-8e3c-d0137ce97553
+msDS-User-Account-Control-Computed   : 0
+msExchArchiveQuota                   : 104857600
+msExchArchiveWarnQuota               : 94371840
+msExchAuditDelegate                  : 1533
+msExchAuditOwner                     : 1085
+msExchBlockedSendersHash             : {47, 163, 227, 203}
+msExchDelegateListBL                 : {CN=IT,OU=Mail Accounts Only,OU=AURA Users,DC=aura,DC=dk}
+msExchDumpsterQuota                  : 31457280
+msExchDumpsterWarningQuota           : 20971520
+msExchELCMailboxFlags                : 2
+msExchMailboxAuditEnable             : True
+msExchMailboxAuditLastAdminAccess    : 04-01-2021 19:38:56
+msExchMailboxGuid                    : {246, 6, 35, 164...}
+msExchPoliciesIncluded               : {f4c8c9a7-ba3c-41eb-bd20-06fb466dd577, {26491cfc-9e50-4857-861b-0cb8df22b5d7}}
+msExchRecipientDisplayType           : -2147483642
+msExchRecipientTypeDetails           : 2147483648
+msExchRemoteRecipientType            : 4
+msExchSafeRecipientsHash             : {213, 41, 14, 25...}
+msExchSafeSendersHash                : {120, 234, 13, 6...}
+msExchTextMessagingState             : {302120705, 16842751}
+msExchUMDtmfMap                      : {reversedPhone:1413061554+, reversedPhone:9635297854+, lastNameFirstName:43324375226236442273, firstNameLastName:52262364422734332437...}
+msExchUserAccountControl             : 0
+msExchVersion                        : 88218628259840
+msExchWhenMailboxCreated             : 11-12-2020 13:48:19
+msRTCSIP-DeploymentLocator           : sipfed.online.lync.com
+msRTCSIP-FederationEnabled           : True
+msRTCSIP-InternetAccessEnabled       : True
+msRTCSIP-Line                        : tel:+4587925369
+msRTCSIP-OptionFlags                 : 385
+msRTCSIP-PrimaryHomeServer           : CN=Lc Services\0ADEL:4f0f9868-0cfd-4df4-a0ae-d087a7b95140,CN=Deleted Objects,CN=Configuration,DC=aura,DC=dk
+msRTCSIP-PrimaryUserAddress          : sip:jeh@aura.dk
+msRTCSIP-UserEnabled                 : True
+msTSExpireDate                       : 18-12-2021 12:44:48
+msTSLicenseVersion                   : 655360
+msTSLicenseVersion2                  : 7
+msTSLicenseVersion3                  : C50-10.00-S
+msTSManagingLS                       : 00376-40000-26414-AT366
+Name                                 : Jacob Enggard Heeager
+nTSecurityDescriptor                 : System.DirectoryServices.ActiveDirectorySecurity
+ObjectCategory                       : CN=Person,CN=Schema,CN=Configuration,DC=aura,DC=dk
+ObjectClass                          : user
+ObjectGUID                           : 7e2ef6d3-2c34-4359-bb0c-88d21992038b
+objectSid                            : S-1-5-21-3375157439-597610381-3527669982-8259
+Office                               :
+OfficePhone                          : +45 87 92 53 69
+Organization                         :
+OtherName                            :
+PasswordExpired                      : False
+PasswordLastSet                      : 08-11-2021 10:17:12
+PasswordNeverExpires                 : False
+PasswordNotRequired                  : False
+POBox                                :
+PostalCode                           : 8300
+PrimaryGroup                         : CN=Domain Users,CN=Users,DC=aura,DC=dk
+primaryGroupID                       : 513
+PrincipalsAllowedToDelegateToAccount : {}
+ProfilePath                          :
+ProtectedFromAccidentalDeletion      : False
+proxyAddresses                       : {X500:/o=Aura/ou=Exchange Administrative Group (FYDIBOHF23SPDLT)/cn=Recipients/cn=a40f5da507ee408ab9c224208a6fd545-Jacob Enggard Heeag, sip:jeh@aura.dk, x500:/o=ExchangeLabs/ou=Exchange Administ
+                                       rative Group (FYDIBOHF23SPDLT)/cn=Recipients/cn=2f6e4ce388104f5ea3a20a69138b6891-Jacob Engga, smtp:jeh@auraas.mail.onmicrosoft.com...}
+publicDelegatesBL                    : {CN=IT,OU=Mail Accounts Only,OU=AURA Users,DC=aura,DC=dk}
+pwdLastSet                           : 132808366320113933
+SamAccountName                       : jeh
+sAMAccountType                       : 805306368
+ScriptPath                           :
+sDRightsEffective                    : 15
+ServicePrincipalNames                : {}
+showInAddressBook                    : {CN=All Users,CN=All Address Lists,CN=Address Lists Container,CN=Aura,CN=Microsoft Exchange,CN=Services,CN=Configuration,DC=aura,DC=dk, CN=All Recipients(VLV),CN=All System Address Lists,CN=Addr
+                                       ess Lists Container,CN=Aura,CN=Microsoft Exchange,CN=Services,CN=Configuration,DC=aura,DC=dk, CN=Default Global Address List,CN=All Global Address Lists,CN=Address Lists Container,CN=Aura,CN=Mic
+                                       rosoft Exchange,CN=Services,CN=Configuration,DC=aura,DC=dk}
+SID                                  : S-1-5-21-3375157439-597610381-3527669982-8259
+SIDHistory                           : {}
+SmartcardLogonRequired               : False
+sn                                   : Heeager
+State                                :
+StreetAddress                        : Knudsminde 10
+Surname                              : Heeager
+targetAddress                        : SMTP:jeh@auraas.mail.onmicrosoft.com
+telephoneNumber                      : +45 87 92 53 69
+thumbnailPhoto                       : {255, 216, 255, 224...}
+Title                                : IT-administrator
+TrustedForDelegation                 : False
+TrustedToAuthForDelegation           : False
+UseDESKeyOnly                        : False
+userAccountControl                   : 512
+userCertificate                      : {48 130 8 24 48 130 6 0 160 3 2 1 2 2 19 19 0 11 24 200 242 72 81 38 117 169 9 251 0 0 0 11 24 200 48 13 6 9 42 134 72 134 247 13 1 1 11 5 0 48 68 49 18 48 16 6 10 9 146 38 137 147 242 44 100 1
+                                       25 22 2 100 107 49 20 48 18 6 10 9 146 38 137 147 242 44 100 1 25 22 4 97 117 114 97 49 24 48 22 6 3 85 4 3 19 15 65 117 114 97 32 73 115 115 117 105 110 103 32 67 65 48 30 23 13 50 49 49 50 48
+                                       49 49 51 52 54 51 57 90 23 13 50 50 49 50 48 49 49 51 52 54 51 57 90 48 129 199 49 18 48 16 6 10 9 146 38 137 147 242 44 100 1 25 22 2 100 107 49 20 48 18 6 10 9 146 38 137 147 242 44 100 1 25 2
+                                       2 4 97 117 114 97 49 19 48 17 6 3 85 4 11 19 10 65 85 82 65 32 85 115 101 114 115 49 13 48 11 6 3 85 4 11 19 4 65 85 82 65 49 27 48 25 6 3 85 4 11 19 18 70 111 114 114 101 116 110 105 110 103 11
+                                       5 115 101 114 118 105 99 101 49 11 48 9 6 3 85 4 11 19 2 73 84 49 17 48 15 6 3 85 4 11 19 8 73 84 32 100 114 105 102 116 49 30 48 28 6 3 85 4 3 19 21 74 97 99 111 98 32 69 110 103 103 97 114 100
+                                        32 72 101 101 97 103 101 114 49 26 48 24 6 9 42 134 72 134 247 13 1 9 1 22 11 106 101 104 64 97 117 114 97 46 100 107 48 130 1 34 48 13 6 9 42 134 72 134 247 13 1 1 1 5 0 3 130 1 15 0 48 130 1
+                                       10 2 130 1 1 0 177 199 154 203 167 191 134 74 160 150 77 0 105 157 95 232 247 46 204 54 135 52 52 92 212 182 109 255 159 27 198 221 174 53 75 154 226 143 113 198 5 26 65 111 99 98 242 11 103 168
+                                        232 203 38 123 193 58 83 246 161 135 208 141 175 27 248 183 68 165 98 154 213 16 133 138 222 167 39 229 224 222 213 80 14 183 102 70 7 69 159 43 58 146 60 72 113 202 210 233 176 201 118 204 196
+                                        159 35 129 235 2 245 66 226 51 46 179 59 53 64 30 46 132 218 211 142 77 139 58 22 176 235 208 99 121 28 168 138 87 152 103 210 25 136 9 28 37 228 139 196 41 160 240 58 173 218 62 160 246 219 14
+                                       9 134 169 163 247 215 99 235 254 161 180 10 89 195 82 163 134 237 69 92 47 246 53 204 251 76 125 26 251 25 237 87 19 27 137 33 21 131 173 219 99 145 42 51 46 241 100 87 123 166 234 150 21 24 45
+                                       214 145 82 152 13 131 81 244 242 190 73 59 188 231 135 252 141 113 58 64 121 177 113 118 109 204 43 114 142 102 81 136 219 42 151 161 64 244 189 138 43 82 195 149 2 3 1 0 1 163 130 3 125 48 130
+                                       3 121 48 61 6 9 43 6 1 4 1 130 55 21 7 4 48 48 46 6 38 43 6 1 4 1 130 55 21 8 243 139 52 131 134 134 112 131 161 139 21 131 158 167 7 134 166 152 5 129 1 131 159 173 125 133 217 128 119 2 1 100
+                                       2 1 4 48 41 6 3 85 29 37 4 34 48 32 6 8 43 6 1 5 5 7 3 2 6 8 43 6 1 5 5 7 3 4 6 10 43 6 1 4 1 130 55 10 3 4 48 14 6 3 85 29 15 1 1 255 4 4 3 2 5 160 48 53 6 9 43 6 1 4 1 130 55 21 10 4 40 48 38
+                                       48 10 6 8 43 6 1 5 5 7 3 2 48 10 6 8 43 6 1 5 5 7 3 4 48 12 6 10 43 6 1 4 1 130 55 10 3 4 48 68 6 9 42 134 72 134 247 13 1 9 15 4 55 48 53 48 14 6 8 42 134 72 134 247 13 3 2 2 2 0 128 48 14 6 8
+                                       42 134 72 134 247 13 3 4 2 2 0 128 48 7 6 5 43 14 3 2 7 48 10 6 8 42 134 72 134 247 13 3 7 48 29 6 3 85 29 14 4 22 4 20 189 224 232 57 27 250 162 202 230 206 49 222 205 223 106 241 217 159 28 92
+                                        48 31 6 3 85 29 35 4 24 48 22 128 20 156 181 169 110 149 68 45 157 154 5 242 206 82 76 163 29 245 14 179 88 48 129 251 6 3 85 29 31 4 129 243 48 129 240 48 129 237 160 129 234 160 129 231 134 4
+                                       6 104 116 116 112 58 47 47 112 107 105 46 97 117 114 97 46 100 107 47 112 107 105 47 65 117 114 97 37 50 48 73 115 115 117 105 110 103 37 50 48 67 65 46 99 114 108 134 129 180 108 100 97 112 58
+                                       47 47 47 67 78 61 65 117 114 97 37 50 48 73 115 115 117 105 110 103 37 50 48 67 65 44 67 78 61 80 75 73 48 50 44 67 78 61 67 68 80 44 67 78 61 80 117 98 108 105 99 37 50 48 75 101 121 37 50 48 8
+                                       3 101 114 118 105 99 101 115 44 67 78 61 83 101 114 118 105 99 101 115 44 67 78 61 67 111 110 102 105 103 117 114 97 116 105 111 110 44 68 67 61 97 117 114 97 44 68 67 61 100 107 63 99 101 114 1
+                                       16 105 102 105 99 97 116 101 82 101 118 111 99 97 116 105 111 110 76 105 115 116 63 98 97 115 101 63 111 98 106 101 99 116 67 108 97 115 115 61 99 82 76 68 105 115 116 114 105 98 117 116 105 111
+                                        110 80 111 105 110 116 48 130 1 11 6 8 43 6 1 5 5 7 1 1 4 129 254 48 129 251 48 129 174 6 8 43 6 1 5 5 7 48 2 134 129 161 108 100 97 112 58 47 47 47 67 78 61 65 117 114 97 37 50 48 73 115 115 1
+                                       17 105 110 103 37 50 48 67 65 44 67 78 61 65 73 65 44 67 78 61 80 117 98 108 105 99 37 50 48 75 101 121 37 50 48 83 101 114 118 105 99 101 115 44 67 78 61 83 101 114 118 105 99 101 115 44 67 78
+                                       61 67 111 110 102 105 103 117 114 97 116 105 111 110 44 68 67 61 97 117 114 97 44 68 67 61 100 107 63 99 65 67 101 114 116 105 102 105 99 97 116 101 63 98 97 115 101 63 111 98 106 101 99 116 67
+                                       108 97 115 115 61 99 101 114 116 105 102 105 99 97 116 105 111 110 65 117 116 104 111 114 105 116 121 48 72 6 8 43 6 1 5 5 7 48 2 134 60 104 116 116 112 58 47 47 112 107 105 46 97 117 114 97 46
+                                       100 107 47 112 107 105 47 80 75 73 48 50 46 97 117 114 97 46 100 107 95 65 117 114 97 37 50 48 73 115 115 117 105 110 103 37 50 48 67 65 46 99 114 116 48 51 6 3 85 29 17 4 44 48 42 160 27 6 10 4
+                                       3 6 1 4 1 130 55 20 2 3 160 13 12 11 106 101 104 64 97 117 114 97 46 100 107 129 11 106 101 104 64 97 117 114 97 46 100 107 48 13 6 9 42 134 72 134 247 13 1 1 11 5 0 3 130 2 1 0 111 214 127 45 2
+                                       31 197 233 93 96 84 128 86 246 135 102 111 202 60 32 170 249 104 145 230 123 113 255 158 173 227 25 107 4 4 42 240 200 75 110 153 127 73 103 240 88 88 148 199 193 111 164 86 134 107 52 23 161 18
+                                       9 70 50 67 44 201 173 144 68 167 207 255 224 92 170 167 229 156 237 164 201 200 252 239 112 198 34 106 60 19 109 25 250 133 112 230 102 115 150 178 236 7 190 49 105 143 96 190 3 182 232 201 87 7
+                                       2 9 205 176 222 217 6 130 109 178 80 208 77 84 96 152 20 81 169 117 140 239 142 135 91 228 243 92 138 43 42 152 21 196 170 149 157 217 32 129 74 118 82 173 115 122 158 40 219 183 61 229 249 224
+                                       80 154 23 114 67 116 44 71 59 183 56 73 175 31 72 94 15 242 142 198 135 80 15 52 203 137 134 148 199 210 67 174 202 53 128 91 29 41 250 23 185 38 209 201 71 34 109 30 74 218 203 118 94 45 180 25
+                                       0 123 253 245 219 148 234 167 30 168 56 133 137 91 250 126 113 239 124 164 232 107 28 44 186 57 62 20 166 17 49 240 147 95 96 130 163 167 163 45 16 229 6 81 71 200 64 200 222 65 228 57 122 79 21
+                                       6 112 252 22 70 94 159 82 1 69 46 62 87 44 145 173 128 58 153 55 21 76 43 131 21 247 170 219 213 2 124 238 8 228 4 226 7 6 54 190 216 243 10 3 243 250 222 20 182 160 49 85 124 89 16 8 87 145 86
+                                       114 158 199 104 62 134 132 147 98 184 101 231 109 100 53 235 80 186 74 207 45 88 250 115 17 211 133 189 219 194 137 79 63 56 35 238 36 226 44 164 23 46 99 140 240 107 60 239 115 149 159 78 73 9
+                                       148 133 152 155 180 199 25 221 158 208 187 31 91 40 82 129 248 248 198 45 113 177 212 15 192 22 123 81 69 103 226 244 62 182 172 52 192 116 58 221 61 244 177 34 233 10 14 126 67 84 241 37 88 7 1
+                                       68 161 212 225 248 154 125 36 174 185 168 113 11 224 169 70 171 235 96 36 132 209 35 208 217 5 115 94 231 224 105 191 60 51 9 225 123 52 223 73 111 139 74 231 1 115 212 28 183 198 35 145 21 210
+                                       117 98 87 243 176 144 249 42 242 86 99 240 16 41 227 133 127 117, 48 130 8 24 48 130 6 0 160 3 2 1 2 2 19 19 0 10 231 107 35 73 185 141 74 190 253 85 0 0 0 10 231 107 48 13 6 9 42 134 72 134 247
+                                        13 1 1 11 5 0 48 68 49 18 48 16 6 10 9 146 38 137 147 242 44 100 1 25 22 2 100 107 49 20 48 18 6 10 9 146 38 137 147 242 44 100 1 25 22 4 97 117 114 97 49 24 48 22 6 3 85 4 3 19 15 65 117 114 9
+                                       7 32 73 115 115 117 105 110 103 32 67 65 48 30 23 13 50 49 49 48 49 57 49 49 51 53 48 56 90 23 13 50 50 49 48 49 57 49 49 51 53 48 56 90 48 129 199 49 18 48 16 6 10 9 146 38 137 147 242 44 100 1
+                                        25 22 2 100 107 49 20 48 18 6 10 9 146 38 137 147 242 44 100 1 25 22 4 97 117 114 97 49 19 48 17 6 3 85 4 11 19 10 65 85 82 65 32 85 115 101 114 115 49 13 48 11 6 3 85 4 11 19 4 65 85 82 65 49
+                                       27 48 25 6 3 85 4 11 19 18 70 111 114 114 101 116 110 105 110 103 115 115 101 114 118 105 99 101 49 11 48 9 6 3 85 4 11 19 2 73 84 49 17 48 15 6 3 85 4 11 19 8 73 84 32 100 114 105 102 116 49 30
+                                        48 28 6 3 85 4 3 19 21 74 97 99 111 98 32 69 110 103 103 97 114 100 32 72 101 101 97 103 101 114 49 26 48 24 6 9 42 134 72 134 247 13 1 9 1 22 11 106 101 104 64 97 117 114 97 46 100 107 48 130
+                                       1 34 48 13 6 9 42 134 72 134 247 13 1 1 1 5 0 3 130 1 15 0 48 130 1 10 2 130 1 1 0 198 85 151 161 187 18 216 242 177 49 164 116 89 102 171 50 191 104 114 22 190 56 6 220 215 220 117 96 31 142 18
+                                       5 86 195 123 241 155 205 180 241 241 186 140 119 251 199 129 58 243 237 176 208 206 183 191 73 143 232 89 49 101 239 155 136 121 74 92 165 239 157 155 54 108 223 237 194 159 200 5 118 63 23 145
+                                       21 31 39 146 28 20 179 98 69 36 64 87 56 105 110 167 0 70 161 128 102 169 26 103 86 163 237 174 156 15 185 87 82 132 168 219 90 19 54 96 131 103 130 137 108 102 111 187 211 252 164 157 113 241 2
+                                       10 111 210 66 27 0 195 44 9 214 68 140 97 41 61 240 111 126 167 239 201 58 203 194 26 129 182 32 3 135 228 67 224 214 216 44 65 27 154 120 206 76 19 185 235 246 52 138 193 226 35 68 62 222 204 6
+                                       1 195 251 61 113 91 9 114 67 142 74 110 181 66 197 192 32 68 97 183 147 50 50 214 121 140 237 114 55 224 180 228 39 113 185 125 233 154 160 48 21 77 28 73 171 105 219 239 46 140 209 112 247 157
+                                       104 121 33 183 41 157 225 147 157 252 189 2 3 1 0 1 163 130 3 125 48 130 3 121 48 61 6 9 43 6 1 4 1 130 55 21 7 4 48 48 46 6 38 43 6 1 4 1 130 55 21 8 243 139 52 131 134 134 112 131 161 139 21 1
+                                       31 158 167 7 134 166 152 5 129 1 131 159 173 125 133 217 128 119 2 1 100 2 1 4 48 41 6 3 85 29 37 4 34 48 32 6 8 43 6 1 5 5 7 3 2 6 8 43 6 1 5 5 7 3 4 6 10 43 6 1 4 1 130 55 10 3 4 48 14 6 3 85
+                                       29 15 1 1 255 4 4 3 2 5 160 48 53 6 9 43 6 1 4 1 130 55 21 10 4 40 48 38 48 10 6 8 43 6 1 5 5 7 3 2 48 10 6 8 43 6 1 5 5 7 3 4 48 12 6 10 43 6 1 4 1 130 55 10 3 4 48 68 6 9 42 134 72 134 247 13
+                                       1 9 15 4 55 48 53 48 14 6 8 42 134 72 134 247 13 3 2 2 2 0 128 48 14 6 8 42 134 72 134 247 13 3 4 2 2 0 128 48 7 6 5 43 14 3 2 7 48 10 6 8 42 134 72 134 247 13 3 7 48 29 6 3 85 29 14 4 22 4 20 1
+                                       4 7 202 19 197 23 4 85 226 142 13 178 121 101 94 203 191 186 157 118 48 31 6 3 85 29 35 4 24 48 22 128 20 156 181 169 110 149 68 45 157 154 5 242 206 82 76 163 29 245 14 179 88 48 129 251 6 3 85
+                                        29 31 4 129 243 48 129 240 48 129 237 160 129 234 160 129 231 134 46 104 116 116 112 58 47 47 112 107 105 46 97 117 114 97 46 100 107 47 112 107 105 47 65 117 114 97 37 50 48 73 115 115 117 105
+                                        110 103 37 50 48 67 65 46 99 114 108 134 129 180 108 100 97 112 58 47 47 47 67 78 61 65 117 114 97 37 50 48 73 115 115 117 105 110 103 37 50 48 67 65 44 67 78 61 80 75 73 48 50 44 67 78 61 67 6
+                                       8 80 44 67 78 61 80 117 98 108 105 99 37 50 48 75 101 121 37 50 48 83 101 114 118 105 99 101 115 44 67 78 61 83 101 114 118 105 99 101 115 44 67 78 61 67 111 110 102 105 103 117 114 97 116 105 1
+                                       11 110 44 68 67 61 97 117 114 97 44 68 67 61 100 107 63 99 101 114 116 105 102 105 99 97 116 101 82 101 118 111 99 97 116 105 111 110 76 105 115 116 63 98 97 115 101 63 111 98 106 101 99 116 67
+                                       108 97 115 115 61 99 82 76 68 105 115 116 114 105 98 117 116 105 111 110 80 111 105 110 116 48 130 1 11 6 8 43 6 1 5 5 7 1 1 4 129 254 48 129 251 48 129 174 6 8 43 6 1 5 5 7 48 2 134 129 161 108
+                                        100 97 112 58 47 47 47 67 78 61 65 117 114 97 37 50 48 73 115 115 117 105 110 103 37 50 48 67 65 44 67 78 61 65 73 65 44 67 78 61 80 117 98 108 105 99 37 50 48 75 101 121 37 50 48 83 101 114 11
+                                       8 105 99 101 115 44 67 78 61 83 101 114 118 105 99 101 115 44 67 78 61 67 111 110 102 105 103 117 114 97 116 105 111 110 44 68 67 61 97 117 114 97 44 68 67 61 100 107 63 99 65 67 101 114 116 105
+                                        102 105 99 97 116 101 63 98 97 115 101 63 111 98 106 101 99 116 67 108 97 115 115 61 99 101 114 116 105 102 105 99 97 116 105 111 110 65 117 116 104 111 114 105 116 121 48 72 6 8 43 6 1 5 5 7 4
+                                       8 2 134 60 104 116 116 112 58 47 47 112 107 105 46 97 117 114 97 46 100 107 47 112 107 105 47 80 75 73 48 50 46 97 117 114 97 46 100 107 95 65 117 114 97 37 50 48 73 115 115 117 105 110 103 37 5
+                                       0 48 67 65 46 99 114 116 48 51 6 3 85 29 17 4 44 48 42 160 27 6 10 43 6 1 4 1 130 55 20 2 3 160 13 12 11 106 101 104 64 97 117 114 97 46 100 107 129 11 106 101 104 64 97 117 114 97 46 100 107 48
+                                        13 6 9 42 134 72 134 247 13 1 1 11 5 0 3 130 2 1 0 83 141 219 152 7 140 82 205 203 250 106 99 212 186 97 232 174 134 58 130 86 190 47 65 253 194 157 1 254 162 143 173 151 69 207 105 6 255 87 20
+                                       8 54 145 155 5 107 194 199 189 247 92 132 159 226 50 156 51 136 190 20 144 75 138 99 223 53 171 88 32 234 156 231 33 72 198 217 17 152 189 122 68 110 225 240 148 143 145 177 206 145 12 162 160 1
+                                       27 232 89 221 232 13 21 208 89 92 179 35 97 153 166 179 6 28 245 25 69 52 163 7 121 100 235 206 116 242 28 8 4 34 48 14 232 157 151 86 250 179 2 213 9 26 90 110 89 129 21 156 236 114 70 229 103
+                                       94 205 84 77 143 71 254 48 121 184 83 144 191 81 57 89 107 141 95 135 103 95 254 22 184 70 233 215 159 2 1 187 210 131 212 41 10 163 46 249 167 69 197 145 114 17 62 128 18 15 16 57 139 188 122 9
+                                       6 82 28 136 96 155 43 28 236 253 91 77 198 37 26 52 0 217 226 41 158 227 40 143 152 3 60 44 159 26 118 161 209 240 135 101 125 38 85 31 47 241 30 37 124 94 131 192 166 0 55 4 84 223 59 147 233 8
+                                        178 92 169 96 142 199 242 176 188 223 250 199 103 248 238 100 48 6 134 158 204 74 161 215 219 253 192 211 53 114 38 148 74 223 191 75 53 137 27 13 209 26 108 203 185 245 48 77 191 171 134 22 0
+                                       224 247 133 192 204 18 147 178 33 13 16 146 70 204 47 166 19 4 10 30 80 134 125 197 98 218 112 147 39 224 252 56 205 41 247 193 3 36 134 2 122 196 99 46 219 103 179 137 49 218 64 182 1 57 89 10
+                                       164 79 252 2 217 98 187 63 124 252 96 221 88 179 69 213 1 12 159 109 251 62 157 127 176 21 70 11 39 19 23 139 52 170 32 114 81 226 177 25 242 2 178 93 113 239 179 225 54 26 147 161 156 227 4 34
+                                       139 242 138 210 63 90 227 252 5 3 118 94 132 85 119 85 148 230 127 133 223 250 240 158 83 162 40 120 196 149 121 222 36 126 124 0 69 244 204 249 74 121 50 44 208 250 89 240 54 140 115 77 31 180
+                                       227 28 207 126 131 102 217 242 83 185 147 235 254 132 181 44 11 17 253 84 117 95 102 248 92 171 13 89 100 123 23, 48 130 8 24 48 130 6 0 160 3 2 1 2 2 19 19 0 10 208 86 86 20 184 142 101 150 119
+                                        137 0 0 0 10 208 86 48 13 6 9 42 134 72 134 247 13 1 1 11 5 0 48 68 49 18 48 16 6 10 9 146 38 137 147 242 44 100 1 25 22 2 100 107 49 20 48 18 6 10 9 146 38 137 147 242 44 100 1 25 22 4 97 117
+                                       114 97 49 24 48 22 6 3 85 4 3 19 15 65 117 114 97 32 73 115 115 117 105 110 103 32 67 65 48 30 23 13 50 49 48 57 50 55 49 50 49 49 49 53 90 23 13 50 50 48 57 50 55 49 50 49 49 49 53 90 48 129 19
+                                       9 49 18 48 16 6 10 9 146 38 137 147 242 44 100 1 25 22 2 100 107 49 20 48 18 6 10 9 146 38 137 147 242 44 100 1 25 22 4 97 117 114 97 49 19 48 17 6 3 85 4 11 19 10 65 85 82 65 32 85 115 101 114
+                                       115 49 13 48 11 6 3 85 4 11 19 4 65 85 82 65 49 27 48 25 6 3 85 4 11 19 18 70 111 114 114 101 116 110 105 110 103 115 115 101 114 118 105 99 101 49 11 48 9 6 3 85 4 11 19 2 73 84 49 17 48 15 6 3
+                                        85 4 11 19 8 73 84 32 100 114 105 102 116 49 30 48 28 6 3 85 4 3 19 21 74 97 99 111 98 32 69 110 103 103 97 114 100 32 72 101 101 97 103 101 114 49 26 48 24 6 9 42 134 72 134 247 13 1 9 1 22 11
+                                        106 101 104 64 97 117 114 97 46 100 107 48 130 1 34 48 13 6 9 42 134 72 134 247 13 1 1 1 5 0 3 130 1 15 0 48 130 1 10 2 130 1 1 0 212 33 129 145 40 245 16 214 184 249 10 214 49 242 99 131 147 8
+                                        134 2 231 156 63 209 215 69 232 65 49 119 77 111 229 130 101 99 58 104 116 46 186 237 47 126 47 137 116 71 214 121 154 130 153 27 205 164 31 217 66 149 56 10 177 150 227 151 140 142 173 134 122
+                                        49 114 113 192 183 214 147 213 165 180 43 6 172 67 44 58 16 28 96 102 30 206 115 212 113 5 9 24 195 5 4 144 30 123 108 32 74 140 163 111 233 89 198 216 85 227 43 8 106 11 159 70 27 155 212 125
+                                       226 27 199 61 137 152 105 174 113 67 159 170 234 98 240 170 171 108 164 253 162 45 94 244 167 190 45 121 199 91 71 196 174 21 182 201 117 132 235 120 242 100 6 101 67 145 62 201 72 40 85 162 82
+                                       128 253 23 42 80 7 17 155 23 213 254 161 108 225 105 142 230 207 123 250 187 128 169 147 16 248 81 10 195 190 197 224 103 203 252 78 217 52 204 169 93 144 186 240 32 140 57 48 100 242 141 113 84
+                                        234 199 3 164 30 74 166 78 244 38 82 207 42 81 230 16 137 40 174 176 87 129 201 2 3 1 0 1 163 130 3 125 48 130 3 121 48 61 6 9 43 6 1 4 1 130 55 21 7 4 48 48 46 6 38 43 6 1 4 1 130 55 21 8 243
+                                       139 52 131 134 134 112 131 161 139 21 131 158 167 7 134 166 152 5 129 1 131 159 173 125 133 217 128 119 2 1 100 2 1 4 48 41 6 3 85 29 37 4 34 48 32 6 8 43 6 1 5 5 7 3 2 6 8 43 6 1 5 5 7 3 4 6 10
+                                        43 6 1 4 1 130 55 10 3 4 48 14 6 3 85 29 15 1 1 255 4 4 3 2 5 160 48 53 6 9 43 6 1 4 1 130 55 21 10 4 40 48 38 48 10 6 8 43 6 1 5 5 7 3 2 48 10 6 8 43 6 1 5 5 7 3 4 48 12 6 10 43 6 1 4 1 130 55
+                                        10 3 4 48 68 6 9 42 134 72 134 247 13 1 9 15 4 55 48 53 48 14 6 8 42 134 72 134 247 13 3 2 2 2 0 128 48 14 6 8 42 134 72 134 247 13 3 4 2 2 0 128 48 7 6 5 43 14 3 2 7 48 10 6 8 42 134 72 134 24
+                                       7 13 3 7 48 29 6 3 85 29 14 4 22 4 20 70 148 113 95 114 163 61 66 23 2 216 247 230 106 39 82 51 74 113 44 48 31 6 3 85 29 35 4 24 48 22 128 20 156 181 169 110 149 68 45 157 154 5 242 206 82 76 1
+                                       63 29 245 14 179 88 48 129 251 6 3 85 29 31 4 129 243 48 129 240 48 129 237 160 129 234 160 129 231 134 46 104 116 116 112 58 47 47 112 107 105 46 97 117 114 97 46 100 107 47 112 107 105 47 65 1
+                                       17 114 97 37 50 48 73 115 115 117 105 110 103 37 50 48 67 65 46 99 114 108 134 129 180 108 100 97 112 58 47 47 47 67 78 61 65 117 114 97 37 50 48 73 115 115 117 105 110 103 37 50 48 67 65 44 67
+                                       78 61 80 75 73 48 50 44 67 78 61 67 68 80 44 67 78 61 80 117 98 108 105 99 37 50 48 75 101 121 37 50 48 83 101 114 118 105 99 101 115 44 67 78 61 83 101 114 118 105 99 101 115 44 67 78 61 67 111
+                                        110 102 105 103 117 114 97 116 105 111 110 44 68 67 61 97 117 114 97 44 68 67 61 100 107 63 99 101 114 116 105 102 105 99 97 116 101 82 101 118 111 99 97 116 105 111 110 76 105 115 116 63 98 97
+                                        115 101 63 111 98 106 101 99 116 67 108 97 115 115 61 99 82 76 68 105 115 116 114 105 98 117 116 105 111 110 80 111 105 110 116 48 130 1 11 6 8 43 6 1 5 5 7 1 1 4 129 254 48 129 251 48 129 174
+                                       6 8 43 6 1 5 5 7 48 2 134 129 161 108 100 97 112 58 47 47 47 67 78 61 65 117 114 97 37 50 48 73 115 115 117 105 110 103 37 50 48 67 65 44 67 78 61 65 73 65 44 67 78 61 80 117 98 108 105 99 37 50
+                                        48 75 101 121 37 50 48 83 101 114 118 105 99 101 115 44 67 78 61 83 101 114 118 105 99 101 115 44 67 78 61 67 111 110 102 105 103 117 114 97 116 105 111 110 44 68 67 61 97 117 114 97 44 68 67 6
+                                       1 100 107 63 99 65 67 101 114 116 105 102 105 99 97 116 101 63 98 97 115 101 63 111 98 106 101 99 116 67 108 97 115 115 61 99 101 114 116 105 102 105 99 97 116 105 111 110 65 117 116 104 111 114
+                                        105 116 121 48 72 6 8 43 6 1 5 5 7 48 2 134 60 104 116 116 112 58 47 47 112 107 105 46 97 117 114 97 46 100 107 47 112 107 105 47 80 75 73 48 50 46 97 117 114 97 46 100 107 95 65 117 114 97 37
+                                       50 48 73 115 115 117 105 110 103 37 50 48 67 65 46 99 114 116 48 51 6 3 85 29 17 4 44 48 42 160 27 6 10 43 6 1 4 1 130 55 20 2 3 160 13 12 11 106 101 104 64 97 117 114 97 46 100 107 129 11 106 1
+                                       01 104 64 97 117 114 97 46 100 107 48 13 6 9 42 134 72 134 247 13 1 1 11 5 0 3 130 2 1 0 114 127 27 21 43 192 66 96 111 49 197 189 174 153 33 234 90 202 98 160 78 235 73 239 230 120 217 57 115 5
+                                       6 99 44 93 154 237 47 184 43 201 69 71 42 121 215 224 102 143 172 17 159 114 214 206 255 97 182 156 217 116 126 131 97 22 214 219 115 184 57 206 218 36 102 244 101 198 183 169 240 171 174 243 78
+                                        224 127 121 248 68 43 2 76 241 100 122 213 135 162 150 247 213 49 177 77 203 160 59 55 208 108 184 72 172 224 186 187 25 104 231 240 209 88 213 102 123 190 117 19 151 91 253 167 157 92 254 199
+                                       131 106 121 105 204 192 228 157 179 232 137 63 90 10 81 135 8 218 77 41 93 75 48 174 153 159 49 223 248 200 125 198 36 119 102 165 251 84 228 208 198 162 157 115 112 13 145 238 109 182 251 207 1
+                                       98 228 86 94 68 123 131 128 111 159 2 220 255 53 156 14 1 11 173 172 185 236 87 186 126 204 227 135 50 140 230 28 5 239 90 168 34 28 102 16 45 168 169 197 168 89 170 236 67 219 235 168 33 175 19
+                                        191 53 127 46 217 28 162 235 227 229 111 157 102 221 59 153 128 68 142 149 152 195 247 131 77 162 129 78 223 33 223 169 101 9 239 72 79 139 229 92 14 22 31 45 235 27 116 130 62 219 239 148 151
+                                       215 32 132 53 157 205 66 115 154 127 119 25 29 141 164 2 194 184 205 45 202 224 60 122 38 207 84 153 146 163 163 180 40 154 7 232 63 231 229 97 167 82 166 255 209 165 34 61 140 61 210 112 171 77
+                                        2 126 201 209 47 9 107 58 251 54 104 224 165 64 152 82 198 80 41 143 237 122 183 252 153 186 209 147 174 122 132 217 24 168 183 35 237 62 158 13 85 251 27 156 21 139 0 186 155 32 253 58 203 145
+                                        144 158 175 210 202 32 18 167 71 46 180 169 147 148 210 105 204 76 51 104 63 115 164 146 202 76 220 231 215 25 239 121 70 85 33 86 204 28 160 117 227 136 229 159 156 85 41 59 94 2 225 206 186 3
+                                       4 100 12 154 239 123 213 79 98 234 163 53 204 147 130 243 194 134 7 17 43 16 241 146 147 204 48 153 93 200 44 215 155 11 133 224 13 230 211 52 149 143 169 136 147 178 238 125 106 43 92 160 237 3
+                                       7 190 56 250, 48 130 8 24 48 130 6 0 160 3 2 1 2 2 19 19 0 10 208 27 11 185 15 236 121 59 196 91 0 0 0 10 208 27 48 13 6 9 42 134 72 134 247 13 1 1 11 5 0 48 68 49 18 48 16 6 10 9 146 38 137 147
+                                        242 44 100 1 25 22 2 100 107 49 20 48 18 6 10 9 146 38 137 147 242 44 100 1 25 22 4 97 117 114 97 49 24 48 22 6 3 85 4 3 19 15 65 117 114 97 32 73 115 115 117 105 110 103 32 67 65 48 30 23 13 5
+                                       0 49 48 57 50 55 48 57 50 50 48 51 90 23 13 50 50 48 57 50 55 48 57 50 50 48 51 90 48 129 199 49 18 48 16 6 10 9 146 38 137 147 242 44 100 1 25 22 2 100 107 49 20 48 18 6 10 9 146 38 137 147 242
+                                        44 100 1 25 22 4 97 117 114 97 49 19 48 17 6 3 85 4 11 19 10 65 85 82 65 32 85 115 101 114 115 49 13 48 11 6 3 85 4 11 19 4 65 85 82 65 49 27 48 25 6 3 85 4 11 19 18 70 111 114 114 101 116 110
+                                       105 110 103 115 115 101 114 118 105 99 101 49 11 48 9 6 3 85 4 11 19 2 73 84 49 17 48 15 6 3 85 4 11 19 8 73 84 32 100 114 105 102 116 49 30 48 28 6 3 85 4 3 19 21 74 97 99 111 98 32 69 110 103
+                                       103 97 114 100 32 72 101 101 97 103 101 114 49 26 48 24 6 9 42 134 72 134 247 13 1 9 1 22 11 106 101 104 64 97 117 114 97 46 100 107 48 130 1 34 48 13 6 9 42 134 72 134 247 13 1 1 1 5 0 3 130 1
+                                       15 0 48 130 1 10 2 130 1 1 0 191 222 16 19 253 18 80 31 141 6 80 166 168 179 68 187 70 236 179 23 174 36 106 168 12 227 229 46 50 244 76 45 92 74 14 106 43 159 77 190 39 104 66 88 191 93 180 130
+                                        100 225 64 115 104 37 44 117 180 75 121 67 117 84 15 41 242 35 151 30 143 87 184 20 203 69 187 123 223 125 36 70 141 249 212 199 131 62 222 147 215 157 248 186 89 19 65 229 121 217 254 74 170 5
+                                       1 86 151 146 231 46 55 78 73 95 136 99 54 161 24 251 168 189 243 161 72 238 233 197 133 158 145 156 145 64 170 46 12 187 246 150 67 42 208 235 127 41 85 126 56 55 134 237 124 117 144 185 82 21 2
+                                       37 62 162 88 125 249 237 210 121 99 245 159 16 175 35 21 33 147 128 204 12 48 16 52 230 0 236 230 217 102 131 136 89 55 146 164 250 249 6 1 124 95 144 112 67 145 31 111 206 200 67 142 248 60 96
+                                       79 70 151 221 180 90 218 46 237 211 53 206 55 252 145 156 77 39 99 117 94 62 140 21 210 120 86 162 133 246 195 216 22 67 208 207 145 191 16 35 75 207 195 89 77 25 2 3 1 0 1 163 130 3 125 48 130
+                                       3 121 48 61 6 9 43 6 1 4 1 130 55 21 7 4 48 48 46 6 38 43 6 1 4 1 130 55 21 8 243 139 52 131 134 134 112 131 161 139 21 131 158 167 7 134 166 152 5 129 1 131 159 173 125 133 217 128 119 2 1 100
+                                       2 1 4 48 41 6 3 85 29 37 4 34 48 32 6 8 43 6 1 5 5 7 3 2 6 8 43 6 1 5 5 7 3 4 6 10 43 6 1 4 1 130 55 10 3 4 48 14 6 3 85 29 15 1 1 255 4 4 3 2 5 160 48 53 6 9 43 6 1 4 1 130 55 21 10 4 40 48 38
+                                       48 10 6 8 43 6 1 5 5 7 3 2 48 10 6 8 43 6 1 5 5 7 3 4 48 12 6 10 43 6 1 4 1 130 55 10 3 4 48 68 6 9 42 134 72 134 247 13 1 9 15 4 55 48 53 48 14 6 8 42 134 72 134 247 13 3 2 2 2 0 128 48 14 6 8
+                                       42 134 72 134 247 13 3 4 2 2 0 128 48 7 6 5 43 14 3 2 7 48 10 6 8 42 134 72 134 247 13 3 7 48 29 6 3 85 29 14 4 22 4 20 253 231 3 49 54 65 139 237 249 90 87 172 97 35 10 108 194 25 247 78 48 31
+                                       6 3 85 29 35 4 24 48 22 128 20 156 181 169 110 149 68 45 157 154 5 242 206 82 76 163 29 245 14 179 88 48 129 251 6 3 85 29 31 4 129 243 48 129 240 48 129 237 160 129 234 160 129 231 134 46 104 1
+                                       16 116 112 58 47 47 112 107 105 46 97 117 114 97 46 100 107 47 112 107 105 47 65 117 114 97 37 50 48 73 115 115 117 105 110 103 37 50 48 67 65 46 99 114 108 134 129 180 108 100 97 112 58 47 47 4
+                                       7 67 78 61 65 117 114 97 37 50 48 73 115 115 117 105 110 103 37 50 48 67 65 44 67 78 61 80 75 73 48 50 44 67 78 61 67 68 80 44 67 78 61 80 117 98 108 105 99 37 50 48 75 101 121 37 50 48 83 101 1
+                                       14 118 105 99 101 115 44 67 78 61 83 101 114 118 105 99 101 115 44 67 78 61 67 111 110 102 105 103 117 114 97 116 105 111 110 44 68 67 61 97 117 114 97 44 68 67 61 100 107 63 99 101 114 116 105
+                                       102 105 99 97 116 101 82 101 118 111 99 97 116 105 111 110 76 105 115 116 63 98 97 115 101 63 111 98 106 101 99 116 67 108 97 115 115 61 99 82 76 68 105 115 116 114 105 98 117 116 105 111 110 80
+                                        111 105 110 116 48 130 1 11 6 8 43 6 1 5 5 7 1 1 4 129 254 48 129 251 48 129 174 6 8 43 6 1 5 5 7 48 2 134 129 161 108 100 97 112 58 47 47 47 67 78 61 65 117 114 97 37 50 48 73 115 115 117 105
+                                       110 103 37 50 48 67 65 44 67 78 61 65 73 65 44 67 78 61 80 117 98 108 105 99 37 50 48 75 101 121 37 50 48 83 101 114 118 105 99 101 115 44 67 78 61 83 101 114 118 105 99 101 115 44 67 78 61 67 1
+                                       11 110 102 105 103 117 114 97 116 105 111 110 44 68 67 61 97 117 114 97 44 68 67 61 100 107 63 99 65 67 101 114 116 105 102 105 99 97 116 101 63 98 97 115 101 63 111 98 106 101 99 116 67 108 97
+                                       115 115 61 99 101 114 116 105 102 105 99 97 116 105 111 110 65 117 116 104 111 114 105 116 121 48 72 6 8 43 6 1 5 5 7 48 2 134 60 104 116 116 112 58 47 47 112 107 105 46 97 117 114 97 46 100 107
+                                        47 112 107 105 47 80 75 73 48 50 46 97 117 114 97 46 100 107 95 65 117 114 97 37 50 48 73 115 115 117 105 110 103 37 50 48 67 65 46 99 114 116 48 51 6 3 85 29 17 4 44 48 42 160 27 6 10 43 6 1 4
+                                        1 130 55 20 2 3 160 13 12 11 106 101 104 64 97 117 114 97 46 100 107 129 11 106 101 104 64 97 117 114 97 46 100 107 48 13 6 9 42 134 72 134 247 13 1 1 11 5 0 3 130 2 1 0 105 218 9 147 156 193 1
+                                       5 207 103 97 123 186 135 153 107 59 224 11 249 83 235 184 82 187 172 132 186 254 77 19 6 180 67 108 186 241 21 190 141 119 215 14 1 152 3 179 248 247 136 136 191 46 166 13 67 16 233 137 196 187
+                                       173 203 113 179 242 231 42 2 60 15 90 131 62 45 241 229 46 61 190 236 168 25 158 147 49 181 233 231 12 96 237 174 158 110 53 238 59 180 155 89 189 224 24 222 92 219 10 178 183 188 226 212 169 0
+                                       194 38 115 247 121 13 116 128 137 46 62 20 101 85 204 21 172 160 80 158 180 215 75 8 39 177 18 131 238 126 131 13 82 11 199 22 45 85 221 173 228 13 210 152 16 17 243 177 66 30 160 249 7 106 139
+                                       162 40 37 176 205 160 31 254 41 81 239 201 89 56 6 49 82 187 13 230 93 47 73 151 200 253 114 91 68 78 244 87 5 99 9 115 16 170 37 249 33 116 97 139 11 95 126 148 137 159 244 236 210 58 245 248 7
+                                       3 132 148 110 22 82 151 53 217 141 15 246 65 238 110 164 197 153 231 47 115 65 87 253 8 201 213 242 218 147 8 197 58 197 8 178 213 118 127 125 56 178 74 136 246 162 5 230 154 115 181 188 207 162
+                                        98 167 108 116 243 7 156 130 50 187 248 51 167 91 86 73 110 89 235 104 237 154 131 235 223 73 71 5 164 249 14 36 111 242 136 191 208 41 171 15 224 110 51 100 59 210 135 27 47 201 101 118 94 2 1
+                                       90 115 60 36 89 207 55 200 156 94 32 252 201 113 87 20 220 0 204 65 210 49 125 83 20 76 38 92 115 41 77 136 211 80 182 226 162 143 39 91 23 115 15 17 158 182 171 36 253 16 226 129 174 75 169 31
+                                       236 150 117 170 152 23 88 209 21 91 96 185 170 42 200 46 104 140 179 1 51 23 169 0 7 44 26 87 35 1 16 72 186 201 150 148 38 159 22 75 67 251 158 219 54 29 96 114 190 220 22 98 167 248 68 82 107
+                                       49 93 237 142 34 96 12 42 110 223 38 191 0 122 106 228 221 25 230 112 121 253 211 21 167 218 130 45 170 242 90 178 244 212 150 157 219 181 61 62 158 168 56 243 161 5 147 207 195 104 210 34 246 2
+                                       46 133 84 189 133 115 51 21 224 180 240 17 248...}
+UserPrincipalName                    : jeh@aura.dk
+uSNChanged                           : 240597576
+uSNCreated                           : 200435605
+whenChanged                          : 01-12-2021 14:56:56
+whenCreated                          : 11-12-2020 13:35:12
+wWWHomePage                          : aura.dk
+
+
+
+**********************
+Windows PowerShell transcript end
+End time: 20211215071218
+**********************
+**********************
+Windows PowerShell transcript start
+Start time: 20220307093530
+Username: AURA\jehadmin
+RunAs User: AURA\jehadmin
+Configuration Name: 
+Machine: AD02 (Microsoft Windows NT 10.0.17763.0)
+Host Application: C:\WINDOWS\system32\WindowsPowerShell\v1.0\PowerShell_ISE.exe
+Process ID: 11820
+PSVersion: 5.1.17763.2268
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.17763.2268
+BuildVersion: 10.0.17763.2268
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+Transcript started, output file is C:\Scripts\AD\Log\AddADGroupToLocalAdminstrators.txt
+PS>TerminatingError(Get-ADGroup): "Cannot find an object with identity: 'appl-ora-01-Admin' under: 'DC=aura,DC=dk'."
+Get-ADGroup : Cannot find an object with identity: 'appl-ora-01-Admin' under: 'DC=aura,DC=dk'.
+At line:23 char:11
++     if (!(Get-ADGroup $GroupName))
++           ~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (appl-ora-01-Admin:ADGroup) [Get-ADGroup], ADIdentityNotFoundException
+    + FullyQualifiedErrorId : ActiveDirectoryCmdlet:Microsoft.ActiveDirectory.Management.ADIdentityNotFoundException,Mic
+rosoft.ActiveDirectory.Management.Commands.GetADGroup
+Get-ADGroup : Cannot find an object with identity: 'appl-ora-01-Admin' under: 'DC=aura,DC=dk'.
+At line:23 char:11
++     if (!(Get-ADGroup $GroupName))
++           ~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (appl-ora-01-Admin:ADGroup) [Get-ADGroup], ADIdentityNotFoundException
+    + FullyQualifiedErrorId : ActiveDirectoryCmdlet:Microsoft.ActiveDirectory.Management.ADIdentityNotFoundException,Microsoft.ActiveDirectory.Management.Commands.GetADGroup
+
+Principal appl-ora-01-Admin was not found.
+    + CategoryInfo          : ObjectNotFound: (appl-ora-01-Admin:String) [Add-LocalGroupMember], PrincipalNotFoundExcept
+ion
+    + FullyQualifiedErrorId : PrincipalNotFound,Microsoft.PowerShell.Commands.AddLocalGroupMemberCommand
+    + PSComputerName        : appl-ora-01.aura.dk
+Principal appl-ora-01-Admin was not found.
+    + CategoryInfo          : ObjectNotFound: (appl-ora-01-Admin:String) [Add-LocalGroupMember], PrincipalNotFoundException
+    + FullyQualifiedErrorId : PrincipalNotFound,Microsoft.PowerShell.Commands.AddLocalGroupMemberCommand
+    + PSComputerName        : appl-ora-01.aura.dk
+
+**********************
+Windows PowerShell transcript end
+End time: 20220307093536
+**********************

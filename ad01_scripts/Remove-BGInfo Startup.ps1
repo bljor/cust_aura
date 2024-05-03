@@ -1,0 +1,1 @@
+﻿rm "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup\apply_bginfo.bat"

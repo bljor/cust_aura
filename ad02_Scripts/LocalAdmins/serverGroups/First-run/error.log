@@ -1,0 +1,14 @@
+[11:03:26.192]: WARNING:		 Server: MAILDAG01 is NOT responding
+[11:03:26.739]: WARNING:		 Server: DB-MIDAS is NOT responding
+[11:03:27.255]: WARNING:		 Server: TS-APPL-AIM is NOT responding
+[11:03:27.786]: WARNING:		 Server: PRTG is NOT responding
+[11:03:28.333]: WARNING:		 Server: APPL-EXPANDIT-T is NOT responding
+[11:03:28.864]: WARNING:		 Server: DB-AX-OLD is NOT responding
+[11:03:29.739]: WARNING:		 Server: PRTG01 is NOT responding
+[11:03:30.286]: WARNING:		 Server: KAMSTRUPTEMP is NOT responding
+[11:03:30.880]: WARNING:		 Server: EXCH01 is NOT responding
+[11:03:31.380]: WARNING:		 Server: EXCH02 is NOT responding
+[11:03:31.896]: WARNING:		 Server: DAG01 is NOT responding
+[11:03:32.864]: WARNING:		 Server: HYPERV12 is NOT responding
+[11:03:33.380]: WARNING:		 Server: SQL-DINEL-XELLE is NOT responding
+[11:03:33.896]: WARNING:		 Server: DINEL-XELLENT-M is NOT responding

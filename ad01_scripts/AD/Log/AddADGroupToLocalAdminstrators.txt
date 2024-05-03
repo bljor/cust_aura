@@ -1,0 +1,144 @@
+﻿**********************
+Windows PowerShell transcript start
+Start time: 20220323091522
+Username: AURA\jehadmin
+RunAs User: AURA\jehadmin
+Configuration Name: 
+Machine: AD01 (Microsoft Windows NT 10.0.17763.0)
+Host Application: C:\WINDOWS\system32\WindowsPowerShell\v1.0\PowerShell_ISE.exe
+Process ID: 10928
+PSVersion: 5.1.17763.2268
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.17763.2268
+BuildVersion: 10.0.17763.2268
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+Transcript started, output file is C:\Scripts\AD\Log\AddADGroupToLocalAdminstrators.txt
+PS>TerminatingError(Get-ADGroup): "Cannot find an object with identity: 'appl-ora-01-Admin' under: 'DC=aura,DC=dk'."
+Get-ADGroup : Cannot find an object with identity: 'appl-ora-01-Admin' under: 'DC=aura,DC=dk'.
+At line:23 char:11
++     if (!(Get-ADGroup $GroupName))
++           ~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (appl-ora-01-Admin:ADGroup) [Get-ADGroup], ADIdentityNotFoundException
+    + FullyQualifiedErrorId : ActiveDirectoryCmdlet:Microsoft.ActiveDirectory.Management.ADIdentityNotFoundException,Mic
+rosoft.ActiveDirectory.Management.Commands.GetADGroup
+Get-ADGroup : Cannot find an object with identity: 'appl-ora-01-Admin' under: 'DC=aura,DC=dk'.
+At line:23 char:11
++     if (!(Get-ADGroup $GroupName))
++           ~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (appl-ora-01-Admin:ADGroup) [Get-ADGroup], ADIdentityNotFoundException
+    + FullyQualifiedErrorId : ActiveDirectoryCmdlet:Microsoft.ActiveDirectory.Management.ADIdentityNotFoundException,Microsoft.ActiveDirectory.Management.Commands.GetADGroup
+
+Principal appl-ora-01-Admin was not found.
+    + CategoryInfo          : ObjectNotFound: (appl-ora-01-Admin:String) [Add-LocalGroupMember], PrincipalNotFoundExcept
+ion
+    + FullyQualifiedErrorId : PrincipalNotFound,Microsoft.PowerShell.Commands.AddLocalGroupMemberCommand
+    + PSComputerName        : appl-ora-01.aura.dk
+Principal appl-ora-01-Admin was not found.
+    + CategoryInfo          : ObjectNotFound: (appl-ora-01-Admin:String) [Add-LocalGroupMember], PrincipalNotFoundException
+    + FullyQualifiedErrorId : PrincipalNotFound,Microsoft.PowerShell.Commands.AddLocalGroupMemberCommand
+    + PSComputerName        : appl-ora-01.aura.dk
+
+**********************
+Windows PowerShell transcript end
+End time: 20220323091525
+**********************
+**********************
+Windows PowerShell transcript start
+Start time: 20220324111041
+Username: AURA\jehadmin
+RunAs User: AURA\jehadmin
+Configuration Name: 
+Machine: AD01 (Microsoft Windows NT 10.0.17763.0)
+Host Application: C:\WINDOWS\system32\WindowsPowerShell\v1.0\PowerShell_ISE.exe
+Process ID: 10928
+PSVersion: 5.1.17763.2268
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.17763.2268
+BuildVersion: 10.0.17763.2268
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+Transcript started, output file is C:\Scripts\AD\Log\AddADGroupToLocalAdminstrators.txt
+PS>TerminatingError(Get-ADGroup): "Cannot find an object with identity: 'appl-ora-01-Admin' under: 'DC=aura,DC=dk'."
+Get-ADGroup : Cannot find an object with identity: 'appl-ora-01-Admin' under: 'DC=aura,DC=dk'.
+At line:23 char:11
++     if (!(Get-ADGroup $GroupName -ErrorAction SilentlyContinue))
++           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (appl-ora-01-Admin:ADGroup) [Get-ADGroup], ADIdentityNotFoundException
+    + FullyQualifiedErrorId : ActiveDirectoryCmdlet:Microsoft.ActiveDirectory.Management.ADIdentityNotFoundException,Mic
+rosoft.ActiveDirectory.Management.Commands.GetADGroup
+Get-ADGroup : Cannot find an object with identity: 'appl-ora-01-Admin' under: 'DC=aura,DC=dk'.
+At line:23 char:11
++     if (!(Get-ADGroup $GroupName -ErrorAction SilentlyContinue))
++           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (appl-ora-01-Admin:ADGroup) [Get-ADGroup], ADIdentityNotFoundException
+    + FullyQualifiedErrorId : ActiveDirectoryCmdlet:Microsoft.ActiveDirectory.Management.ADIdentityNotFoundException,Microsoft.ActiveDirectory.Management.Commands.GetADGroup
+
+Principal appl-ora-01-Admin was not found.
+    + CategoryInfo          : ObjectNotFound: (appl-ora-01-Admin:String) [Add-LocalGroupMember], PrincipalNotFoundExcept
+ion
+    + FullyQualifiedErrorId : PrincipalNotFound,Microsoft.PowerShell.Commands.AddLocalGroupMemberCommand
+    + PSComputerName        : appl-ora-01.aura.dk
+Principal appl-ora-01-Admin was not found.
+    + CategoryInfo          : ObjectNotFound: (appl-ora-01-Admin:String) [Add-LocalGroupMember], PrincipalNotFoundException
+    + FullyQualifiedErrorId : PrincipalNotFound,Microsoft.PowerShell.Commands.AddLocalGroupMemberCommand
+    + PSComputerName        : appl-ora-01.aura.dk
+
+**********************
+Windows PowerShell transcript end
+End time: 20220324111046
+**********************
+**********************
+Windows PowerShell transcript start
+Start time: 20220324111153
+Username: AURA\jehadmin
+RunAs User: AURA\jehadmin
+Configuration Name: 
+Machine: AD01 (Microsoft Windows NT 10.0.17763.0)
+Host Application: C:\WINDOWS\system32\WindowsPowerShell\v1.0\PowerShell_ISE.exe
+Process ID: 10928
+PSVersion: 5.1.17763.2268
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.17763.2268
+BuildVersion: 10.0.17763.2268
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+Transcript started, output file is C:\Scripts\AD\Log\AddADGroupToLocalAdminstrators.txt
+PS>TerminatingError(Get-ADGroup): "Cannot find an object with identity: 'hyperv-cluster-Admin' under: 'DC=aura,DC=dk'."
+Get-ADGroup : Cannot find an object with identity: 'hyperv-cluster-Admin' under: 'DC=aura,DC=dk'.
+At line:23 char:11
++     if (!(Get-ADGroup $GroupName -ErrorAction SilentlyContinue))
++           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (hyperv-cluster-Admin:ADGroup) [Get-ADGroup], ADIdentityNotFoundException
+    + FullyQualifiedErrorId : ActiveDirectoryCmdlet:Microsoft.ActiveDirectory.Management.ADIdentityNotFoundException,Mic
+rosoft.ActiveDirectory.Management.Commands.GetADGroup
+Get-ADGroup : Cannot find an object with identity: 'hyperv-cluster-Admin' under: 'DC=aura,DC=dk'.
+At line:23 char:11
++     if (!(Get-ADGroup $GroupName -ErrorAction SilentlyContinue))
++           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (hyperv-cluster-Admin:ADGroup) [Get-ADGroup], ADIdentityNotFoundException
+    + FullyQualifiedErrorId : ActiveDirectoryCmdlet:Microsoft.ActiveDirectory.Management.ADIdentityNotFoundException,Microsoft.ActiveDirectory.Management.Commands.GetADGroup
+
+Principal hyperv-cluster-Admin was not found.
+    + CategoryInfo          : ObjectNotFound: (hyperv-cluster-Admin:String) [Add-LocalGroupMember], PrincipalNotFoundExc
+eption
+    + FullyQualifiedErrorId : PrincipalNotFound,Microsoft.PowerShell.Commands.AddLocalGroupMemberCommand
+    + PSComputerName        : hyperv-cluster.aura.dk
+Principal hyperv-cluster-Admin was not found.
+    + CategoryInfo          : ObjectNotFound: (hyperv-cluster-Admin:String) [Add-LocalGroupMember], PrincipalNotFoundException
+    + FullyQualifiedErrorId : PrincipalNotFound,Microsoft.PowerShell.Commands.AddLocalGroupMemberCommand
+    + PSComputerName        : hyperv-cluster.aura.dk
+
+**********************
+Windows PowerShell transcript end
+End time: 20220324111154
+**********************
