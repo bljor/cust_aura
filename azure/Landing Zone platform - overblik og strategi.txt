@@ -1,0 +1,21 @@
+Landing Zone: platform
+
+Indeholder basal infrastruktur til hele Auras infrastruktur i Azure. Alle centrale komponenter ligger her.
+
+Platform anvendes udelukkende til kørende løsninger. Den indeholder ikke test- eller udviklings-konfigurationer (eks. test-application gateway, test-api management, eller tilsvarende).
+
+Alt hvad der findes i platform subscription ligger udelukkende der. Der findes ikke flere kopier af elementer i platform.
+
+
+Hvad skal platform indeholde:
+
+- Azure Firewall Premium
+- Azure Keyvault
+  Skal indeholde passwords, secrets og certifikater som anvendes i forbindelse med driften af platformen. Denne keyvault må ikke indeholde secrets, apikeys og certifikater
+  anvendes i selve løsningen (f.eks. ifm. autentificering af en service fra AURA, der henter data fra Kamstrups API).
+- DNS zones
+- Virtual Networks
+- Public IP addresses
+- 
+
+

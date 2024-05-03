@@ -1,0 +1,59 @@
+$newapp = "test0001-ext-bjo-slettes"
+$apiid = "00000003-0000-0000-c000-000000000000"			# Microsoft Entra API
+$apiperm = "e1fe6dd8-ba31-4d61-89e7-88639da4683d=Scope"		# Hvilke rettigheder der skal tildeles
+$permscope = "User.Read"					# På hvilket niveau skal adgang tildeles
+
+
+# Create the app registration
+$appid = (az ad app create --display-name $newapp --app-roles @app-roles.json --enable-id-token-issuance --required-resource-access @resource-access.json --web-redirect-uris "https://localhost:44368/signin-oidc" "https://mdas.dev.aura.dk:44369/signin-oidc" | convertfrom-json | select appid).appid
+
+
+
+# Retrieve the ID of the App Registration
+Write-Host "New app created with ID " $appid
+
+# Create the Enterprise App (service principal)
+az ad sp create --id $appid
+
+# Add permissions to the Enterprise App
+ az ad app permission add --id $appid --api $apiid --api-permissions $apiperm
+
+# Grant permissions to the Enterprise App - DENNE SKAL ÆNDRES, DER TILDELES ADMIN CONSENT TIL USER.READ, DEN BØR LIGGE UNDER USER CONSENT
+az ad app permission grant --id $appid --api $apiid --scope $permscope
+
+
+
+
+
+
+
+
+
+
+# az ad sp create-for-rbac -n $newapp 
+
+
+
+#az ad sp list --display-name $newapp
+
+
+Brug der mangler tags på den jeg laver ... HideApp + en anden... Tags kan kun tilføjes med kald af REST API:
+
+# mine eksempler nedenfor - 1 stk til opdatering og 1 til at hente data efterfølgende
+az rest --method PATCH --url https://graph.microsoft.com/v1.0/servicePrincipals/8f37eeb5-ebf5-4512-b8f5-120990970f6d --body '{"homepage":"http:/localhost"}'
+az rest --method GET --url https://graph.microsoft.com/v1.0/servicePrincipals/8f37eeb5-ebf5-4512-b8f5-120990970f6d
+
+
+
+
+
+
+# Eksemplet der er udgangspunkt for ovestående
+# $ az rest --method PATCH --url https://graph.microsoft.com/v1.0/servicePrincipals/52e3d1ac-48c1-4486-8ed6-ad99a74415a7 --body '{"tags":["mytag2_sp"]}'
+# $ az rest --method GET --url https://graph.microsoft.com/v1.0/servicePrincipals/52e3d1ac-48c1-4486-8ed6-ad99a74415a7
+# ...
+#   "tags": [
+#    "mytag2_sp",
+#     "mytag1_app"
+#   ],
+
