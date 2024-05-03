@@ -1,0 +1,77 @@
+Task 15612:
+
+APP_NAME : MDAS
+HOST_NAME_PART1: (still unknown)
+
+
+DEV:
+-----
+NAME:			SIGN-IN-MDAS-unknown-host-app-d-aura
+Client ID:		19ba5030-b23d-43ca-bfb4-186eb40f84ab
+Tenant ID:		3edc1f09-0806-41b0-af0b-50944799113a
+Redirect URI:		Web  https://localhost:44368/
+Azure AD group:		AZ-ENTERPRISE-APPLICATION-DA-U-MDAS-dev-aura
+
+
+TEST:
+-----
+NAME:			SIGN-IN-MDAS-unknown-host-app-t-aura
+Client ID:		
+Tenant ID:		
+Redirect URI:		
+Azure AD group:		AZ-ENTERPRISE-APPLICATION-DA-U-MDAS-test-aura
+
+
+PRE-PROD:
+---------
+NAME:			SIGN-IN-MDAS-unknown-host-app-pp-aura
+Client ID:		
+Tenant ID:		
+Redirect URI:		
+Azure AD group:		AZ-ENTERPRISE-APPLICATION-DA-U-MDAS-pre-prod-aura
+
+
+PROD:
+-----
+NAME:			SIGN-IN-MDAS-unknown-host-app-p-aura
+Client ID:		
+Tenant ID:		
+Redirect URI:		
+Azure AD group:		AZ-ENTERPRISE-APPLICATION-DA-U-MDAS-prod-aura
+
+Task 15618:
+
+APP_NAME: refeed
+HOST_NAME_PART1: (still unknown)
+
+DEV:
+-----
+NAME:			SIGN-IN-refeed-unknown-host-app-d-aura
+Client ID:		50ba41e2-f04a-407f-92cf-61194aa0d1a7
+Tenant ID:		3edc1f09-0806-41b0-af0b-50944799113a
+Azure AD Group:		AZ-ENTERPRISE-APPLICATION-DA-US-refeed-dev-aura
+
+
+TEST:
+-----
+NAME:			SIGN-IN-refeed-unknown-host-app-t-aura
+Client ID:		
+Tenant ID:		
+Azure AD Group:		AZ-ENTERPRISE-APPLICATION-DA-US-refeed-test-aura
+
+
+PRE-PROD:
+---------
+NAME:			SIGN-IN-refeed-unknown-host-app-pp-aura
+Client ID:		
+Tenant ID:		
+Azure AD Group:		AZ-ENTERPRISE-APPLICATION-DA-US-refeed-pre-prod-aura
+
+
+PROD:
+-----
+NAME:			SIGN-IN-refeed-unknown-host-app-p-aura
+Client ID:		
+Tenant ID:		
+Azure AD Group:		AZ-ENTERPRISE-APPLICATION-DA-US-refeed-prod-aura
+

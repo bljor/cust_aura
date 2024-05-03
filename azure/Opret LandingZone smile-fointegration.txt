@@ -1,0 +1,22 @@
+Der oprettes 2 subscriptions pr. løsning
+
+Create subscription						(kræver minimum v6.2 af PowerShell, så vidt jeg husker)
+
+Move subscription						(placeringen af subscriptions i management groups er lidt rodet ... jeg kan ikke forstå blandingen af online og corp i det der er oprettet. Bør rettes op.
+
+Create resource groups						(på hes integrationen ligger det hele i én resource group, jf. dokumentationen skal der oprettes en resource group til ting der deployes sammen, tænker
+								derfor at eks. en container app skal ligge i sin egen resource group.
+
+								Udviklerne skal definere hvilke der skal oprettes.
+
+(Optional) Create V-NET resource groups for landing zone.	Skal vel først oprettes på det tidspunkt, hvor en ressource skal vnet integreres?
+
+Create security groups for landing zone.			.\CreateSecurityGroupsForEnvironment.ps1 -landingZoneSubscription smile-fointegration-sub-nonproduction-dinel -environment Dev
+- fails, groups created ... but not assigned to subscription
+- man skal sikkert have en ekstra rolle aktiveret (og jeg kan ikke tage GA)
+
+
+
+
+
+

@@ -1,0 +1,138 @@
+------------------------------------------------------------------------------------------------------------------------
+1. OPRET NYT SUBSCRIPTION
+Script name:	CreateSubscription.ps1
+
+- Anvendte parametre:
+	landingZoneName:			smile-fsintegration
+	environmentType:			nonproduction
+	organization:				dinel
+
+Resultat:	Navn på det oprettede subscription = smile-fsintegration-sub-nonproduction-dinel
+
+- Nye grupper (tildeles rettigheder til subscription, og der defineres rettigheder i PIM):
+	AZ-LANDINGZONE-DA-U-CONTRIBUTOR-smile-fsintegration-sub-nonproduction-dinel-test
+	AZ-LANDINGZONE-DA-U-PIMCONTRIBUTOR-smile-fsintegration-sub-nonproduction-dinel-test
+	AZ-LANDINGZONE-DA-U-READER-smile-fsintegration-sub-nonproduction-dinel-test
+	AZ-LANDINGZONE-DA-U-PIMREADER-smile-fsintegration-sub-nonproduction-dinel-test
+
+------------------------------------------------------------------------------------------------------------------------
+2. OPRET AZURE AD SIKKERHEDSGRUPPER TIL BRUG FOR DEN NYE LANDING landingZoneName
+Script name:	CreateSecurityGroupsForEnvironment.ps1
+
+- Anvendte parametre:
+	landingZoneSubscription:	smile-fsintegration-sub-nonproduction-dinel
+	environment:				Test
+
+Resultat:	
+Skift til det subscription som er den landing zone der sendes med i landingZoneSubscription.
+
+Opret 4 grupper i Azure AD:
+- readerGroup			AZ-LANDINGZONE-DA-U-READER-$landingZoneSubscription
+- contributorGroup		AZ-LANDINGZONE-DA-U-CONTRIBUTOR-$landingZoneSubscription
+- pimReaderGroup		AZ-LANDINGZONE-DA-U-PIMREADER-$landingZoneSubscription
+- pimContributorGroup	AZ-LANDINGZONE-DA-U-PIMCONTRIBUTOR-$landingZoneSubscription
+
+Tildel rettigheder til grupperne:
+- alle grupper får reader adgang til det subscription der er angivet i landingZoneSubscription.
+- registrer readerGroup og contributorGroup i PIM
+- giver contributorGroup hhv. Reader og ArcPull adgang til sharedcrpaura i platform-subscription
+- Hvis environment = Production, så får contributorGroup reader adgang til "Email IT Service" i platform-subscription
+
+------------------------------------------------------------------------------------------------------------------------
+3. FLYT SUBSCRIPTION TIL DEN RIGTIGE MANAGEMENT GROUP
+Script name:	MoveSubscription.ps1
+
+- Anvendte parametre
+	subscriptionName:			smile-fsintegration-sub-nonproduction-dinel
+	environmentType:			non-prod
+	organization:				dinel
+	onlineOrCorporate:			online
+
+Resultat:	Subscription bliver lagt ind under den management group som skal anvendes, defineret
+			ud fra de kriterier / parametre der er brugt.
+
+------------------------------------------------------------------------------------------------------------------------
+4. OPRET NY RESOURCE GROUP
+Script name:	CreateResouceGroupInLandingZone.ps1		(NB: Stavefejl i ResourceGroup er rigtig nok)
+
+- Anvendte parametre:
+	landingZoneSubscription:	smile-fsintegration-sub-nonproduction-dinel
+	resourceGroupName:			fsintegration-infrastructure-rg-d-dinel
+	costCenter:					DinEl
+	opsTeam:					IT-Drift
+	environment:				Dev
+
+Resultat:	Navn på den oprettede resource group = fsintegration-infrastructure-rg-d-dinel
+
+Resource group skal oprettes, der skal defineres Tags på den, og så er der nogle grupper
+fra Azure AD som skal tildeles rettigheder til resourcegruppen.
+
+Sørg for at $landingZoneSubscription bliver det aktive subscription.
+
+Kør bicep validering (ResourceGroup.bicep)
+--location		westeurope
+--parameters
+				resourceGroupName	= $resourceGroupName
+				costCenterTag		= $costCenter
+				opsTeamTag			= $opsTeam
+				environmentTag		= $environment
+
+Definer navne på de grupper, som skal have tildelt rettigheder til den nye resource group.
+
+- readerGroup		= AZ-LANDINGZONE-DA-U-READER-$landingZoneSubscriotion
+- contributorGroup	= AZ-LANDINGZONE-DA-U-CONTRIBUTOR-$landingZoneSubscription
+
+Kør bicep deployment (ResourceGroup.bicep)
+--location		westeurope
+--template-file	ResourceGroup-bicep
+--parameters	resourceGroupName=$resourceGRoupName costCenterTag=$costCenter opsTeamTag=$opsTeam environmentTag=$environment
+
+Tildel reader adgang til subscription $landingZoneSubscription for readerGroup
+
+Tildel contributor adgang til resourcegruppen $resourceGroupName til contributorGroup
+
+Hvis der er tale om enten Dev eller Test environment, så udføres yderligere:
+
+	- medlemmer af contributorGroup får tildelt delegation rettigheder til følgende roller på resourcegruppen:
+		- ArcPull, Storage Blob Data Contributor, Key Vault Secrets User, Storage Table Data Contributor,
+	  	  Azure Service Bus Data Receiver, Azure Service Bus Data Sender, EventGrid Contributor
+
+	- medlemmer af contributorGroup får tildelt følgende roller:
+		- Key Vault Secrets Officer, Key Vault Secrets User, Storage Blob Data Contributor, Azure Service Bus Data Sender,
+	  	  Azure Service Bus Data Receiver
+
+------------------------------------------------------------------------------------------------------------------------
+5. FORBIND TIL AZURE DEVOPS
+Script name:	Der findes ikke noget script til dette
+
+Hvad skal der laves?
+
+Der skal laves App Registrations / Service Principals som kan anvendes af service connection 4til at forbinde til Azure Resource Manager.
+
+Der skal laves en service connection i DevOps i SMILE Integrations projektet.
+
+============================================================================================================================================================================================
+Eksempler lavet i tidligere projekter:
+
+Subscription ID							Subscription Name:								Service Principal						App Registration
+070d4b31-5ff8-494a-bf07-c1c0e275859a	smile-hesintegration-sub-nonproduction-dinel	2998a22a-ad35-4c9b-a810-eca762306388	devops/SMILE Integrations/smile-hesintegration-dinel-sandbox
+a12d307e-13e0-425a-ac7a-e287154c6ab8	smile-hesintegration-sub-sandbox-dinel			65424370-6c35-4d20-a614-4f71aedaf65a	devops/SMILE Integrations/smile-hesintegration-dinel-test
+============================================================================================================================================================================================
+
+
+New service connection:
+- Azure Resource Manager
+- Next
+- Service principal (manual)
+- Environment:				Azure Cloud
+- Scope Level:  			Subscription
+- Subscription ID:			[Indtast ID'et fra azure portalen]
+- Subscription name:		(regner med den udfyldes automatisk, hvis ikke - så udfyld med det korrekte navn)
+- Service Principal Id:		[Indtast ID'et som er oprettet]
+- Service Principal Key:	[Indtast Key som er oprettet]
+- Tenant ID:				[Indtast Tenant ID fra azure portalen]
+- Klik Verify
+- Service connection name:	Giv forbindelsen et navn. DU BØR VÆLGE: navnet på det subscription som der forbindes til.
+
+
+Resultat:	Der skal findes en service connection i Azure DevOps, som er forbundet til noget i 
