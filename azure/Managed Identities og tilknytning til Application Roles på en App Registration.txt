@@ -1,0 +1,96 @@
+https://learn.microsoft.com/en-us/entra/identity/managed-identities-azure-resources/how-to-assign-app-role-managed-identity-powershell?tabs=azurepowershell
+
+
+# Hent ID for App Registration
+$app_obj_id = (Get-MgApplication -Filter "DisplayName eq 'bc-agreement-api-app-t-aura'").Id
+
+
+# Hent liste over app roles
+$app_roles = (Get-MgApplication -ApplicationId $app_obj_id)
+
+
+Get-MgServicePrincipalAppRoleAssignment -ServicePrincipalId [$servicePrincipal] -PrincipalId [$managedIdentityId] -ResourceId [$AppRoleId]
+
+
+
+
+
+
+=========== TIDLIGERE NOTER, SOM INDEHOLDER DET HELT RIGTIGE ===== OVENSTÅENDE HAR MÅSKE EN FEJL ELLER 2
+
+
+#SR-13310 - Andre opgaver: AD identitet tilføjes til IP/SQL grupper
+
+Opgaven er 2-delt.
+
+1) Meld identiteten dkr-cms-umbraco-id-t-aura ind i følgende grupper
+
+- AZ-LANDINGZONE-DA-U-SQL-dkr-cms-umbraco-Test
+- AZ-LANDINGZONE-DA-U-Blob-dkr-cms-umbraco-Test
+
+
+
+2) Sørg for at identiteten dkr-cms-umbraco-id-t-aura, får følgende roller
+   på Enterprise App : bc-agreement-api-app-t-aura
+
+   -Internal:        internalclient				6e5df880-3092-45f3-95f1-947e2d682b49
+   - Product BC:     ProductRead				
+   - Agreement BC:   OrdersReadWrite, AgreementsRead		201d1fb9-07d5-4547-89ff-3c905968f296, 5ad73da4-59d2-4532-b096-766b497793a6
+   - Customer BC:    CprRead
+
+
+Krav før tildeling af rettigheder:
+https://learn.microsoft.com/en-us/entra/identity/managed-identities-azure-resources/how-to-assign-app-role-managed-identity-powershell?tabs=azurepowershell
+
+
+$userManagedIdentityResourceId = '/subscriptions/cea75450-4e5e-4c2a-bed2-c6b29b02cab4/resourceGroups/bc-agreement-rg-t-aura/providers/Microsoft.ManagedIdentity/userAssignedIdentities/bc-agreement-id-t-aura'
+(Get-AzResource -ResourceId $userManagedIdentityResourceId).Identity.PrincipalId
+
+348675bf-98e6-4032-b7d2-d9f5d356dd69
+
+
+- Find object ID for den managed identity's service principal (med PowerShell ovenfor)
+  348675bf-98e6-4032-b7d2-d9f5d356dd69
+
+- Find the object ID of the service principal (enterprise applicationen) i Azure portalen, eller vha. powershell
+  Powershell: (Get-MgServicePrincipal -filter "DisplayName eq 'bc-agreement-api-app-t-aura'").Id
+
+	$ServicePrincipalId = "c7913943-9453-4daf-85b6-16f4cc7f7096"
+
+
+Tildel app rollen til den managed identity:
+- du skal bruge AppRole ID - altså ID på hver app role som skal tildeles (find dem i Azure Portalen, under App Registration / App roles)
+
+PowerShell:
+New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId [$ServicePrinicpalId] -PrincipalId [$ManagedIdentityObjectId] -ResourceId [$AppRoleId]
+
+
+# Role: internalclient
+New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId "348675bf-98e6-4032-b7d2-d9f5d356dd69" -PrincipalId "348675bf-98e6-4032-b7d2-d9f5d356dd69" -ResourceId "6e5df880-3092-45f3-95f1-947e2d682b49"
+
+# Role: OrdersReadWrite
+New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId 348675bf-98e6-4032-b7d2-d9f5d356dd69 -PrincipalId 348675bf-98e6-4032-b7d2-d9f5d356dd69 -ResourceId 201d1fb9-07d5-4547-89ff-3c905968f296
+
+# Role: AgreementsRead
+New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId 348675bf-98e6-4032-b7d2-d9f5d356dd69 -PrincipalId 348675bf-98e6-4032-b7d2-d9f5d356dd69 -ResourceId 5ad73da4-59d2-4532-b096-766b497793a6
+
+
+
+Se eksisterende roller der allerede er tildelt:
+
+Get-MgServicePrincipalAppRoleAssignment -ServicePrincipalId 348675bf-98e6-4032-b7d2-d9f5d356dd69
+
+
+
+
+# DE NØDVENDIGE KOMMANDOER NEDENFOR, ALT OVENFOR ER FORSKELLIGE NOTER:
+
+$app_obj_id = (Get-MgApplication -Filter "DisplayName eq 'bc-agreement-api-app-t-aura'").Id
+
+# Hent App Registration fra Entra ID
+Get-MgApplication -ApplicationId "3c919eec-fed2-480c-9abf-5fbda4f5dc44"
+
+# 
+$app_roles = (Get-MgApplication -ApplicationId "3c919eec-fed2-480c-9abf-5fbda4f5dc44").AppRoles
+
+
