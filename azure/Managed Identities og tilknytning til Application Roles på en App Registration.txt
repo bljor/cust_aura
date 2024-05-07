@@ -81,6 +81,25 @@ Se eksisterende roller der allerede er tildelt:
 Get-MgServicePrincipalAppRoleAssignment -ServicePrincipalId 348675bf-98e6-4032-b7d2-d9f5d356dd69
 
 
+----------------------
+Internal		?
+Product BC		bc-product-api-app-t-aura		(Product Read rollen findes her)
+Agreement BC		bc-agreement-api-app-t-aura		(Orders Read Write og Agreements Read rollerne findes her)
+Customer BC		bc-customer-api-app-t-aura		(Cpr Read rollen findes her)
+
+bc-agreement-api-app-t-aura		Internal Client, Orders Read Write, Agreements Read
+bc-customer-api-app-t-aura		Cpr Read, Internal Client
+bc-product-api-app-t-aura		Internal Client, Product Read
+
+bc-agreement-api-app-t-aura		6e5df880-3092-45f3-95f1-947e2d682b49, 201d1fb9-07d5-4547-89ff-3c905968f296, 5ad73da4-59d2-4532-b096-766b497793a6
+bc-customer-api-app-t-aura		a967d363-1a97-4ae1-b3c0-a7de2d167f10, ccf0f868-7691-46de-a494-a119bf5154b1
+bc-product-api-app-t-aura		25d9d26d-5ccf-4954-961d-c8a1ae95b3bd, f6766fcc-7629-4413-b6ce-0147e7516700
+----------------------
+
+
+
+
+
 
 
 # DE NØDVENDIGE KOMMANDOER NEDENFOR, ALT OVENFOR ER FORSKELLIGE NOTER:
@@ -92,5 +111,16 @@ Get-MgApplication -ApplicationId "3c919eec-fed2-480c-9abf-5fbda4f5dc44"
 
 # 
 $app_roles = (Get-MgApplication -ApplicationId "3c919eec-fed2-480c-9abf-5fbda4f5dc44").AppRoles
+
+
+
+
+
+
+!!! Brug script lavet af Immeo: !!!
+
+c:\git\aura_scripts\AppRolesAndPermission\AssignAppRoleToServicePrincipal.ps1
+
+AssignAppRoleToServicePrincipal.ps1 -roleAssigneeName dkr-cms-umbraco-id-t-aura -appName bc-product-api-app-t-aura -roleName "Procuct Read"
 
 
