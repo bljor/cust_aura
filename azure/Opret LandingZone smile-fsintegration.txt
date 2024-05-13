@@ -127,12 +127,45 @@ New service connection:
 - Environment:				Azure Cloud
 - Scope Level:  			Subscription
 - Subscription ID:			[Indtast ID'et fra azure portalen]
-- Subscription name:		(regner med den udfyldes automatisk, hvis ikke - så udfyld med det korrekte navn)
-- Service Principal Id:		[Indtast ID'et som er oprettet]
-- Service Principal Key:	[Indtast Key som er oprettet]
+- Subscription name:			(regner med den udfyldes automatisk, hvis ikke - så udfyld med det korrekte navn)
+- Service Principal Id:			[Indtast ID'et som er oprettet]
+- Service Principal Key:		[Indtast Key som er oprettet]
 - Tenant ID:				[Indtast Tenant ID fra azure portalen]
 - Klik Verify
 - Service connection name:	Giv forbindelsen et navn. DU BØR VÆLGE: navnet på det subscription som der forbindes til.
 
 
-Resultat:	Der skal findes en service connection i Azure DevOps, som er forbundet til noget i 
+Resultat:	Der skal findes en service connection i Azure DevOps, som er forbundet til et subscription i Azure.
+
+
+------------------------------------------------------------------------------------------------------------------------
+5. UDVIKLERNE LAVER ET CONTAINER REGISTRY
+Script name:	Laves af udviklerne, der er ikke noget script til det.
+
+Der er ikke lavet et centralt script til infrastruktur i forbindelse med oprettelse af Container Registries.
+
+
+
+------------------------------------------------------------------------------------------------------------------------
+6. TILRETTE FIREWALL SETTINGS PÅ CONTAINER REGISTRY
+
+Efter container registry er oprettet, skal der etableres endnu en service connection fra Azure DevOps til denne
+Container Registry. Yderligere, så skal Networking settings på Container Registry rettes til, således at der er 
+adgang fra public networks (gad vide om det skal være reglen - mon ikke det burde laves så container registry kun
+kan tilgås fra Azure DevOps IP scope, og evt. også for Azure resourcer?
+
+
+------------------------------------------------------------------------------------------------------------------------
+7. OPRETTE SERVICE CONNECTION TIL DET NYE CONTAINER REGISTRAY
+
+I Azure DevOps oprettes med følgende parametre:
+
+- Docker Registry
+- Next
+- Registry type:	Azure Container Registry
+- Authentication Type:	Service Principal
+- Subscription:		[Indtast ID'et fra Azure portalen]
+- Azure container registry:	(Vælg den registry der skal forbindes til)
+- Service connection name:	Giv forbindelsen et navn. DU BØR VÆLGE: navnet på det subscription som der forbindes til.
+				Yderligere bør navnet indeholde betegnelsen -docker (så der er et hint til at det er et
+				registry der forbindes til.
