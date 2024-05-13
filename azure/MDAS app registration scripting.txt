@@ -45,6 +45,8 @@ az ad app permission grant --id $appid --api $apiid --scope $permscope
 
 
 
+# az ad app delete --id $appid			-> Sletter appen igen
+
 
 
 -------------------------
