@@ -1,0 +1,14 @@
+DeviceTvmSoftwareVulnerabilities
+| project DeviceName, VulnerabilitySeverityLevel
+| evaluate pivot(VulnerabilitySeverityLevel): (DeviceName: string,Critical: long, High: long, Medium: long, Low: long)
+| sort by Critical, High, Medium, Low
+
+
+
+
+# Viser hver KB nummer med overskriften... Overskriften gentages for hver KB
+DeviceTvmSoftwareVulnerabilities 
+| where OSPlatform contains "Windows"
+| where RecommendedSecurityUpdateId != ''
+| distinct RecommendedSecurityUpdateId, RecommendedSecurityUpdate
+| project RecommendedSecurityUpdateId, RecommendedSecurityUpdate
