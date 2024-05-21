@@ -1,0 +1,24 @@
+Storage Account (STANDARD):
+- Require secure transfer for REST API operations		(activated)
+- Allow enabling anonymous access on individual containers	(disabled)
+- Enable storage account key access				(disabled), may be enabled when necessary due to very specific requirements
+- Default to Microsoft Entra authorization in the Azure portal	(disabled) -> men læs op på hvad det rent faktisk betyder
+
+
+- Minimum TLS version:						Version 1.2 (skal hele tiden øges til nyeste, hvis der kommer en nyere)
+- Permitted scope for copy operations (preview)			Bør vel som minimum kunne sættes til (Inden for samme tenant, måske endda samme vnet)
+- Enable hierarchical namespace					(disabled)
+
+- Enable SFTP							(disabled)
+- Enable network file system v3					(disabled)
+
+
+Storage Account (NETWORKING):
+- Network access:						Disable public access and use private access
+- Routing preference:						Microsoft network routing
+
+
+Storage Account (ENCRYPTION):
+- Encryption type:						Customer-managed keys (CMK)		(Etabler proces for håndtering af disse)
+- Enable support for customer-managed keys			All service types (blobs, files, tables, and queues)
+- Enable infrastructure encryption				Enabled

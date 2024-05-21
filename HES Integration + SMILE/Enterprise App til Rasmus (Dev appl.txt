@@ -1,0 +1,16 @@
+Enterprise App til Rasmus (Dev applikationen)
+
+-DNS	(tilføj både forwarding til localhost og til dns navnet)
+
+
+Nyt certifikat til Kamstrup
+
+
+
+
+
+Nyt projekt:	"Field Service integration"
+- ny landing zone "Field Service integration"
+- 
+
+

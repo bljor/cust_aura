@@ -1,0 +1,16 @@
+App Registration:	SIGN-IN-MDAS-smilemdascappddinel-app-d-dinel
+
+APP_NAME:	MDAS
+HOSTNAME:	smilemdascappddinel
+
+Client ID:	5a0e9708-f0a9-4def-84c1-6bad00979e78
+Tenant ID:	3edc1f09-0806-41b0-af0b-50944799113a
+
+Azure AD Group:	AZ-ENTERPRISE-APPLICATION-DA-U-MDAS-D-DINEL
+
+Group description:	Grants access to the SIGN-IN-MDAS-smiledascappddinel-app-d-dinel integration
+
+
+
+
+

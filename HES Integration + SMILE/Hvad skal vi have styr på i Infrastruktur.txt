@@ -1,0 +1,25 @@
+Hvad skal vi have styr på i Infrastruktur:
+
+- automatic key rotation på managed identities
+- automatic key rotation på service principals
+- automatic key rotation på certificates
+- automatic renewal of certificates for services
+
+
+- hvis der skal være delte ressourcer på tværs af landing zones, hvordan vil vi så tillade
+  at de delte ressourcer kan konfigureres automatisk? Hvis ikke vi sikrer det, så bliver IT
+  Drift en potentiel flaskehals på fremtidige projekter. Delte ressourcer betyder også at
+  fejl i konfigurationer, potentielt kan påvirke andre områder.
+
+Tænk:
+- hvis en landing zone (et projekt) inkluderer alle de ressourcer der er brug for - så vil
+  eventuelle fejl i konfigurationer etc. kun påvirke denne løsning. DevOps teamet kan dermed
+  også selv fikse problemerne.
+
+
+
+
+Cloud:
+- 
+
+

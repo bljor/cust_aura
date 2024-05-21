@@ -1,0 +1,49 @@
+Azure Firewall:
+---------------
+- Basic                                                 1.986,41
+- Standard                                              6.286,12
+- Premium                                               8.800,57
+
+
+API Management:
+---------------
+- Consumption (100.000.000 mio kald / måned)            2.387,00
+- Developer                                               330,90
+- Basic                                                 1.013,83
+- Standard                                              4.730,68
+- Premium                                              19.255,65
+
+
+VPN Gateway (730 Gateway hours):
+------------
+- Basic VPN                                               181,04
+- VpnGw1                                                  955,49
+- VpnGw1AZ                                              1.815,43
+- VpnGw2                                                2.464,16
+- VpnGw2AZ                                              2.836,30
+- VpnGw3                                                6.286,12
+- VpnGw3AZ                                              7.231,55
+- VpnGw4                                               10.560,68
+- VpnGw4AZ                                             12.169,93
+- VpnGw5                                               18.355,47
+- VpnGw5AZ                                             21.121,37
+
+
+Load Balancer (5 load balancer rules):
+--------------
+- Basic                                                     free
+- Standard                                                 23,25
+- Gateway (730 gw hours, 730 chain hours, 1000 gb data)	   20,43
+
+
+Application Gateway (730 hours):
+-------------
+- Standard V2 (1 comp. unit, 1000 pers. conn)             195,64
+- Web Application Firewall V2                             352,15
+- Basic, Small                                             20,44
+- Basic, Medium                                            57,23
+- Basic, Large                                            261,63
+- Web Application Firewall, Medium                        103,02
+- Web Application Firewall, Large                         366,28
+- Application Gateway for Containers                      200,00 -> afhængig af mængden af containers
+
