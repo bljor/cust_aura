@@ -1,0 +1,21 @@
+Notater omkring Direct Access implementering:
+
+
+Hvad skal fjernes ifm. at koncept-installationen nedlægges igen.
+
+
+Group Policies:
+
+- DirectAccess Client Settings	(policy slettes)
+- DirectAccess Server Settings  (policy slettes)
+
+
+
+
+Microsoft best practice for hvordan decommission foretages (jf. Chat GPT):
+
+1. Remove Clients from DirectAccess Security Groups
+2. Network Location Server (NLS)
+3. Uninstall DirectAccess
+4. Remove Configuration Settings and Clean Up:
+5. Decommission the DirectAccess Server
