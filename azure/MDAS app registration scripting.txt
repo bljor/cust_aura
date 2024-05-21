@@ -41,7 +41,7 @@ az ad app permission add --id $appid --api $apiid --api-permissions $apiperm
 az ad app permission grant --id $appid --api $apiid --scope $permscope
 
 
-#az ad sp list --display-name $newapp
+# az ad sp list --display-name $newapp
 
 
 
