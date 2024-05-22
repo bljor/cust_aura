@@ -1,0 +1,45 @@
+$title = "MDAS-smilemdascappddinel"
+
+# Default values
+$apiid = "00000003-0000-0000-c000-000000000000"			# Microsoft Entra API
+$apiperm = "e1fe6dd8-ba31-4d61-89e7-88639da4683d=Scope"		# Hvilke rettigheder der skal tildeles
+$permscope = "User.Read"					# På hvilket niveau skal adgang til deles
+
+#------ RET INTET NEDENUNDER HER ------
+
+$names = @(
+	"SIGN-IN-$title-APP-D-DINEL",
+	"SIGN-IN-$title-APP-T-DINEL",
+	"SIGN-IN-$title-APP-PP-DINEL",
+	"SIGN-IN-$title-APP-PP-DINEL"
+)
+
+ForEach ($name in $names) {
+	# Opret App Registration
+	$app = (az ad app create --display-name $newapp --app-roles @app-roles.json --enable-id-token-issuance --required-resource-access @resource-access.json --web-redirect-uris "https://localhost:44368/signin-oidc" "https://mdas.dev.aura.dk:44369/signin-oidc")
+
+	# Hent App ID som skal anvendes senere i flowet
+	$appid = ($app | convertfrom-json).appid
+
+	# Opret service principal der skal knyttes til $appid
+	$sp = az ad sp create --id $appid
+
+	# Hent ID på den service principal der er oprettet
+	$spid = ($sp | convertfrom-json).id
+
+	# Tildel rettigheder til Aoo Registration
+	az ad app permission add --id $appid --api $apiid --api-permissions $apiperm
+	az ad app permission grant --id $appid --api $apiid --scope $permscope
+
+	# Opret tags via REST API
+	# Forudsætter at filen  .temp-body-tags.json findes i den folder hvorfra kommando køres
+	$updspn = (az rest --method PATCH --url https://graph.microsoft.com/v1.0/servicePrincipals/$($spid) --body "@.temp-body-tags.json")
+}
+
+
+
+
+Create-ApsAndSps.ps1
+-Prefix [string]		(e.g. SIGN-IN)
+-Title [string]			(e.g. $titlecap$envionment$company
+-

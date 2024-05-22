@@ -1,0 +1,43 @@
+Opret App Registration samt Service Princpal
+
+
+Note: Som standard så vises en service principal der oprettes via AZ CLI eller PowerShell ikke i Azure Portalen.
+      Visning i Azure Portalen forudsætter at der på service principal oprettes en Tag med indholdet:
+      ["HideApp","WindowsAzureActiveDirectorYIntegratedApp"]
+
+      Tags kan ikke oprettes direkte via az cli, men kræver der laves kald imod Azure REST API.
+
+
+
+# Standard variable til brug ved oprettelsen
+
+$newapp = "test0001-ext-bjo-slettes"
+$apiid = "00000003-0000-0000-c000-000000000000"			# Microsoft Entra API
+$apiperm = "e1fe6dd8-ba31-4d61-89e7-88639da4683d=Scope"		# Hvilke rettigheder der skal tildeles
+$permscope = "User.Read"					# På hvilket niveau skal adgang til deles
+
+# Opret App Registration
+$app = (az ad app create --display-name $newapp --app-roles @app-roles.json --enable-id-token-issuance --required-resource-access @resource-access.json --web-redirect-uris "https://localhost:44368/signin-oidc" "https://mdas.dev.aura.dk:44369/signin-oidc")
+
+
+# Hent App ID som skal anvendes senere i flowet
+$appid = ($app | convertfrom-json).appid
+
+
+# Opret service principal der skal knyttes til $appid
+$sp = az ad sp create --id $appid
+
+
+# Hent ID på den service principal der er oprettet
+$spid = ($sp | convertfrom-json).id
+
+# Tildel rettigheder til Aoo Registration
+az ad app permission add --id $appid --api $apiid --api-permissions $apiperm
+az ad app permission grant --id $appid --api $apiid --scope $permscope
+
+
+# Opret tags via REST API
+# Forudsætter at filen  .temp-body-tags.json findes i den folder hvorfra kommando køres
+$updspn = (az rest --method PATCH --url https://graph.microsoft.com/v1.0/servicePrincipals/$($spid) --body "@.temp-body-tags.json")
+
+s

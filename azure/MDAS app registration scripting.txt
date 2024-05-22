@@ -31,17 +31,23 @@ $apiid = "00000003-0000-0000-c000-000000000000"			# Microsoft Entra API
 $apiperm = "e1fe6dd8-ba31-4d61-89e7-88639da4683d=Scope"		# Hvilke rettigheder der skal tildeles
 $permscope = "User.Read"					# På hvilket niveau skal adgang til deles
 
-$appid = (az ad app create --display-name $newapp --app-roles @app-roles.json --enable-id-token-issuance --required-resource-access @resource-access.json --web-redirect-uris "https://localhost:44368/signin-oidc" "https://mdas.dev.aura.dk:44369/signin-oidc" | convertfrom-json | select appid).appid
+$app = (az ad app create --display-name $newapp --app-roles @app-roles.json --enable-id-token-issuance --required-resource-access @resource-access.json --web-redirect-uris "https://localhost:44368/signin-oidc" "https://mdas.dev.aura.dk:44369/signin-oidc")
 
 
-az ad sp create-for-rbac -n $newapp 
+$sp = az ad sp create --id ($app | convertfrom-json).appid
 
 az ad app permission add --id $appid --api $apiid --api-permissions $apiperm
-
 az ad app permission grant --id $appid --api $apiid --scope $permscope
 
+az tag create --resource-id --tags "{WindowsAzureActiveDirectoryIntegratedApp}"
 
-# az ad sp list --display-name $newapp
+
+# Example
+# az tag create --resource-id /subscriptions/{sub-id}/resourcegroups/{rg}/providers/Microsoft.Compute/virtualMachines/{vmName} --tags Dept=Finance Status=Normal
+
+
+# az ad sp create-for-rbac --name $newapp --role 
+# az ad sp list --display-name $newapp --id $appid 
 
 
 
