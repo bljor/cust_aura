@@ -40,4 +40,14 @@ az ad app permission grant --id $appid --api $apiid --scope $permscope
 # Forudsætter at filen  .temp-body-tags.json findes i den folder hvorfra kommando køres
 $updspn = (az rest --method PATCH --url https://graph.microsoft.com/v1.0/servicePrincipals/$($spid) --body "@.temp-body-tags.json")
 
-s
+
+
+
+# Application name:
+
+# SIGN-IN-MDAS-smilemdascappddinel-APP-D-DINEL			OK
+# SIGN-IN-MDAS-smilemdascappddinel-APP-T-DINEL
+# SIGN-IN-MDAS-smilemdascappddinel-APP-PP-DINEL
+# SIGN-IN-MDAS-smilemdascappddinel-APP-PP-DINEL
+
+

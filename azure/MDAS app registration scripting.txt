@@ -24,7 +24,10 @@ $appid = $(az ad app list --displayname $newapp --query [].appId -o tsv)
 
 
 
-OPRETTELSE AF BÅDE APP REGISTRATION OG ENTERPRISE APPLICATION - START HER:
+OPRETTELSE AF BÅDE APP REGISTRATION OG ENTERPRISE APPLICATION - START HER: --- JA HER...
+
+Service Principal skal have en Tag for at blive vist i Azure Portalen (tag = WindowsAzureActiveDirectoryIntegratedApp)
+
 
 $newapp = "test0001-ext-bjo-slettes"
 $apiid = "00000003-0000-0000-c000-000000000000"			# Microsoft Entra API
@@ -33,17 +36,32 @@ $permscope = "User.Read"					# På hvilket niveau skal adgang til deles
 
 $app = (az ad app create --display-name $newapp --app-roles @app-roles.json --enable-id-token-issuance --required-resource-access @resource-access.json --web-redirect-uris "https://localhost:44368/signin-oidc" "https://mdas.dev.aura.dk:44369/signin-oidc")
 
+$appid = ($app | convertfrom-json).appid
 
-$sp = az ad sp create --id ($app | convertfrom-json).appid
+$sp = az ad sp create --id $appid
+
+$spid = ($sp | convertfrom-json).id
 
 az ad app permission add --id $appid --api $apiid --api-permissions $apiperm
 az ad app permission grant --id $appid --api $apiid --scope $permscope
 
-az tag create --resource-id --tags "{WindowsAzureActiveDirectoryIntegratedApp}"
+### TAGGING ISSUE, HVORDAN TILFØJES TAGS PÅ EN SERVICE PRINCIPAL??? IKKE DIREKTE UNDERSTØTTET I UI, VIA AZURE CLI
+
+$updspn = (az rest --method PATCH --url https://graph.microsoft.com/v1.0/servicePrincipals/$($spid) --body "@.temp-body-tags.json")
+# $updspn = (az rest --method PATCH --url https://graph.microsoft.com/v1.0/servicePrincipals($($spn.id) --body "@.temp-body-tags.json" | ConvertFrom-Cli)
+
+"the 'temp-body-tags.json' file" contains the following:
+
+ {"tags":["HideApp","WindowsAzureActiveDirectorYIntegratedApp"]}
+
+
+
+# az tag create --resource-id --tags "{WindowsAzureActiveDirectoryIntegratedApp}"
 
 
 # Example
 # az tag create --resource-id /subscriptions/{sub-id}/resourcegroups/{rg}/providers/Microsoft.Compute/virtualMachines/{vmName} --tags Dept=Finance Status=Normal
+
 
 
 # az ad sp create-for-rbac --name $newapp --role 
