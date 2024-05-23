@@ -12,3 +12,15 @@ DeviceTvmSoftwareVulnerabilities
 | where RecommendedSecurityUpdateId != ''
 | distinct RecommendedSecurityUpdateId, RecommendedSecurityUpdate
 | project RecommendedSecurityUpdateId, RecommendedSecurityUpdate
+
+
+
+
+
+# Viser 
+DeviceTvmSoftwareVulnerabilities 
+| where OSPlatform contains "Windows"
+| where RecommendedSecurityUpdate contains "security updates"
+| summarize MissingKbs = count() by RecommendedSecurityUpdateId
+| project RecommendedSecurityUpdateId, MissingKbs
+
