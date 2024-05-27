@@ -1,0 +1,7 @@
+Opret resource group
+
+az group create --name extbjo-rg-d-dinel --location westeurope --tags environment="Dev" costCenter="IT-Drift" opsTeam="IT-Drift"
+
+
+az deployment group create --resource-group extbjo-rg-d-dinel --template-file .\smile-fsintegration-vm.bicep --parameters adminUsername="adminbjo"
+
