@@ -15,18 +15,93 @@ var securityProfileJson = {
   securityType: 'TrustedLaunch'
 }
 
+param securityType string = 'TrustedLaunch'
+
+
+resource kvsecrets 'Microsoft.KeyVault/vaults@2023-07-01' = {
+  name: 'extbjo-keyvault-001'
+  location: resourceGroup().location
+  properties: {
+    enabledForDeployment: false
+    enabledForDiskEncryption: false
+    enabledForTemplateDeployment: false
+    tenantId: subscription().tenantId
+    enableSoftDelete: true
+    softDeleteRetentionInDays: 90
+    accessPolicies: [
+
+    ]
+    sku: {
+      name: 'standard'
+      family: 'A'
+    }
+    networkAcls: {
+      defaultAction: 'Allow'
+      bypass: 'AzureServices'
+    }
+  }
+}
+
+
+resource networkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2022-05-01' = {
+  name: 'smile-fsintegration-nsg-001-d-dinel'
+  location: resourceGroup().location
+  properties: {
+    securityRules: [
+      {
+        name: 'AllowRDPFromOfficePublicIP'
+        properties: {
+          priority: 100
+          access: 'Allow'
+          direction: 'Inbound'
+          destinationPortRange: '3389'
+          protocol: 'Tcp'
+          sourcePortRange: '*'
+          sourceAddressPrefixes: [
+            '85.191.121.173/32','85.191.121.6/32'
+          ]
+          destinationAddressPrefix: '*'
+        }
+      }
+    ]
+  }
+}
+
+resource virtualNetwork 'Microsoft.Network/virtualNetworks@2022-05-01' = {
+  name: 'extbjo-demo-vnet-001-d-dinel'
+  location: resourceGroup().location
+  properties: {
+    addressSpace: {
+      addressPrefixes: [
+        '10.0.0.0/16'
+      ]
+    }
+    subnets: [
+      {
+        name: 'extbjo-demo-subnet-001-d-dinel'
+        properties: {
+          addressPrefix: '10.0.0.0/24'
+          networkSecurityGroup: {
+            id: networkSecurityGroup.id
+          }
+        }
+      }
+    ]
+  }
+}
+
 resource nic 'Microsoft.Network/networkInterfaces@2022-05-01' = {
   name: 'extbjo-demovm1-nic01'
-  location: 'westeurope'
+  location: resourceGroup().location
   properties: {
     ipConfigurations: [
       {
-        name: 'ipconfig1'
+        name: 'privateipconfig'
         properties: {
           privateIPAllocationMethod: 'Dynamic'
-
+          privateIPAddressVersion: 'IPv4'
           subnet: {
-            id: resourceId('Microsoft.Network/virtualNetworks/subnets', virtualNetworkName, subnetName)
+            id: resourceId('Microsoft.Network/virtualNetworks/subnets', 'extbjo-demo-vnet-001-d-dinel', 'extbjo-demo-subnet-001-d-dinel')
           }
         }
       }
@@ -42,10 +117,11 @@ resource nic 'Microsoft.Network/networkInterfaces@2022-05-01' = {
 
 resource vm 'Microsoft.Compute/virtualMachines@2022-03-01' = {
   name: 'extbjo-demovm1'
-  location: 'westeurope'
+  location: resourceGroup().location
   properties: {
     hardwareProfile: {
-      vmSize: 'Standard_D2as_v5'
+      vmSize: 'Standard_D2as_v4'    //'Standard_D2as_v5', 'Standard_B1ls'
+      
     }
     osProfile: {
       computerName: 'extbjo-demovm1'
