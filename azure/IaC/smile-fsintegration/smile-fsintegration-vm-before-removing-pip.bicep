@@ -6,6 +6,26 @@ param adminUsername string
 @secure()
 param adminPassword string
 
+@description('Unique DNS Name for the Public IP used to access the Virtual Machine.')
+param dnsLabelPrefix string = toLower('${vmName}-${uniqueString(resourceGroup().id, vmName)}')
+
+@description('Name for the Public IP used to access the Virtual Machine.')
+param publicIpName string = 'smile-fsinteg1-01-pip-d-aura'
+
+@description('Allocation method for the Public IP used to access the Virtual Machine.')
+@allowed([
+  'Dynamic'
+  'Static'
+])
+param publicIPAllocationMethod string = 'Dynamic'
+
+@description('SKU for the Public IP used to access the Virtual Machine.')
+@allowed([
+  'Basic'
+  'Standard'
+])
+param publicIpSku string = 'Basic'
+
 @description('Size of the virtual machine.')
 param vmSize string = 'Standard_D2as_v5'
 
@@ -54,6 +74,20 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2022-05-01' = {
     name: 'Standard_LRS'
   }
   kind: 'Storage'
+}
+
+resource publicIp 'Microsoft.Network/publicIPAddresses@2022-05-01' = {
+  name: publicIpName
+  location: sharedLocation
+  sku: {
+    name: publicIpSku
+  }
+  properties: {
+    publicIPAllocationMethod: publicIPAllocationMethod
+    dnsSettings: {
+      domainNameLabel: dnsLabelPrefix
+    }
+  }
 }
 
 resource networkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2022-05-01' = {
@@ -107,10 +141,15 @@ resource nic 'Microsoft.Network/networkInterfaces@2022-05-01' = {
   properties: {
     ipConfigurations: [
       {
-        name: 'privateipconfig'
+        name: 'ipconfig1'
         properties: {
           privateIPAllocationMethod: 'Dynamic'
-          privateIPAddressVersion: 'IPv4'
+          publicIPAddress: {
+            id: publicIp.id
+          }
+          subnet: {
+            id: resourceId('Microsoft.Network/virtualNetworks/subnets', virtualNetworkName, subnetName)
+          }
         }
       }
     ]
@@ -303,4 +342,4 @@ resource privDns03 'Microsoft.Network/privateDnsZones@2020-06-01' = {
 
 
 
-
+output hostname string = publicIp.properties.dnsSettings.fqdn
