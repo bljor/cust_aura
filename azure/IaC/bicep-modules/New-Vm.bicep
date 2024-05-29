@@ -1,12 +1,28 @@
-@description('Username for the Virtual Machine.')
+@description('Brugernavn for administrator på den Virtuelle Maskine.')
 param adminUsername string
 
-@description('Password for the Virtual Machine.')
+@description('Administrator password til den Virtuelle Maskine.')
 @minLength(12)
 @secure()
 param adminPassword string
 
+@description('Lokation hvor alle ressourcer skal oprettes')
+param commonLocation string = resourceGroup().location
 
+@description('Navn på den Virtuelle Maskine')
+param vmName string = 'extbjo-demovm1'
+
+@description('Navn på Network Security Group')
+param nsgName string = 'smile-fsintegration-nsg-001-d-dinel'
+
+@description('Navn på det Virtuelle Netværk')
+param vnetName string = 'extbjo-demo-vnet-001-d-dinel'
+
+@description('Navn på det Network Interface der oprettes til den Virtuelle Maskine')
+param vmNicName string = 'extbjo-demovm1-nic01'
+
+
+// security profile til brug for VM
 var securityProfileJson = {
   uefiSettings: {
     secureBootEnabled: true
@@ -17,35 +33,11 @@ var securityProfileJson = {
 
 param securityType string = 'TrustedLaunch'
 
-
-resource kvsecrets 'Microsoft.KeyVault/vaults@2023-07-01' = {
-  name: 'extbjo-keyvault-001'
-  location: resourceGroup().location
-  properties: {
-    enabledForDeployment: false
-    enabledForDiskEncryption: false
-    enabledForTemplateDeployment: false
-    tenantId: subscription().tenantId
-    enableSoftDelete: true
-    softDeleteRetentionInDays: 90
-    accessPolicies: [
-
-    ]
-    sku: {
-      name: 'standard'
-      family: 'A'
-    }
-    networkAcls: {
-      defaultAction: 'Allow'
-      bypass: 'AzureServices'
-    }
-  }
-}
-
-
+// oprettelse af Network Security Group, opret kun én regel som tillader RDP fra Auras
+// offentlinge IP adresser.
 resource networkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2022-05-01' = {
-  name: 'smile-fsintegration-nsg-001-d-dinel'
-  location: resourceGroup().location
+  name: nsgName
+  location: commonLocation
   properties: {
     securityRules: [
       {
@@ -67,9 +59,10 @@ resource networkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2022-05-0
   }
 }
 
+// oprettelse af Virtual Network hvortil den Virtuelle Maskine bliver forbundet
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2022-05-01' = {
-  name: 'extbjo-demo-vnet-001-d-dinel'
-  location: resourceGroup().location
+  name: vnetName
+  location: commonLocation
   properties: {
     addressSpace: {
       addressPrefixes: [
@@ -90,9 +83,10 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2022-05-01' = {
   }
 }
 
+// Oprettelse af Network Interface til den virtuelle maskine
 resource nic 'Microsoft.Network/networkInterfaces@2022-05-01' = {
-  name: 'extbjo-demovm1-nic01'
-  location: resourceGroup().location
+  name: vmNicName
+  location: commonLocation
   properties: {
     ipConfigurations: [
       {
@@ -113,18 +107,17 @@ resource nic 'Microsoft.Network/networkInterfaces@2022-05-01' = {
   ]
 }
 
-
-
+// oprettelse af den Virtuelle Maskine
 resource vm 'Microsoft.Compute/virtualMachines@2022-03-01' = {
-  name: 'extbjo-demovm1'
-  location: resourceGroup().location
+  name: vmName
+  location: commonLocation
   properties: {
     hardwareProfile: {
       vmSize: 'Standard_D2as_v4'    //'Standard_D2as_v5', 'Standard_B1ls'
       
     }
     osProfile: {
-      computerName: 'extbjo-demovm1'
+      computerName: vmName
       adminUsername: adminUsername
       adminPassword: adminPassword
     }

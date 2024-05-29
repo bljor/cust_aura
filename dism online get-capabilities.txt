@@ -1,0 +1,13 @@
+dism /online /get-capabilities
+dism /online /add-capability
+dism /online /remove-capability
+
+
+Rsat.Dns.Tools~~~~0.0.1.0
+
+Rsat.ActiveDirectory.DS-LDS.Tools~~~~0.0.1.0
+
+
+dism /online /remove-capability /capabilityname:rsat.activedirectory.ds-lds.tools~~~~0.0.1.0
+dism /online /add-capability /capabilityname:rsat.activedirectory.ds-lsd.tools~~~~0.0.1.0
+

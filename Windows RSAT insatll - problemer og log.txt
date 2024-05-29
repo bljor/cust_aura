@@ -1,0 +1,51 @@
+I denne liste vises kun GPO'er som ikke er aktive for alle computere
+Afvigelser af GPO'er:									PC-00250	PC-00187	W11-EXT-BJO
+
+        PC - Powerplan/Lock								Mangler		
+        PC - FreshService Asset Discovery						Mangler				
+        PC - Prevent users from loading and unloading device drivers			Mangler				
+        PC - Lenovo Vantage - Disable Smart Assist									Filtered out (WMI)
+        PC - Disable Windows Update online search (No access to menu)			Filtered out
+
+
+Fjernet filteret på OU, så den burde blive applied til PC-00250
+
+
+
+
+Hvad virker hvor?
+
+Get-WindowsCapability -Name rsat.* -online						Ja		Ja		Ja
+Get-WindowsCapability -Name rsat.wsus* -online |Add-WindowsCapability -Online		Ja		Nej		Ja
+Get-WindowsCapability -Name rsat.wsus* -online | Remove-WindowsCapability -Online	Ja				Ja
+
+dism /online /get-capabilities										Ja		Ja
+dism /online /add-capability /capabilityname:Rsat.WSUS.Tools~~~~0.0.1.0			Ja				Ja
+dism /online /remove-capability /capabilityname:rsat.wsus.tools~~~~0.0.1.0		Ja				Ja
+
+dism /online /remove-capability /capabilityname:rsat.fileservices.tools~~~~0.0.1.0	Ja		Ja		Ja
+dism /online /add-capability /capabilityname:rsat.fileservices.tools~~~~0.0.1.0		Ja				Ja
+
+
+
+dism /online /add-capability /limitaccess
+
+
+
+
+
+Nulstil indstillinger på PC'en:
+
+Stop-Service wuauserv -Force;
+Remove-Item "C:\Windows\System32\GroupPolicyUsers" -Recurse -Force ;
+Remove-Item "C:\Windows\System32\GroupPolicy" -Recurse -Force;
+Remove-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" -Recurse -Force;
+Start-Service wuauserv;
+
+Prøv så igen:
+dism /online /get-capabilities										Ja		
+dism /online /add-capability /capabilityname:Rsat.DHCP.Tools~~~~0.0.1.0					Ja		
+dism /online /remove-capability /capabilityname:rsat.wsus.tools~~~~0.0.1.0				Ja		
+dism /online /remove-capability /capabilityname:rsat.fileservices.tools~~~~0.0.1.0					
+dism /online /add-capability /capabilityname:rsat.fileservices.tools~~~~0.0.1.0						
+Get-WindowsCapability -Name rsat.wsus* -online | add-windowscapability -online				Ja
