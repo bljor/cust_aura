@@ -66,14 +66,14 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2022-05-01' = {
   properties: {
     addressSpace: {
       addressPrefixes: [
-        '10.0.0.0/16'
+        '10.116.0.0/16'
       ]
     }
     subnets: [
       {
         name: 'extbjo-demo-subnet-001-d-dinel'
         properties: {
-          addressPrefix: '10.0.0.0/24'
+          addressPrefix: '10.116.47.0/24'
           networkSecurityGroup: {
             id: networkSecurityGroup.id
           }
@@ -113,7 +113,7 @@ resource vm 'Microsoft.Compute/virtualMachines@2022-03-01' = {
   location: commonLocation
   properties: {
     hardwareProfile: {
-      vmSize: 'Standard_D2as_v4'    //'Standard_D2as_v5', 'Standard_B1ls'
+      vmSize: 'Standard_DS2as_v5'    //'Standard_D2as_v5', 'Standard_B1ls'
       
     }
     osProfile: {

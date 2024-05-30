@@ -6,25 +6,15 @@ param adminUsername string
 @secure()
 param adminPassword string
 
-@description('Size of the virtual machine.')
-param vmSize string = 'Standard_D2as_v5'
-
-@description('Name of the virtual machine.')
-param vmName string = 'fs-integra1'
-
-@description('Security Type of the Virtual Machine.')
-@allowed([
-  'Standard'
-  'TrustedLaunch'
-])
-param securityType string = 'TrustedLaunch'
+var vmName = 'fs-integra1'
+var securityType = 'TrustedLaunch'   // must be either TrustedLaunch or Standard
+var vmSize = 'Standard_D2as_v5'
 
 var sharedLocation = resourceGroup().location
 
 var tagCostCenter = 'Dinel'
 var tagOpsTeam = 'IT-Drift'
 var tagEnvironment = 'Dev'
-
 
 var keyVaultName = 'smile-fsi-kv-d-dinel'
 var storageAccountName = 'stfsintegdaura'
@@ -42,10 +32,9 @@ var securityProfileJson = {
   securityType: securityType
 }
 var extensionName = 'GuestAttestation'
-var extensionPublisher = 'Microsoft.Azure.Security.WindowsAttestation'
+var extensionPublisher = 'Microsoft.Azure.ActiveDirectory'
 var extensionVersion = '1.0'
-var maaTenantName = 'GuestAttestation'
-var maaEndpoint = substring('emptyString', 0, 0)
+var extensionType = 'AADLoginForWindows'
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2022-05-01' = {
   name: storageAccountName
@@ -70,7 +59,9 @@ resource networkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2022-05-0
           destinationPortRange: '3389'
           protocol: 'Tcp'
           sourcePortRange: '*'
-          sourceAddressPrefix: '85.191.121.173,85.191.121.6'
+          sourceAddressPrefixes: [
+            '85.191.121.173/32','85.191.121.6/32'
+          ]
           destinationAddressPrefix: '*'
         }
       }
@@ -111,6 +102,9 @@ resource nic 'Microsoft.Network/networkInterfaces@2022-05-01' = {
         properties: {
           privateIPAllocationMethod: 'Dynamic'
           privateIPAddressVersion: 'IPv4'
+          subnet: {
+            id: resourceId('Microsoft.Network/virtualNetworks/subnets', virtualNetworkName, subnetName)
+          }
         }
       }
     ]
@@ -164,24 +158,33 @@ resource vm 'Microsoft.Compute/virtualMachines@2022-03-01' = {
   }
 }
 
+resource autoShutdownConfig 'Microsoft.DevTestLab/schedules@2018-09-15' = {
+  name: 'shutdown-computevm-${vmName}'
+  location: sharedLocation
+  tags: {
+    opsTeam: tagOpsTeam
+    costCenter: tagCostCenter
+    environment: tagEnvironment
+  }
+  properties: {
+    dailyRecurrence: {
+      time: '1900'
+    }
+    timeZoneId: 'UTC'
+    taskType: 'ComputeVmShutdownTask'
+    targetResourceId: vm.id
+  }
+}
+
 resource vmExtension 'Microsoft.Compute/virtualMachines/extensions@2022-03-01' = if ((securityType == 'TrustedLaunch') && ((securityProfileJson.uefiSettings.secureBootEnabled == true) && (securityProfileJson.uefiSettings.vTpmEnabled == true))) {
   parent: vm
   name: extensionName
   location: sharedLocation
   properties: {
     publisher: extensionPublisher
-    type: extensionName
+    type: extensionType
     typeHandlerVersion: extensionVersion
     autoUpgradeMinorVersion: true
-    enableAutomaticUpgrade: true
-    settings: {
-      AttestationConfig: {
-        MaaSettings: {
-          maaEndpoint: maaEndpoint
-          maaTenantName: maaTenantName
-        }
-      }
-    }
   }
 }
 
@@ -266,7 +269,6 @@ resource routetable001 'Microsoft.Network/routeTables@2023-11-01' = {
   }
 }
 
-
 resource privDns01 'Microsoft.Network/privateDnsZones@2020-06-01' = {
   name: 'dev.api.private.aura.dk'
   location: 'global'
@@ -277,7 +279,6 @@ resource privDns01 'Microsoft.Network/privateDnsZones@2020-06-01' = {
   }
   properties: {  }
 }
-
 
 resource privDns02 'Microsoft.Network/privateDnsZones@2020-06-01' = {
   name: 'privatelink.azurecr.io'
@@ -300,7 +301,3 @@ resource privDns03 'Microsoft.Network/privateDnsZones@2020-06-01' = {
   }
   properties: {  }
 }
-
-
-
-
