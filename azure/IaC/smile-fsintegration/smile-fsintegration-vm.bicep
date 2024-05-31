@@ -6,17 +6,23 @@ param adminUsername string
 @secure()
 param adminPassword string
 
+@description('Resource Group hvori ressourcer skal orpettes')
+param resourceGroupName string
+
+@description('Deployment location')
+param location string
+
 var vmName = 'fs-integra1'
 var securityType = 'TrustedLaunch'   // must be either TrustedLaunch or Standard
 var vmSize = 'Standard_D2as_v5'
-
-var sharedLocation = resourceGroup().location
 
 var tagCostCenter = 'Dinel'
 var tagOpsTeam = 'IT-Drift'
 var tagEnvironment = 'Dev'
 
 var keyVaultName = 'smile-fsi-kv-d-dinel'
+var recoveryVaultName = 'smile-fsi-rv-d-dinel'
+var backupPolicyName = 'smile-fsi-backuppolicy-d-dinel'
 var storageAccountName = 'stfsintegdaura'
 var nicName = 'fs-integra1-nic01'
 var addressPrefix = '10.0.0.0/16'
@@ -38,16 +44,93 @@ var extensionType = 'AADLoginForWindows'
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2022-05-01' = {
   name: storageAccountName
-  location: sharedLocation
+  location: location
   sku: {
     name: 'Standard_LRS'
   }
   kind: 'Storage'
 }
 
+// Key Vault til opbevaring af certifikater og nøgler
+resource keyvaultcerts 'Microsoft.KeyVault/vaults@2023-07-01' = {
+  name: keyVaultName
+  location: location
+  properties: {
+    enabledForDeployment: false
+    enabledForDiskEncryption: false
+    enabledForTemplateDeployment: false
+    tenantId: subscription().tenantId
+    enableSoftDelete: true
+    softDeleteRetentionInDays: 90
+    accessPolicies: [
+      {
+        objectId: '8dc62288-6290-45de-8fa6-bfcf91eaa884'
+        tenantId: subscription().tenantId
+        permissions: {
+          keys: [
+            'list'
+          ]          
+          secrets: [
+            'list'
+          ] 
+        }
+      }
+    ]
+    sku: {
+      name: 'standard'
+      family: 'A'
+    }
+    networkAcls: {
+      defaultAction: 'Allow'
+      bypass: 'AzureServices'
+    }
+  }
+}
+
+// Recovery Services Vault til lagring og opbevaring af backup, der konfigureres for virtuelle maskiner
+resource recoveryServicesVault 'Microsoft.RecoveryServices/vaults@2022-01-01' = {
+  name: recoveryVaultName
+  location: location
+  sku: {
+    name: 'RS0'
+    tier: 'Standard'
+  }
+  properties: {}
+}
+
+// Backup Policy som styrer hvordan backup laves. Relateret til Recovery Services ovenfor
+resource backupPolicy 'Microsoft.RecoveryServices/vaults/backupPolicies@2024-04-01' = {
+  name: backupPolicyName
+  location: location
+  tags: {
+    opsTeam: tagOpsTeam
+    costCenter: tagCostCenter
+    Environment: tagEnvironment    
+  }
+  parent: recoveryServicesVault
+  properties: {
+    backupManagementType: 'AzureIaasVM'
+    instantRPDetails: {
+      azureBackupRGNamePrefix: 'backup-prefix'
+      azureBackupRGNameSuffix: 'backup-suffix'
+    }
+    instantRpRetentionRangeInDays: 7
+    policyType: 'string'
+    retentionPolicy: {
+      retentionPolicyType: 'SimpleRetentionPolicy'
+    }
+    schedulePolicy: {
+      schedulePolicyType: 'SimpleSchedulePolicyV2'
+    }
+    tieringPolicy: {}
+    timeZone: 'UTC'
+  }
+}
+
+// Network Security Group - bliver brugt af nedenstående virtualNetwork
 resource networkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2022-05-01' = {
   name: networkSecurityGroupName
-  location: sharedLocation
+  location: location
   properties: {
     securityRules: [
       {
@@ -69,9 +152,10 @@ resource networkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2022-05-0
   }
 }
 
+// Virtaul network - afhænger af Network Security Group defineret ovenfor
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2022-05-01' = {
   name: virtualNetworkName
-  location: sharedLocation
+  location: location
   properties: {
     addressSpace: {
       addressPrefixes: [
@@ -92,9 +176,10 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2022-05-01' = {
   }
 }
 
+// Network Interface - relateret til ovenstående Virtual Network
 resource nic 'Microsoft.Network/networkInterfaces@2022-05-01' = {
   name: nicName
-  location: sharedLocation
+  location: location
   properties: {
     ipConfigurations: [
       {
@@ -115,9 +200,10 @@ resource nic 'Microsoft.Network/networkInterfaces@2022-05-01' = {
   ]
 }
 
+// Oprettelse af den virtuelle maskine, afhænger af ovenstående Network Interface
 resource vm 'Microsoft.Compute/virtualMachines@2022-03-01' = {
   name: vmName
-  location: sharedLocation
+  location: location
   properties: {
     hardwareProfile: {
       vmSize: vmSize
@@ -158,28 +244,34 @@ resource vm 'Microsoft.Compute/virtualMachines@2022-03-01' = {
   }
 }
 
+// Konfiguration af automatisk slukning af VM hver aften kl. 19:00 UTC, er knyttet til ovenstående VM
 resource autoShutdownConfig 'Microsoft.DevTestLab/schedules@2018-09-15' = {
   name: 'shutdown-computevm-${vmName}'
-  location: sharedLocation
+  location: location
   tags: {
     opsTeam: tagOpsTeam
     costCenter: tagCostCenter
-    environment: tagEnvironment
+    Environment: tagEnvironment
   }
   properties: {
     dailyRecurrence: {
       time: '1900'
     }
+    notificationSettings: {
+      status: 'Disabled'
+    }
+    status: 'Enabled'
     timeZoneId: 'UTC'
     taskType: 'ComputeVmShutdownTask'
     targetResourceId: vm.id
   }
 }
 
+// Extensions for den Virtuelle Maskine
 resource vmExtension 'Microsoft.Compute/virtualMachines/extensions@2022-03-01' = if ((securityType == 'TrustedLaunch') && ((securityProfileJson.uefiSettings.secureBootEnabled == true) && (securityProfileJson.uefiSettings.vTpmEnabled == true))) {
   parent: vm
   name: extensionName
-  location: sharedLocation
+  location: location
   properties: {
     publisher: extensionPublisher
     type: extensionType
@@ -188,44 +280,10 @@ resource vmExtension 'Microsoft.Compute/virtualMachines/extensions@2022-03-01' =
   }
 }
 
-resource keyvaultcerts 'Microsoft.KeyVault/vaults@2023-07-01' = {
-  name: keyVaultName
-  location: sharedLocation
-  properties: {
-    enabledForDeployment: false
-    enabledForDiskEncryption: false
-    enabledForTemplateDeployment: false
-    tenantId: subscription().tenantId
-    enableSoftDelete: true
-    softDeleteRetentionInDays: 90
-    accessPolicies: [
-      {
-        objectId: '8dc62288-6290-45de-8fa6-bfcf91eaa884'
-        tenantId: subscription().tenantId
-        permissions: {
-          keys: [
-            'list'
-          ]          
-          secrets: [
-            'list'
-          ] 
-        }
-      }
-    ]
-    sku: {
-      name: 'standard'
-      family: 'A'
-    }
-    networkAcls: {
-      defaultAction: 'Allow'
-      bypass: 'AzureServices'
-    }
-  }
-}
-
+// Oprettelse af managed identity som giver adgang til at læse certifikater i key vault
 resource managedidentity001 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
   name: 'certreader-smile-fsintegration-kv-id-d-dinel'
-  location: sharedLocation
+  location: location
   tags: {
     costCenter: tagCostCenter
     opsTeam: tagOpsTeam
@@ -233,9 +291,10 @@ resource managedidentity001 'Microsoft.ManagedIdentity/userAssignedIdentities@20
   }
 }
 
+// Oprettelse af managed identity som giver adgang til at læse secrets i key vault
 resource managedidentity002 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
   name: 'secretreader-smile-fsintegration-kv-id-d-dinel'
-  location: sharedLocation
+  location: location
   tags: {
     costCenter: tagCostCenter
     opsTeam: tagOpsTeam
@@ -243,9 +302,10 @@ resource managedidentity002 'Microsoft.ManagedIdentity/userAssignedIdentities@20
   }
 }
 
+// Oprettelse af Route Tables, relateret til 
 resource routetable001 'Microsoft.Network/routeTables@2023-11-01' = {
   name: 'smile-fsintegration-ft-hub-d-aura'
-  location: sharedLocation
+  location: location
   tags: {
     costCenter: tagCostCenter
     opsTeam: tagOpsTeam
@@ -269,6 +329,7 @@ resource routetable001 'Microsoft.Network/routeTables@2023-11-01' = {
   }
 }
 
+// Oprettele af den første private DNS zone til dev.api.private.aura.dk
 resource privDns01 'Microsoft.Network/privateDnsZones@2020-06-01' = {
   name: 'dev.api.private.aura.dk'
   location: 'global'
@@ -280,6 +341,7 @@ resource privDns01 'Microsoft.Network/privateDnsZones@2020-06-01' = {
   properties: {  }
 }
 
+// Oprettelse af den anden private DNS zone til Container Registry
 resource privDns02 'Microsoft.Network/privateDnsZones@2020-06-01' = {
   name: 'privatelink.azurecr.io'
   location: 'global'
@@ -291,6 +353,7 @@ resource privDns02 'Microsoft.Network/privateDnsZones@2020-06-01' = {
   properties: {  }
 }
 
+// Oprettelse af den tredje private DNS zone til Container Instances
 resource privDns03 'Microsoft.Network/privateDnsZones@2020-06-01' = {
   name: 'proudmushroom-089bd104.westeurope.azcontainerapps.io'
   location: 'global'
