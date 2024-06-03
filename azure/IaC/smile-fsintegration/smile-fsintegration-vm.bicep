@@ -6,8 +6,8 @@ param adminUsername string
 @secure()
 param adminPassword string
 
-@description('Resource Group hvori ressourcer skal orpettes')
-param resourceGroupName string
+//@description('Resource Group hvori ressourcer skal oprettes')
+//param resourceGroupName string
 
 @description('Deployment location')
 param location string
@@ -37,7 +37,7 @@ var securityProfileJson = {
   }
   securityType: securityType
 }
-var extensionName = 'GuestAttestation'
+var extensionName = 'AADLoginForWindows'
 var extensionPublisher = 'Microsoft.Azure.ActiveDirectory'
 var extensionVersion = '1.0'
 var extensionType = 'AADLoginForWindows'
@@ -91,6 +91,9 @@ resource keyvaultcerts 'Microsoft.KeyVault/vaults@2023-07-01' = {
 resource recoveryServicesVault 'Microsoft.RecoveryServices/vaults@2022-01-01' = {
   name: recoveryVaultName
   location: location
+  identity: {
+    type: 'SystemAssigned'
+  }
   sku: {
     name: 'RS0'
     tier: 'Standard'
@@ -107,24 +110,41 @@ resource backupPolicy 'Microsoft.RecoveryServices/vaults/backupPolicies@2024-04-
     costCenter: tagCostCenter
     Environment: tagEnvironment    
   }
+
   parent: recoveryServicesVault
   properties: {
     backupManagementType: 'AzureIaasVM'
-    instantRPDetails: {
-      azureBackupRGNamePrefix: 'backup-prefix'
-      azureBackupRGNameSuffix: 'backup-suffix'
-    }
-    instantRpRetentionRangeInDays: 7
-    policyType: 'string'
+//    instantRpRetentionRangeInDays: 7
+    policyType: 'V2'
+//    tieringPolicy: {}
+//    timeZone: 'UTC'
+
+//    instantRPDetails: {
+//      azureBackupRGNamePrefix: 'backup-prefix'
+//      azureBackupRGNameSuffix: 'backup-suffix'
+//    }
+
     retentionPolicy: {
       retentionPolicyType: 'SimpleRetentionPolicy'
+
+      retentionDuration: {
+        count: 7
+        durationType: 'Days'
+      }
     }
+
     schedulePolicy: {
       schedulePolicyType: 'SimpleSchedulePolicyV2'
+      scheduleRunFrequency: 'Daily'
+      dailySchedule: {
+        scheduleRunTimes:  [
+          '2024-06-03T19:00:00Z'
+        ]
+      }
     }
-    tieringPolicy: {}
-    timeZone: 'UTC'
+
   }
+
 }
 
 // Network Security Group - bliver brugt af nedenstående virtualNetwork
@@ -152,7 +172,7 @@ resource networkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2022-05-0
   }
 }
 
-// Virtaul network - afhænger af Network Security Group defineret ovenfor
+// Virtual network - afhænger af Network Security Group defineret ovenfor
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2022-05-01' = {
   name: virtualNetworkName
   location: location
