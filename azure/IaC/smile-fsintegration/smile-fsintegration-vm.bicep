@@ -51,46 +51,51 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2022-05-01' = {
   kind: 'Storage'
 }
 
-// Key Vault til opbevaring af certifikater og nøgler
-resource keyvaultcerts 'Microsoft.KeyVault/vaults@2023-07-01' = {
-  name: keyVaultName
-  location: location
-  properties: {
-    enabledForDeployment: false
-    enabledForDiskEncryption: false
-    enabledForTemplateDeployment: false
-    tenantId: subscription().tenantId
-    enableSoftDelete: true
-    softDeleteRetentionInDays: 90
-    accessPolicies: [
-      {
-        objectId: '8dc62288-6290-45de-8fa6-bfcf91eaa884'
-        tenantId: subscription().tenantId
-        permissions: {
-          keys: [
-            'list'
-          ]          
-          secrets: [
-            'list'
-          ] 
-        }
-      }
-    ]
-    sku: {
-      name: 'standard'
-      family: 'A'
-    }
-    networkAcls: {
-      defaultAction: 'Allow'
-      bypass: 'AzureServices'
-    }
-  }
-}
+// // Key Vault til opbevaring af certifikater og nøgler
+// resource keyvaultcerts 'Microsoft.KeyVault/vaults@2023-07-01' = {
+//   name: keyVaultName
+//   location: location
+//   properties: {
+//     enabledForDeployment: false
+//     enabledForDiskEncryption: false
+//     enabledForTemplateDeployment: false
+//     tenantId: subscription().tenantId
+//     enableSoftDelete: true
+//     softDeleteRetentionInDays: 90
+//     accessPolicies: [
+//       {
+//         objectId: '8dc62288-6290-45de-8fa6-bfcf91eaa884'
+//         tenantId: subscription().tenantId
+//         permissions: {
+//           keys: [
+//             'list'
+//           ]          
+//           secrets: [
+//             'list'
+//           ] 
+//         }
+//       }
+//     ]
+//     sku: {
+//       name: 'standard'
+//       family: 'A'
+//     }
+//     networkAcls: {
+//       defaultAction: 'Allow'
+//       bypass: 'AzureServices'
+//     }
+//   }
+// }
 
 // Recovery Services Vault til lagring og opbevaring af backup, der konfigureres for virtuelle maskiner
 resource recoveryServicesVault 'Microsoft.RecoveryServices/vaults@2022-01-01' = {
   name: recoveryVaultName
   location: location
+  tags: {
+    OpsTeam: 'IT-Drift'
+    CostCenter: 'Dinel'
+    Environment: 'Dev'
+  }
   identity: {
     type: 'SystemAssigned'
   }
@@ -102,50 +107,105 @@ resource recoveryServicesVault 'Microsoft.RecoveryServices/vaults@2022-01-01' = 
 }
 
 // Backup Policy som styrer hvordan backup laves. Relateret til Recovery Services ovenfor
-resource backupPolicy 'Microsoft.RecoveryServices/vaults/backupPolicies@2024-04-01' = {
-  name: backupPolicyName
-  location: location
-  tags: {
-    opsTeam: tagOpsTeam
-    costCenter: tagCostCenter
-    Environment: tagEnvironment    
-  }
+resource backupPolicy 'Microsoft.RecoveryServices/vaults/backupPolicies@2021-03-01' = {
 
   parent: recoveryServicesVault
+  name: backupPolicyName
+  location: resourceGroup().location
+
+  tags: {
+    OpsTeam: 'IT-Drift'
+    CostCenter: 'Dinel'
+    Environment: 'Dev'
+  }
+
   properties: {
     backupManagementType: 'AzureIaasVM'
-//    instantRpRetentionRangeInDays: 7
-    policyType: 'V2'
-//    tieringPolicy: {}
-//    timeZone: 'UTC'
-
-//    instantRPDetails: {
-//      azureBackupRGNamePrefix: 'backup-prefix'
-//      azureBackupRGNameSuffix: 'backup-suffix'
-//    }
-
-    retentionPolicy: {
-      retentionPolicyType: 'SimpleRetentionPolicy'
-
-      retentionDuration: {
-        count: 7
-        durationType: 'Days'
-      }
-    }
+    instantRpRetentionRangeInDays: 5
 
     schedulePolicy: {
-      schedulePolicyType: 'SimpleSchedulePolicyV2'
       scheduleRunFrequency: 'Daily'
-      dailySchedule: {
-        scheduleRunTimes:  [
-          '2024-06-03T19:00:00Z'
-        ]
-      }
+      scheduleRunTimes: ['2024-06-04T19:00:00Z']
+      schedulePolicyType: 'SimpleSchedulePolicy'
     }
 
+    retentionPolicy: {
+      dailySchedule: {
+        retentionTimes: ['2024-06-04T19:00:00Z']
+        retentionDuration: {
+          count: 30
+          durationType: 'Days'
+        }
+      }
+      weeklySchedule: {
+        daysOfTheWeek: [
+          'Sunday'
+          'Monday'
+          'Tuesday'
+          'Wednesday'
+          'Thursday'
+          'Friday'
+          'Saturday'
+        ]
+        retentionTimes: ['2024-06-04T19:00:00Z']
+        retentionDuration: {
+          count: 12
+          durationType: 'Weeks'
+        }
+      }
+      monthlySchedule: {
+        retentionScheduleFormatType: 'Daily'
+        retentionScheduleDaily: {
+          daysOfTheMonth: [
+            {
+              date: 1
+              isLast: false
+            }
+          ]
+        }
+        retentionTimes: ['2024-06-04T19:00:00Z']
+        retentionDuration: {
+          count: 60
+          durationType: 'Months'
+        }
+      }
+      yearlySchedule: {
+        retentionScheduleFormatType: 'Daily'
+        monthsOfYear: [
+          'January'
+          'February'
+          'March'
+          'April'
+          'May'
+          'June'
+          'July'
+          'August'
+          'September'
+          'October'
+          'November'
+          'December'
+        ]
+        retentionScheduleDaily: {
+          daysOfTheMonth: [
+            {
+              date: 1
+              isLast: false
+            }
+          ]
+        }
+        retentionTimes: ['2024-06-04T19:00:00Z']
+        retentionDuration: {
+          count: 2
+          durationType: 'Years'
+        }
+      }
+      retentionPolicyType: 'LongTermRetentionPolicy'
+    }
+    timeZone: 'UTC'
   }
 
 }
+
 
 // Network Security Group - bliver brugt af nedenstående virtualNetwork
 resource networkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2022-05-01' = {

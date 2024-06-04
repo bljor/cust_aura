@@ -1,7 +1,12 @@
 // Recovery Services Vault til lagring og opbevaring af backup, der konfigureres for virtuelle maskiner
-resource recoveryServicesVault 'Microsoft.RecoveryServices/vaults@2022-01-01' = {
+resource recoveryServicesVault 'Microsoft.RecoveryServices/vaults@2023-01-01' = {
   name: 'extbjo-recoveryservices'
   location: resourceGroup().location
+  tags: {
+    OpsTeam: 'IT-Drift'
+    CostCenter: 'Dinel'
+    Envrionment: 'Dev'
+  }
   identity: {
     type: 'SystemAssigned'
   }
@@ -9,53 +14,115 @@ resource recoveryServicesVault 'Microsoft.RecoveryServices/vaults@2022-01-01' = 
     name: 'RS0'
     tier: 'Standard'
   }
-  properties: {}
+  properties: {
+    publicNetworkAccess: 'Disabled'
+    securitySettings: {
+      immutabilitySettings: {
+        state: 'Disabled'
+      }
+    }
+  }
 }
 
-// Backup Policy som styrer hvordan backup laves. Relateret til Recovery Services ovenfor
-resource backupPolicy 'Microsoft.RecoveryServices/vaults/backupPolicies@2024-04-01' = {
-  name: 'extbjo-backup-policy-name'
-  location: resourceGroup().location
-  tags: {
-    opsTeam: 'IT-Drift'
-    costCenter: 'Dinel'
-    Environment: 'Dev'
-  }
+// Backup Policy skrevet fra bunden, med udgangspunkt i Microsoft dokumentation.
+// name: 'extbjo-backup-policy-name'
+// location: resourceGroup().location
+// parent: recoveryServicesVault
+//   tags: {
+//   OpsTeam: 'IT-Drift'
+//   CostCenter: 'Dinel'
+//   Environment: 'Dev'
+
+
+resource backupPolicy 'Microsoft.RecoveryServices/vaults/backupPolicies@2021-03-01' = {
 
   parent: recoveryServicesVault
+  name: 'extbjo-backup-policy-name'
+  location: resourceGroup().location
+
   properties: {
     backupManagementType: 'AzureIaasVM'
-    instantRpRetentionRangeInDays: 7
-    policyType: 'V2'
-//    tieringPolicy: {}
-    timeZone: 'UTC'
+    instantRpRetentionRangeInDays: 5
 
-    instantRPDetails: {
-      azureBackupRGNamePrefix: 'backup-prefix'
-      azureBackupRGNameSuffix: 'backup-suffix'
+    schedulePolicy: {
+      scheduleRunFrequency: 'Daily'
+      scheduleRunTimes: ['2024-06-04T19:00:00Z']
+      schedulePolicyType: 'SimpleSchedulePolicy'
     }
 
     retentionPolicy: {
-      retentionPolicyType: 'SimpleRetentionPolicy'
-
-      retentionDuration: {
-        count: 30
-        durationType: 'Days'
-      }
-    }
-
-    schedulePolicy: {
-      schedulePolicyType: 'SimpleSchedulePolicyV2'
-      scheduleRunFrequency: 'Daily'
       dailySchedule: {
-        scheduleRunTimes: [
-            '2024-06-03T19:00:00Z'
-          ]
+        retentionTimes: ['2024-06-04T19:00:00Z']
+        retentionDuration: {
+          count: 30
+          durationType: 'Days'
+        }
       }
-      hourlySchedule: {}
-      weeklySchedule: {}
+      weeklySchedule: {
+        daysOfTheWeek: [
+          'Sunday'
+          'Monday'
+          'Tuesday'
+          'Wednesday'
+          'Thursday'
+          'Friday'
+          'Saturday'
+        ]
+        retentionTimes: ['2024-06-04T19:00:00Z']
+        retentionDuration: {
+          count: 12
+          durationType: 'Weeks'
+        }
+      }
+      monthlySchedule: {
+        retentionScheduleFormatType: 'Daily'
+        retentionScheduleDaily: {
+          daysOfTheMonth: [
+            {
+              date: 1
+              isLast: false
+            }
+          ]
+        }
+        retentionTimes: ['2024-06-04T19:00:00Z']
+        retentionDuration: {
+          count: 60
+          durationType: 'Months'
+        }
+      }
+      yearlySchedule: {
+        retentionScheduleFormatType: 'Daily'
+        monthsOfYear: [
+          'January'
+          'February'
+          'March'
+          'April'
+          'May'
+          'June'
+          'July'
+          'August'
+          'September'
+          'October'
+          'November'
+          'December'
+        ]
+        retentionScheduleDaily: {
+          daysOfTheMonth: [
+            {
+              date: 1
+              isLast: false
+            }
+          ]
+        }
+        retentionTimes: ['2024-06-04T19:00:00Z']
+        retentionDuration: {
+          count: 2
+          durationType: 'Years'
+        }
+      }
+      retentionPolicyType: 'LongTermRetentionPolicy'
     }
-
+    timeZone: 'UTC'
   }
 
 }
