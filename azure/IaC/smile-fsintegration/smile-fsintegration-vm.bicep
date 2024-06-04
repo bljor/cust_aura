@@ -1,3 +1,6 @@
+// version pr. 04-06-2024 deployer uden fejl ...
+
+
 @description('Username for the Virtual Machine.')
 param adminUsername string
 
