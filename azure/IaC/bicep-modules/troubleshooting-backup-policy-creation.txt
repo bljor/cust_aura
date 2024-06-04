@@ -1,0 +1,35 @@
+Hvad er forsøgt:
+
+- format på tidsangivelser:
+	'19:00'
+	'2024-06-04T19:00:00Z'
+	'2024-06-04T19:00:00.000Z'
+
+
+
+
+- fjernet disse schedules fra bicep filen:
+
+      dailySchedule: {
+        scheduleRunTimes: [
+          '2024-06-04T19:00:00Z'
+        ]
+      }
+      
+      weeklySchedule: {
+        scheduleRunDays: [
+          'Monday'
+          'Tuesday'
+          'Wednesday'
+          'Thursday'
+          'Friday'
+          'Saturday'
+          'Sunday'
+        ]
+        scheduleRunTimes: [
+          '2024-06-04T19:00:00Z'
+        ]
+      }
+
+
+
