@@ -1,33 +1,3 @@
-// Recovery Services Vault til lagring og opbevaring af backup, der konfigureres for virtuelle maskiner
-
-param location string = resourceGroup().location
-param rsvName string
-
-resource recoveryServicesVault 'Microsoft.RecoveryServices/vaults@2023-01-01' = {
-  name: rsvName
-  location: location
-  tags: {
-    OpsTeam: 'IT-Drift'
-    CostCenter: 'Dinel'
-    Envrionment: 'Dev'
-  }
-  identity: {
-    type: 'SystemAssigned'
-  }
-  sku: {
-    name: 'RS0'
-    tier: 'Standard'
-  }
-  properties: {
-    publicNetworkAccess: 'Disabled'
-    securitySettings: {
-      immutabilitySettings: {
-        state: 'Disabled'
-      }
-    }
-  }
-}
-
 resource backupPolicy 'Microsoft.RecoveryServices/vaults/backupPolicies@2024-04-01' = {
 
   parent: recoveryServicesVault

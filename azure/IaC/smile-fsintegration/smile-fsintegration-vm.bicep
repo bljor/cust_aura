@@ -1,8 +1,15 @@
 // version pr. 04-06-2024 deployer uden fejl ...
 
+// TODO:
+//
+// Opgaver i fs-integration subscription
+// - der skal laves peering, så VM kan tilgåes via den eksisterende Azure Bastion -> hub-vnet-001-p-aura i subscription platform
+// - backup policy fejler fortsat, den skal der kigges på (ikke prioritet)
 
-@description('Username for the Virtual Machine.')
-param adminUsername string
+// Opgaver i platform subscription
+// - der skal laves firewall regler til fsintegration platformen
+// - der skal laves ??
+
 
 @description('Password for the Virtual Machine.')
 @minLength(12)
@@ -12,9 +19,10 @@ param adminPassword string
 //@description('Resource Group hvori ressourcer skal oprettes')
 //param resourceGroupName string
 
-@description('Deployment location')
-param location string
+var adminUsername = 'adminbjo'
+var resourceGroupName = 'extbjo-sample-rg-d-dinel'
 
+var location = resourceGroup().location
 var vmName = 'fs-integra1'
 var securityType = 'TrustedLaunch'   // must be either TrustedLaunch or Standard
 var vmSize = 'Standard_D2as_v5'
@@ -28,8 +36,8 @@ var recoveryVaultName = 'smile-fsi-rv-d-dinel'
 var backupPolicyName = 'smile-fsi-backuppolicy-d-dinel'
 var storageAccountName = 'stfsintegdaura'
 var nicName = 'fs-integra1-nic01'
-var addressPrefix = '10.0.0.0/16'
-var subnetName = 'Subnet'
+var addressPrefix = '10.245.128.0/22'
+var subnetName = 'General-Purpose-subnet'
 var subnetPrefix = '10.0.0.0/24'
 var virtualNetworkName = 'smile-fsintegration-vnet-001-d-dinel'
 var networkSecurityGroupName = 'smile-fsintegration-nsg-001-d-dinel'
@@ -110,7 +118,7 @@ resource recoveryServicesVault 'Microsoft.RecoveryServices/vaults@2022-01-01' = 
 }
 
 // Backup Policy som styrer hvordan backup laves. Relateret til Recovery Services ovenfor
-resource backupPolicy 'Microsoft.RecoveryServices/vaults/backupPolicies@2021-03-01' = {
+resource backupPolicy 'Microsoft.RecoveryServices/vaults/backupPolicies@2024-04-01' = {
 
   parent: recoveryServicesVault
   name: backupPolicyName
@@ -124,6 +132,7 @@ resource backupPolicy 'Microsoft.RecoveryServices/vaults/backupPolicies@2021-03-
 
   properties: {
     backupManagementType: 'AzureIaasVM'
+    policyType: 'V2'
     instantRpRetentionRangeInDays: 5
 
     schedulePolicy: {
@@ -247,9 +256,33 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2022-05-01' = {
     }
     subnets: [
       {
-        name: subnetName
+        name: 'General-Purpose-subnet'
         properties: {
-          addressPrefix: subnetPrefix
+          addressPrefix: '10.245.128.0/24'
+          networkSecurityGroup: {
+            id: networkSecurityGroup.id
+          }
+          routeTable: {
+            id: routetable001.id
+          }
+        }
+      }
+      {
+        name: 'Container-App-Subnet'
+        properties: {
+          addressPrefix: '10.245.130.0/23'
+          networkSecurityGroup: {
+            id: networkSecurityGroup.id
+          }
+          routeTable: {
+            id: routetable001.id
+          }
+        }
+      }
+      {
+        name: 'LockedFor_AGW_VPNSNAT'
+        properties: {
+          addressPrefix: '10.245.129.240/28'
           networkSecurityGroup: {
             id: networkSecurityGroup.id
           }
@@ -271,7 +304,7 @@ resource nic 'Microsoft.Network/networkInterfaces@2022-05-01' = {
           privateIPAllocationMethod: 'Dynamic'
           privateIPAddressVersion: 'IPv4'
           subnet: {
-            id: resourceId('Microsoft.Network/virtualNetworks/subnets', virtualNetworkName, subnetName)
+            id: resourceId('Microsoft.Network/virtualNetworks/subnets', virtualNetworkName, 'General-Purpose-subnet')
           }
         }
       }
@@ -300,7 +333,7 @@ resource vm 'Microsoft.Compute/virtualMachines@2022-03-01' = {
       imageReference: {
         publisher: 'microsoftwindowsdesktop'
         offer: 'windows-11'
-        sku: 'win11-22h2-pro'
+        sku: 'win11-23h2-pro'
         version: 'latest'
       }
       osDisk: {
@@ -414,7 +447,7 @@ resource routetable001 'Microsoft.Network/routeTables@2023-11-01' = {
 
 // Oprettele af den første private DNS zone til dev.api.private.aura.dk
 resource privDns01 'Microsoft.Network/privateDnsZones@2020-06-01' = {
-  name: 'dev.api.private.aura.dk'
+  name: 'dev.fs.api.private.aura.dk'
   location: 'global'
   tags: {
     costCenter: tagCostCenter
