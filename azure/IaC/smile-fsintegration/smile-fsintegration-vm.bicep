@@ -4,7 +4,8 @@
 //
 // Opgaver i fs-integration subscription
 // - der skal laves peering, så VM kan tilgåes via den eksisterende Azure Bastion -> hub-vnet-001-p-aura i subscription platform
-// - backup policy fejler fortsat, den skal der kigges på (ikke prioritet)
+//   --- INDLEDENDE SKRIDT ER TAGET, OG NOGET SER UD TIL AT VIRKE - SKAL ARBEJDE VIDERE MED DET
+// - backup policy fejler fortsat, den skal der kigges på (ikke prioritet) ::: TROR DENNE ER OK NU
 
 // Opgaver i platform subscription
 // - der skal laves firewall regler til fsintegration platformen
@@ -16,42 +17,70 @@
 @secure()
 param adminPassword string
 
-//@description('Resource Group hvori ressourcer skal oprettes')
-//param resourceGroupName string
 
-var adminUsername = 'adminbjo'
-var resourceGroupName = 'extbjo-sample-rg-d-dinel'
 
+// Delte variable på tværs af ressourcer
 var location = resourceGroup().location
-var vmName = 'fs-integra1'
-var securityType = 'TrustedLaunch'   // must be either TrustedLaunch or Standard
-var vmSize = 'Standard_D2as_v5'
-
 var tagCostCenter = 'Dinel'
 var tagOpsTeam = 'IT-Drift'
 var tagEnvironment = 'Dev'
 
-var keyVaultName = 'smile-fsi-kv-d-dinel'
-var recoveryVaultName = 'smile-fsi-rv-d-dinel'
-var backupPolicyName = 'smile-fsi-backuppolicy-d-dinel'
-var storageAccountName = 'stfsintegdaura'
-var nicName = 'fs-integra1-nic01'
-var addressPrefix = '10.245.128.0/22'
-var subnetName = 'General-Purpose-subnet'
-var subnetPrefix = '10.0.0.0/24'
-var virtualNetworkName = 'smile-fsintegration-vnet-001-d-dinel'
+
+// Variabler til oprettelse af Network Security Group
 var networkSecurityGroupName = 'smile-fsintegration-nsg-001-d-dinel'
-var securityProfileJson = {
+
+
+// Variabler til oprettelse af VNET
+var virtualNetworkName = 'smile-fsintegration-vnet-001-d-dinel'
+var addressPrefix = '10.245.128.0/22'
+
+
+// Variabler til Peering af VNet til HUb-vnet i Platform subscription
+
+
+// Variabler til oprettelse af Network Interface Card (nic)
+var nicName = 'fs-integra1-nic01'
+
+
+// Variabler til oprettelse af VM
+var vmName = 'fs-integra1'
+var securityType = 'TrustedLaunch'          // skal være enten TrustedLaunch eller Standard
+var vmSize = 'Standard_D2as_v5'             // Størrelse / opsætning på den VM der skal oprettes
+var adminUsername = 'adminbjo'              // Navn på den admin-bruger konto der oprettes på VM'en
+var securityProfileJson = {                 // Sikkerhedsprofil, der styrer Secure Boot og TPM chip
   uefiSettings: {
     secureBootEnabled: true
     vTpmEnabled: true
   }
   securityType: securityType
 }
-var extensionName = 'AADLoginForWindows'
+var extensionName = 'AADLoginForWindows'    // Definér extension til AAD login
 var extensionPublisher = 'Microsoft.Azure.ActiveDirectory'
 var extensionVersion = '1.0'
 var extensionType = 'AADLoginForWindows'
+
+
+// Variabler til oprettelse af Key Vault
+var keyVaultName = 'smile-fsi-kv-d-dinel'
+
+
+// Variabler til oprettelse af Recovery Vault
+var recoveryVaultName = 'smile-fsi-rv-d-dinel'
+
+
+// Variabler til oprettelse af backup policy
+var backupPolicyName = 'smile-fsi-backuppolicy-d-dinel'
+
+
+// Variabler til backup vault
+var backupFabric = 'Azure'
+var protectionContainer = 'iaasvmcontainer;iaasvmcontainerv2;${resourceGroup().name};${vmName}'
+var protectedItem = 'vm;iaasvmcontainerv2;${resourceGroup().name};${vmName}'
+
+
+// Variabler til oprettelse af Storage Account
+var storageAccountName = 'stfsintegdaura'
+
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2022-05-01' = {
   name: storageAccountName
@@ -118,9 +147,8 @@ resource recoveryServicesVault 'Microsoft.RecoveryServices/vaults@2022-01-01' = 
 }
 
 // Backup Policy som styrer hvordan backup laves. Relateret til Recovery Services ovenfor
-resource backupPolicy 'Microsoft.RecoveryServices/vaults/backupPolicies@2024-04-01' = {
+resource backupPolicy 'Microsoft.RecoveryServices/vaults/backupPolicies@2022-04-01' = {
 
-  parent: recoveryServicesVault
   name: backupPolicyName
   location: resourceGroup().location
 
@@ -129,94 +157,47 @@ resource backupPolicy 'Microsoft.RecoveryServices/vaults/backupPolicies@2024-04-
     CostCenter: 'Dinel'
     Environment: 'Dev'
   }
+  parent: recoveryServicesVault
 
   properties: {
     backupManagementType: 'AzureIaasVM'
-    policyType: 'V2'
-    instantRpRetentionRangeInDays: 5
-
-    schedulePolicy: {
-      scheduleRunFrequency: 'Daily'
-      scheduleRunTimes: ['2024-06-04T19:00:00Z']
-      schedulePolicyType: 'SimpleSchedulePolicy'
+    
+    instantRPDetails: {
+      azureBackupRGNamePrefix: null
+      azureBackupRGNameSuffix: null
     }
-
+    instantRpRetentionRangeInDays: 2
+    policyType: 'V2'
+    
     retentionPolicy: {
+      retentionPolicyType: 'LongTermRetentionPolicy'
       dailySchedule: {
-        retentionTimes: ['2024-06-04T19:00:00Z']
         retentionDuration: {
           count: 30
           durationType: 'Days'
         }
+        retentionTimes: ['2024-06-04T19:00:00+00:00']
       }
-      weeklySchedule: {
-        daysOfTheWeek: [
-          'Sunday'
-          'Monday'
-          'Tuesday'
-          'Wednesday'
-          'Thursday'
-          'Friday'
-          'Saturday'
-        ]
-        retentionTimes: ['2024-06-04T19:00:00Z']
-        retentionDuration: {
-          count: 12
-          durationType: 'Weeks'
-        }
+      monthlySchedule: null
+      weeklySchedule: null
+      yearlySchedule: null
+    }
+    
+    schedulePolicy: {
+      dailySchedule: null
+      hourlySchedule: {
+        interval: 4
+        scheduleWindowDuration: 12
+        scheduleWindowStartTime: '2024-06-04T19:00:00+00:00'
       }
-      monthlySchedule: {
-        retentionScheduleFormatType: 'Daily'
-        retentionScheduleDaily: {
-          daysOfTheMonth: [
-            {
-              date: 1
-              isLast: false
-            }
-          ]
-        }
-        retentionTimes: ['2024-06-04T19:00:00Z']
-        retentionDuration: {
-          count: 60
-          durationType: 'Months'
-        }
-      }
-      yearlySchedule: {
-        retentionScheduleFormatType: 'Daily'
-        monthsOfYear: [
-          'January'
-          'February'
-          'March'
-          'April'
-          'May'
-          'June'
-          'July'
-          'August'
-          'September'
-          'October'
-          'November'
-          'December'
-        ]
-        retentionScheduleDaily: {
-          daysOfTheMonth: [
-            {
-              date: 1
-              isLast: false
-            }
-          ]
-        }
-        retentionTimes: ['2024-06-04T19:00:00Z']
-        retentionDuration: {
-          count: 2
-          durationType: 'Years'
-        }
-      }
-      retentionPolicyType: 'LongTermRetentionPolicy'
+      schedulePolicyType: 'SimpleSchedulePolicyV2'
+      scheduleRunFrequency: 'Hourly'
+      weeklySchedule: null
     }
     timeZone: 'UTC'
   }
-
 }
+
 
 
 // Network Security Group - bliver brugt af nedenstående virtualNetwork
@@ -311,7 +292,6 @@ resource nic 'Microsoft.Network/networkInterfaces@2022-05-01' = {
     ]
   }
   dependsOn: [
-
     virtualNetwork
   ]
 }
@@ -396,6 +376,18 @@ resource vmExtension 'Microsoft.Compute/virtualMachines/extensions@2022-03-01' =
   }
 }
 
+
+// Opret vault til lagring af
+resource recoveryVaultName_backupFabric_protectionContainer_protectedItem 'Microsoft.RecoveryServices/vaults/backupFabrics/protectionContainers/protectedItems@2024-04-01' = {
+  name: '${recoveryVaultName}/${backupFabric}/${protectionContainer}/${protectedItem}'
+  properties: {
+    protectedItemType: 'Microsoft.Compute/virtualMachines'
+    policyId: '${recoveryServicesVault.id}/backupPolicies/${backupPolicyName}'
+    sourceResourceId: vm.id
+  }
+} 
+
+
 // Oprettelse af managed identity som giver adgang til at læse certifikater i key vault
 resource managedidentity001 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
   name: 'certreader-smile-fsintegration-kv-id-d-dinel'
@@ -428,7 +420,6 @@ resource routetable001 'Microsoft.Network/routeTables@2023-11-01' = {
     Environment: tagEnvironment
   }
   properties: {
-    disableBgpRoutePropagation: true
     routes: [
       {
         id: 'route-id-0001'
@@ -470,7 +461,7 @@ resource privDns02 'Microsoft.Network/privateDnsZones@2020-06-01' = {
 }
 
 // Oprettelse af den tredje private DNS zone til Container Instances
-resource privDns03 'Microsoft.Network/privateDnsZones@2020-06-01' = {
+resource privDns03 'Microsoft.Network/privateDnsZones@2020-06-01' = { 
   name: 'proudmushroom-089bd104.westeurope.azcontainerapps.io'
   location: 'global'
   tags: {
@@ -479,4 +470,34 @@ resource privDns03 'Microsoft.Network/privateDnsZones@2020-06-01' = {
     Environment: tagEnvironment
   }
   properties: {  }
+}
+
+
+resource vnetPeering 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2023-11-01' = {
+  name: 'peeringName'
+  parent: virtualNetwork
+
+  properties: {
+    allowForwardedTraffic: true
+    allowGatewayTransit: false
+    allowVirtualNetworkAccess: true
+    doNotVerifyRemoteGateways: false
+    //peeringState: 'Connected'
+    //peeringSyncLevel: 'FullyInSync'
+    remoteAddressSpace: {
+      addressPrefixes: [
+        addressPrefix
+      ]
+    }
+    remoteVirtualNetwork: {
+      //id: resourceId('vnet','/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg/providers/Microsoft.Network/virtualNetworks/hub-vnet-001-p-aura')
+      id: resourceId('0d742875-267e-4db3-8a2b-10891ce92a5c','platform-connectivity-rg','Microsoft.Network/virtualNetworks','hub-vnet-001-p-aura')
+    }
+    remoteVirtualNetworkAddressSpace: {
+      addressPrefixes: [
+        addressPrefix
+      ]
+    }
+
+  }
 }

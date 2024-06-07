@@ -1,0 +1,198 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.27.1.19265",
+      "templateHash": "1449822460651957075"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.RecoveryServices/vaults",
+      "apiVersion": "2023-01-01",
+      "name": "rv-extbjo",
+      "location": "[resourceGroup().location]",
+      "tags": {
+        "OpsTeam": "IT-Drift",
+        "CostCenter": "Dinel",
+        "Environment": "Dev"
+      },
+      "identity": {
+        "type": "SystemAssigned"
+      },
+      "sku": {
+        "name": "RS0",
+        "tier": "Standard"
+      },
+      "properties": {
+        "publicNetworkAccess": "Disabled"
+      }
+    },
+    {
+      "type": "Microsoft.RecoveryServices/vaults/backupPolicies",
+      "apiVersion": "2023-01-01",
+      "name": "[format('{0}/{1}', 'rv-extbjo', 'extbjo-backup-policy')]",
+      "location": "[resourceGroup().location]",
+      "tags": {
+        "OpsTeam": "IT-Drift",
+        "CostCenter": "Dinel",
+        "Environment": "Dev"
+      },
+      "properties": {
+        "backupManagementType": "AzureIaasVM",
+        "instantRPDetails": {
+          "azureBackupRGNamePrefix": "prefix",
+          "azureBackupRGNameSuffix": "suffix"
+        },
+        "instantRpRetentionRangeInDays": 5,
+        "policyType": "V2",
+        "retentionPolicy": {
+          "retentionPolicyType": "LongTermRetentionPolicy",
+          "dailySchedule": {
+            "retentionDuration": {
+              "count": 30,
+              "durationType": "Days"
+            },
+            "retentionTimes": [
+              "2024-06-04T19:00:00Z"
+            ]
+          },
+          "monthlySchedule": {
+            "retentionDuration": {
+              "count": 60,
+              "durationType": "Months"
+            },
+            "retentionScheduleDaily": {
+              "daysOfTheMonth": [
+                {
+                  "date": 1,
+                  "isLast": false
+                }
+              ]
+            },
+            "retentionScheduleFormatType": "Daily",
+            "retentionScheduleWeekly": {
+              "daysOfTheWeek": [
+                "Monday",
+                "Tuesday",
+                "Wednesday",
+                "Thursday",
+                "Friday",
+                "Saturday",
+                "Sunday"
+              ],
+              "weeksOfTheMonth": [
+                "First",
+                "Fourth",
+                "Invalid",
+                "Last",
+                "Second",
+                "Third"
+              ]
+            },
+            "retentionTimes": [
+              "2024-06-04T19:00:00Z"
+            ]
+          },
+          "weeklySchedule": {
+            "daysOfTheWeek": [
+              "Sunday",
+              "Monday",
+              "Tuesday",
+              "Wednesday",
+              "Thursday",
+              "Friday",
+              "Saturday"
+            ],
+            "retentionDuration": {
+              "count": 12,
+              "durationType": "Weeks"
+            },
+            "retentionTimes": [
+              "2024-06-04T19:00:00Z"
+            ]
+          },
+          "yearlySchedule": {
+            "monthsOfYear": [
+              "January",
+              "February",
+              "March",
+              "April",
+              "May",
+              "June",
+              "July",
+              "August",
+              "September",
+              "October",
+              "November",
+              "December"
+            ],
+            "retentionDuration": {
+              "count": 2,
+              "durationType": "Years"
+            },
+            "retentionScheduleDaily": {
+              "daysOfTheMonth": [
+                {
+                  "date": 1,
+                  "isLast": false
+                }
+              ]
+            },
+            "retentionScheduleFormatType": "Daily",
+            "retentionScheduleWeekly": {
+              "daysOfTheWeek": [
+                "Monday",
+                "Tuesday",
+                "Wednesday",
+                "Thursday",
+                "Friday",
+                "Saturday",
+                "Sunday"
+              ],
+              "weeksOfTheMonth": [
+                "First",
+                "Fourth",
+                "Invalid",
+                "Last",
+                "Second",
+                "Third"
+              ]
+            },
+            "retentionTimes": [
+              "2024-06-04T19:00:00Z"
+            ]
+          }
+        },
+        "schedulePolicy": {
+          "schedulePolicyType": "SimpleSchedulePolicy",
+          "hourlySchedule": {
+            "interval": 8,
+            "scheduleWindowDuration": 24,
+            "scheduleWindowStartTime": "19:00"
+          },
+          "scheduleRunDays": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+            "Sunday"
+          ],
+          "scheduleRunFrequency": "Daily",
+          "scheduleRunTimes": [
+            "2024-06-04T19:00:00Z"
+          ],
+          "scheduleWeeklyFrequency": 1
+        },
+        "timeZone": "UTC"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.RecoveryServices/vaults', 'rv-extbjo')]"
+      ]
+    }
+  ]
+}
