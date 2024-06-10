@@ -3,9 +3,7 @@
 // TODO:
 //
 // Opgaver i fs-integration subscription
-// - der skal laves peering, så VM kan tilgåes via den eksisterende Azure Bastion -> hub-vnet-001-p-aura i subscription platform
-//   --- INDLEDENDE SKRIDT ER TAGET, OG NOGET SER UD TIL AT VIRKE - SKAL ARBEJDE VIDERE MED DET
-// - backup policy fejler fortsat, den skal der kigges på (ikke prioritet) ::: TROR DENNE ER OK NU
+// -
 
 // Opgaver i platform subscription
 // - der skal laves firewall regler til fsintegration platformen
@@ -33,6 +31,7 @@ var networkSecurityGroupName = 'smile-fsintegration-nsg-001-d-dinel'
 // Variabler til oprettelse af VNET
 var virtualNetworkName = 'smile-fsintegration-vnet-001-d-dinel'
 var addressPrefix = '10.245.128.0/22'
+var remotePrefix = '10.0.0.0/22'
 
 
 // Variabler til Peering af VNet til HUb-vnet i Platform subscription
@@ -61,11 +60,11 @@ var extensionType = 'AADLoginForWindows'
 
 
 // Variabler til oprettelse af Key Vault
-var keyVaultName = 'smile-fsi-kv-d-dinel'
+var keyVaultName = 'smile-fsi-001-kv-d-dinel'
 
 
 // Variabler til oprettelse af Recovery Vault
-var recoveryVaultName = 'smile-fsi-rv-d-dinel'
+var recoveryVaultName = 'smile-fsi-001-rv-d-dinel'
 
 
 // Variabler til oprettelse af backup policy
@@ -91,41 +90,42 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2022-05-01' = {
   kind: 'Storage'
 }
 
-// // Key Vault til opbevaring af certifikater og nøgler
-// resource keyvaultcerts 'Microsoft.KeyVault/vaults@2023-07-01' = {
-//   name: keyVaultName
-//   location: location
-//   properties: {
-//     enabledForDeployment: false
-//     enabledForDiskEncryption: false
-//     enabledForTemplateDeployment: false
-//     tenantId: subscription().tenantId
-//     enableSoftDelete: true
-//     softDeleteRetentionInDays: 90
-//     accessPolicies: [
-//       {
-//         objectId: '8dc62288-6290-45de-8fa6-bfcf91eaa884'
-//         tenantId: subscription().tenantId
-//         permissions: {
-//           keys: [
-//             'list'
-//           ]          
-//           secrets: [
-//             'list'
-//           ] 
-//         }
-//       }
-//     ]
-//     sku: {
-//       name: 'standard'
-//       family: 'A'
-//     }
-//     networkAcls: {
-//       defaultAction: 'Allow'
-//       bypass: 'AzureServices'
-//     }
-//   }
-// }
+// Key Vault til opbevaring af certifikater og nøgler
+resource keyvaultcerts 'Microsoft.KeyVault/vaults@2023-07-01' = {
+  name: keyVaultName
+  location: location
+  properties: {
+    enabledForDeployment: false
+    enabledForDiskEncryption: false
+    enabledForTemplateDeployment: false
+    tenantId: subscription().tenantId
+    enableSoftDelete: true
+    softDeleteRetentionInDays: 90
+    accessPolicies: [
+      {
+        objectId: '8dc62288-6290-45de-8fa6-bfcf91eaa884'
+        tenantId: subscription().tenantId
+        permissions: {
+          keys: [
+            'list'
+          ]          
+          secrets: [
+            'list'
+          ] 
+        }
+      }
+    ]
+    sku: {
+      name: 'standard'
+      family: 'A'
+    }
+    networkAcls: {
+      defaultAction: 'Allow'
+      bypass: 'AzureServices'
+    }
+  }
+}
+
 
 // Recovery Services Vault til lagring og opbevaring af backup, der konfigureres for virtuelle maskiner
 resource recoveryServicesVault 'Microsoft.RecoveryServices/vaults@2022-01-01' = {
@@ -146,6 +146,8 @@ resource recoveryServicesVault 'Microsoft.RecoveryServices/vaults@2022-01-01' = 
   properties: {}
 }
 
+
+// UDKOMMENTERET, FOR AT KUNNE SLETTE RECOVERY VAULT IGEN UDEN DER HÆNGER GAMLE DATA OG SPÆRRER FOR SLETNING
 // Backup Policy som styrer hvordan backup laves. Relateret til Recovery Services ovenfor
 resource backupPolicy 'Microsoft.RecoveryServices/vaults/backupPolicies@2022-04-01' = {
 
@@ -194,10 +196,9 @@ resource backupPolicy 'Microsoft.RecoveryServices/vaults/backupPolicies@2022-04-
       scheduleRunFrequency: 'Hourly'
       weeklySchedule: null
     }
-    timeZone: 'UTC'
+    timeZone: 'UTC'             // kunne måske også være 'Romance Standard Time'
   }
 }
-
 
 
 // Network Security Group - bliver brugt af nedenstående virtualNetwork
@@ -225,7 +226,9 @@ resource networkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2022-05-0
   }
 }
 
-// Virtual network - afhænger af Network Security Group defineret ovenfor
+
+// Virtual network - refererer til både Network Security Group defineret ovenfor,
+// samt route table nedenfor
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2022-05-01' = {
   name: virtualNetworkName
   location: location
@@ -272,6 +275,7 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2022-05-01' = {
     ]
   }
 }
+output vnetID string = virtualNetwork.id
 
 // Network Interface - relateret til ovenstående Virtual Network
 resource nic 'Microsoft.Network/networkInterfaces@2022-05-01' = {
@@ -321,6 +325,7 @@ resource vm 'Microsoft.Compute/virtualMachines@2022-03-01' = {
         managedDisk: {
           storageAccountType: 'StandardSSD_LRS'
         }
+        name: '${vmName}-osdisk01'
       }
     }
     networkProfile: {
@@ -357,7 +362,7 @@ resource autoShutdownConfig 'Microsoft.DevTestLab/schedules@2018-09-15' = {
       status: 'Disabled'
     }
     status: 'Enabled'
-    timeZoneId: 'UTC'
+    timeZoneId: 'Romance Standard Time'             // kunne også være 'UTC'
     taskType: 'ComputeVmShutdownTask'
     targetResourceId: vm.id
   }
@@ -377,12 +382,13 @@ resource vmExtension 'Microsoft.Compute/virtualMachines/extensions@2022-03-01' =
 }
 
 
+// UDKOMMENTERET, FOR AT KUNNE SLETTE RECOVERY VAULT IGEN UDEN DER HÆNGER GAMLE DATA OG SPÆRRER FOR SLETNING
 // Opret vault til lagring af
 resource recoveryVaultName_backupFabric_protectionContainer_protectedItem 'Microsoft.RecoveryServices/vaults/backupFabrics/protectionContainers/protectedItems@2024-04-01' = {
-  name: '${recoveryVaultName}/${backupFabric}/${protectionContainer}/${protectedItem}'
+  name: '${recoveryServicesVault.name}/${backupFabric}/${protectionContainer}/${protectedItem}'
   properties: {
     protectedItemType: 'Microsoft.Compute/virtualMachines'
-    policyId: '${recoveryServicesVault.id}/backupPolicies/${backupPolicyName}'
+    policyId: '${recoveryServicesVault.id}/backupPolicies/${backupPolicy.name}'
     sourceResourceId: vm.id
   }
 } 
@@ -460,7 +466,9 @@ resource privDns02 'Microsoft.Network/privateDnsZones@2020-06-01' = {
   properties: {  }
 }
 
-// Oprettelse af den tredje private DNS zone til Container Instances
+
+// Oprettelse af den tredje private DNS zone til Container Instances (navngivning skal sikkert ændres ift. de reelt oprettede
+// container instances)
 resource privDns03 'Microsoft.Network/privateDnsZones@2020-06-01' = { 
   name: 'proudmushroom-089bd104.westeurope.azcontainerapps.io'
   location: 'global'
@@ -473,31 +481,39 @@ resource privDns03 'Microsoft.Network/privateDnsZones@2020-06-01' = {
 }
 
 
-resource vnetPeering 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2023-11-01' = {
-  name: 'peeringName'
-  parent: virtualNetwork
+// Lavet som et module, for at kunne deploye til et andet subscription (ved oprettelse af peering02. Peering01 som oprettes, oprettes i
+// smile-fsintegration-sub-nonproduction-dinel subscription (altså det aktulle subscription))
+var hubVnetId = '/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg/providers/Microsoft.Network/virtualNetworks/hub-vnet-001-p-aura'
 
-  properties: {
-    allowForwardedTraffic: true
-    allowGatewayTransit: false
-    allowVirtualNetworkAccess: true
-    doNotVerifyRemoteGateways: false
-    //peeringState: 'Connected'
-    //peeringSyncLevel: 'FullyInSync'
-    remoteAddressSpace: {
-      addressPrefixes: [
-        addressPrefix
-      ]
-    }
-    remoteVirtualNetwork: {
-      //id: resourceId('vnet','/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg/providers/Microsoft.Network/virtualNetworks/hub-vnet-001-p-aura')
-      id: resourceId('0d742875-267e-4db3-8a2b-10891ce92a5c','platform-connectivity-rg','Microsoft.Network/virtualNetworks','hub-vnet-001-p-aura')
-    }
-    remoteVirtualNetworkAddressSpace: {
-      addressPrefixes: [
-        addressPrefix
-      ]
-    }
+module peering01 './smile-fsintegration-create-hub-vnet-peering.bicep' = {
+  scope: resourceGroup()
 
+  name: 'Peering-to-Hub-vnet'
+
+  params: {
+    peeringName: '${virtualNetwork.name}-To-Hub'
+    vnetName: virtualNetwork.name
+    localPrefix: addressPrefix
+    remotePrefix: remotePrefix
+    remoteVnetID: hubVnetId
+  }
+}
+
+
+// Opret peering i Hub subscription
+var hubVnetSubscriptionID = '0d742875-267e-4db3-8a2b-10891ce92a5c'
+var hubVnetResourceGroup = 'platform-connectivity-rg'
+var hubVnetName = 'hub-vnet-001-p-aura'
+
+module peering02 './smile-fsintegration-create-hub-vnet-peering.bicep' = {
+  name: 'Peering-From-Hub-vnet-to-${virtualNetwork.name}'
+  scope: resourceGroup(hubVnetSubscriptionID, hubVnetResourceGroup)
+
+  params: {
+    peeringName: 'Hub-to-${virtualNetwork.name}'
+    vnetName: hubVnetName
+    localPrefix: remotePrefix
+    remotePrefix: addressPrefix
+    remoteVnetID: virtualNetwork.id
   }
 }

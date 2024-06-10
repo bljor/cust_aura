@@ -1,0 +1,18 @@
+Policy:
+
+Configure backup on virtual machines without a given tag to a new recovery services vault with a default policy
+
+
+Actions:
+- tilføj et tag til policy, så det er muligt at undgå politikken rammer miljøer som er deployet korrekt, og selv håndterer oprettelsen af Recovery Vault samt konfiguration af backup.
+- alternativt, deaktiver policy?
+
+
+
+Policy:
+
+Vnet kræver en network security group
+
+
+
+Kræves at der tages backup af virtuelle maskiner, hvad med maskiner som der ikke skal tages backup af. De skal kunne tagges korrekt.
