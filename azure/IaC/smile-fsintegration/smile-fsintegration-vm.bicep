@@ -60,11 +60,11 @@ var extensionType = 'AADLoginForWindows'
 
 
 // Variabler til oprettelse af Key Vault
-var keyVaultName = 'smile-fsi-001-kv-d-dinel'
+var keyVaultName = 'smile-fsi-sub-kv-d-dinel'
 
 
 // Variabler til oprettelse af Recovery Vault
-var recoveryVaultName = 'smile-fsi-001-rv-d-dinel'
+var recoveryVaultName = 'smile-fsi-sub-rv-d-dinel'
 
 
 // Variabler til oprettelse af backup policy
@@ -261,6 +261,13 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2022-05-01' = {
           routeTable: {
             id: routetable001.id
           }
+          delegations: [        // Skal udfyldes nedenfor ... denne del med delegations er ikke testet endnu
+            {
+              properties: {
+                serviceName: 'Microsoft.App/environments'
+              }
+            }
+          ]
         }
       }
       {
@@ -304,6 +311,14 @@ resource nic 'Microsoft.Network/networkInterfaces@2022-05-01' = {
 resource vm 'Microsoft.Compute/virtualMachines@2022-03-01' = {
   name: vmName
   location: location
+  identity: {
+    type: 'SystemAssigned'
+  }
+  tags: {
+    Environment: tagEnvironment
+    CostCenter: tagCostCenter
+    OpsTeam: tagOpsTeam
+  }
   properties: {
     hardwareProfile: {
       vmSize: vmSize
