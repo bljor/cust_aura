@@ -90,8 +90,9 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2022-05-01' = {
   kind: 'Storage'
 }
 
+
 // Key Vault til opbevaring af certifikater og nøgler
-resource keyvaultcerts 'Microsoft.KeyVault/vaults@2023-07-01' = {
+resource keyvaultcerts 'Microsoft.KeyVault/vaults@2023-07-01' existing = {
   name: keyVaultName
   location: location
   properties: {
@@ -128,7 +129,7 @@ resource keyvaultcerts 'Microsoft.KeyVault/vaults@2023-07-01' = {
 
 
 // Recovery Services Vault til lagring og opbevaring af backup, der konfigureres for virtuelle maskiner
-resource recoveryServicesVault 'Microsoft.RecoveryServices/vaults@2022-01-01' = {
+resource recoveryServicesVault 'Microsoft.RecoveryServices/vaults@2022-01-01' existing = {
   name: recoveryVaultName
   location: location
   tags: {
@@ -234,8 +235,8 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2022-05-01' = {
   location: location
   properties: {
     addressSpace: {
-      addressPrefixes: [
-        addressPrefix
+    addressPrefixes: [
+    addressPrefix
       ]
     }
     subnets: [
@@ -271,18 +272,19 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2022-05-01' = {
         }
       }
       {
-        name: 'LockedFor_AGW_VPNSNAT'
-        properties: {
-          addressPrefix: '10.245.129.240/28'
-          networkSecurityGroup: {
-            id: networkSecurityGroup.id
-          }
-        }
-      }
+       name: 'LockedFor_AGW_VPNSNAT'
+       properties: {
+         addressPrefix: '10.245.129.240/28'
+         networkSecurityGroup: {
+           id: networkSecurityGroup.id
+         }
+       }
+     }
     ]
   }
 }
 output vnetID string = virtualNetwork.id
+
 
 // Network Interface - relateret til ovenstående Virtual Network
 resource nic 'Microsoft.Network/networkInterfaces@2022-05-01' = {
@@ -306,6 +308,7 @@ resource nic 'Microsoft.Network/networkInterfaces@2022-05-01' = {
     virtualNetwork
   ]
 }
+
 
 // Oprettelse af den virtuelle maskine, afhænger af ovenstående Network Interface
 resource vm 'Microsoft.Compute/virtualMachines@2022-03-01' = {
@@ -360,6 +363,7 @@ resource vm 'Microsoft.Compute/virtualMachines@2022-03-01' = {
   }
 }
 
+
 // Konfiguration af automatisk slukning af VM hver aften kl. 19:00 UTC, er knyttet til ovenstående VM
 resource autoShutdownConfig 'Microsoft.DevTestLab/schedules@2018-09-15' = {
   name: 'shutdown-computevm-${vmName}'
@@ -382,6 +386,7 @@ resource autoShutdownConfig 'Microsoft.DevTestLab/schedules@2018-09-15' = {
     targetResourceId: vm.id
   }
 }
+
 
 // Extensions for den Virtuelle Maskine
 resource vmExtension 'Microsoft.Compute/virtualMachines/extensions@2022-03-01' = if ((securityType == 'TrustedLaunch') && ((securityProfileJson.uefiSettings.secureBootEnabled == true) && (securityProfileJson.uefiSettings.vTpmEnabled == true))) {
@@ -420,6 +425,7 @@ resource managedidentity001 'Microsoft.ManagedIdentity/userAssignedIdentities@20
   }
 }
 
+
 // Oprettelse af managed identity som giver adgang til at læse secrets i key vault
 resource managedidentity002 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
   name: 'secretreader-smile-fsintegration-kv-id-d-dinel'
@@ -430,6 +436,7 @@ resource managedidentity002 'Microsoft.ManagedIdentity/userAssignedIdentities@20
     Environment: tagEnvironment
   }
 }
+
 
 // Oprettelse af Route Tables, relateret til 
 resource routetable001 'Microsoft.Network/routeTables@2023-11-01' = {
@@ -457,6 +464,7 @@ resource routetable001 'Microsoft.Network/routeTables@2023-11-01' = {
   }
 }
 
+
 // Oprettele af den første private DNS zone til dev.api.private.aura.dk
 resource privDns01 'Microsoft.Network/privateDnsZones@2020-06-01' = {
   name: 'dev.fs.api.private.aura.dk'
@@ -468,6 +476,7 @@ resource privDns01 'Microsoft.Network/privateDnsZones@2020-06-01' = {
   }
   properties: {  }
 }
+
 
 // Oprettelse af den anden private DNS zone til Container Registry
 resource privDns02 'Microsoft.Network/privateDnsZones@2020-06-01' = {
