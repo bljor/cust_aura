@@ -9,4 +9,5 @@ az network bastion rdp --ids /subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c
 
 fs-integ01
 
-az network bastion rdp --ids /subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg/providers/Microsoft.Network/bastionHosts/platform-bas-p-aura --target-resource-id /subscriptions/3336ebfa-a1f5-4920-a951-78ad5d6b73ec/resourceGroups/sample001-rg-d-dinel/providers/Microsoft.Compute/virtualMachines/fs-integra1 --enable-mfa
+az network bastion rdp --ids /subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg/providers/Microsoft.Network/bastionHosts/platform-bas-p-aura --target-resource-id /subscriptions/3336ebfa-a1f5-4920-a951-78ad5d6b73ec/resourceGroups/fsintegration-infrastructure-rg-d-dinel/providers/Microsoft.Compute/virtualMachines/fs-integra1 --enable-mfa
+

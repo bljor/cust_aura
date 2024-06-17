@@ -1,0 +1,52 @@
+Opgaver til SMILE:
+
+- redeploy af VM til FS-Integration, Rasmus skal have adgang via Bastion host - og dernæst via MFA.
+- MFA adgang var ikke konfigureret ved seneste deploy, så re-deploy var nødvendig
+
+- Rasmus kan logge ind
+
+- HES daglig standup møde
+
+- Oprettelse af App Registration til API Authentication (for Rasmus):
+
+   FS-Integration
+
+   Login til en web-app (med client_id og client_secret)
+   - App Registration
+
+   Navngivning:		SIGN-IN-SMILE-fsintegration-api
+
+   Client Secret name:	FS-Integration-API-Secret
+   - Expires:		Recommended: 180 days (6 months)
+   - Value:		WaX8Q~TtY5diF1xj19qE-g_RYOgPtuk-78Puubg0
+   - Secret ID:		6413dfcd-f361-4120-b014-df59b2beee55
+
+   Client ID:		449e6599-b12b-4b6f-b291-e79dc60e1578
+   Tenant ID:		3edc1f09-0806-41b0-af0b-50944799113a
+
+
+Secret er lagret i Key Vault:
+Key vault:		smile-fsi-001-kv-d-dinel
+
+-------------------------------------
+
+
+Certifikat i keyvault til brug med DNS (det er lavet i HES)
+
+- container environment i HES (der er sat en DNS op, og dér bruges et certifikat)
+
+- På Container Apps Environment, tilføjes under "Custom DNS suffix"
+-- DNS suffix:		dev.api.aura.dk
+-- Source:			Import from Key Vault (subscription: smile-hesintegration-sub-sandbox-dinel / key vault: 
+-- Key vault certificate:	star-dev-api-aura-dk
+-- Managed identity:		certreader-smile-fsintegration-kvb-id-d-dinel
+
+
+
+-------------------------------------
+
+Opgave i DevOps angående Certificate Chain
+
+
+Skrevet til Christian om at få flere oplysninger om fejlen, samt information om hvem der initierer den kommunikation som fejler.
+

@@ -92,7 +92,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2022-05-01' = {
 
 
 // Key Vault til opbevaring af certifikater og nøgler
-resource keyvaultcerts 'Microsoft.KeyVault/vaults@2023-07-01' existing = {
+resource keyvaultcerts 'Microsoft.KeyVault/vaults@2023-07-01' = {
   name: keyVaultName
   location: location
   properties: {
@@ -129,7 +129,7 @@ resource keyvaultcerts 'Microsoft.KeyVault/vaults@2023-07-01' existing = {
 
 
 // Recovery Services Vault til lagring og opbevaring af backup, der konfigureres for virtuelle maskiner
-resource recoveryServicesVault 'Microsoft.RecoveryServices/vaults@2022-01-01' existing = {
+resource recoveryServicesVault 'Microsoft.RecoveryServices/vaults@2022-01-01' = {
   name: recoveryVaultName
   location: location
   tags: {
