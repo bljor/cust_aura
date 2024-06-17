@@ -3,7 +3,7 @@ az network bastion rdp --ids /subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c
 
 
 hes2:
-az network bastion rdp --ids /subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg/providers/Microsoft.Network/bastionHosts/platform-bas-p-aura --target-resource-id /subscriptions/070d4b31-5ff8-494a-bf07-c1c0e275859a/resourceGroups/smile-hesintegration-rg-d-dinel/providers/Microsoft.Compute/virtualMachines/hes-integra1 --enable-mfa
+az network bastion rdp --ids /subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg/providers/Microsoft.Network/bastionHosts/platform-bas-p-aura --target-resource-id /subscriptions/070d4b31-5ff8-494a-bf07-c1c0e275859a/resourceGroups/SMILE-HESINTEGRATION-RG-D-DINEL/providers/Microsoft.Compute/virtualMachines/hes-integra2 --enable-mfa
 
 
 
