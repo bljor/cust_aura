@@ -20,20 +20,21 @@ resource keyvaultcerts 'Microsoft.KeyVault/vaults@2023-07-01' = {
     enableSoftDelete: true                    // Vil blive sat til true, medmindre denne værdi er false.
     softDeleteRetentionInDays: 90             // Antal dage secrets kan gendannes - skal være >= 7 og <= 90 dage.
     enablePurgeProtection: true               // Har kun effekt, hvis Soft Delete også er aktiveret. Kan ikke ændres, når først den er sat.
-    accessPolicies: [
-      {
-        objectId: '8dc62288-6290-45de-8fa6-bfcf91eaa884'
-        tenantId: subscription().tenantId
-        permissions: {
-          keys: [
-            'list'
-          ]          
-          secrets: [
-            'list'
-          ] 
-        }
-      }
-    ]
+    enableRbacAuthorization: true
+//    accessPolicies: [
+//      {
+//        objectId: '8dc62288-6290-45de-8fa6-bfcf91eaa884'
+//        tenantId: subscription().tenantId
+//        permissions: {
+//          keys: [
+//            'list'
+//          ]          
+//          secrets: [
+//            'list'
+//          ] 
+//        }
+//      }
+//    ]
     sku: {
       name: 'standard'
       family: 'A'

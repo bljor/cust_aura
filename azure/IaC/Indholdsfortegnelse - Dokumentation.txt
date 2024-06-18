@@ -1,0 +1,17 @@
+Indholdsfortegnelse - Dokumentation af Azure infrastruktur til SMILE
+
+
+
+1. Kort beskrivelse af infrastrukturen incl. diagram over hvilke elementer der er, og hvordan de hænger sammen.
+
+2. Beskrivelse af hvor bicep kode ligger, og kort forklaring til strukturen. Incl. evt. forklaring til parametre og variabler.
+
+3. Beskrivelse af hvad der kan nedlægges og genoprettes - samt hvad der ikke kan nedlægges og derfor bibeholdes
+
+4. Step-by-step guide til hvordan miljøet køres op fra bunden (excl. de komponenter som ikke kan genskabes)
+
+5. Beskrivelse af certifikater, passwords og app registrations som udløber og skal fornyes løbende
+   skal indeholde processen for hvordan fornyelse sker
+
+6. 
+

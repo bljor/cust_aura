@@ -99,23 +99,24 @@ resource keyvaultcerts 'Microsoft.KeyVault/vaults@2023-07-01' = {
     enabledForDeployment: false
     enabledForDiskEncryption: false
     enabledForTemplateDeployment: false
+    enableRbacAuthorization: true
     tenantId: subscription().tenantId
     enableSoftDelete: true
     softDeleteRetentionInDays: 90
-    accessPolicies: [
-      {
-        objectId: '8dc62288-6290-45de-8fa6-bfcf91eaa884'
-        tenantId: subscription().tenantId
-        permissions: {
-          keys: [
-            'list'
-          ]          
-          secrets: [
-            'list'
-          ] 
-        }
-      }
-    ]
+//    accessPolicies: [
+//      {
+//        objectId: '8dc62288-6290-45de-8fa6-bfcf91eaa884'
+//        tenantId: subscription().tenantId
+//        permissions: {
+//          keys: [
+//            'list'
+//          ]          
+//          secrets: [
+//            'list'
+//          ] 
+//        }
+//      }
+//    ]
     sku: {
       name: 'standard'
       family: 'A'
