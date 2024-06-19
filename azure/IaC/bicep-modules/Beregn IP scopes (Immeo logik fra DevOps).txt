@@ -1,0 +1,39 @@
+
+
+$landingZoneName = "smile-fsintegration"
+$costCenter = "Dinel"
+$opsTeam = "IT-Drift"
+$environment = "production"
+$organization = "dinel"
+$landingZoneNumber = 0
+$ipRangeExtension = 0
+
+# Calculate virtual network ip range 
+$octet1 = 10
+
+$octet2 = 128
+if ($organization -eq 'dinel') {
+    $octet2 += 64
+}
+
+switch ($environment) {
+    "development"       { $octet2 += 48 } # env = 3
+    "test"              { $octet2 += 32 } # env = 2
+    "pre-production"    { $octet2 += 16 } # env = 1
+    "production"        { $octet2 += 0 }  # env = 0
+}
+
+$lz1 = ($landingZoneNumber % 2) 
+$lz2 = (($landingZoneNumber -shr 1) % 2)
+$lz3 = (($landingZoneNumber -shr 2) % 2)
+$lz4 = (($landingZoneNumber -shr 3) % 2)
+$lz5 = (($landingZoneNumber -shr 4) % 2)
+$lz6 = (($landingZoneNumber -shr 5) % 2)
+
+$octet2 += $lz1*4 + $lz2*2 + $lz3
+$octet3 = $lz4*128 + $lz5*64 + $lz6*32
+$cidrRange = 22 - $ipRangeExtension
+
+$finalIpRange = "$octet1.$octet2.$octet3.0/$cidrRange"
+
+$finalIpRange

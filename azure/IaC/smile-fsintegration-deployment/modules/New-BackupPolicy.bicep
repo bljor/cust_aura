@@ -1,33 +1,7 @@
-// Recovery Services Vault til lagring og opbevaring af backup, der konfigureres for virtuelle maskiner
-
-param location string = resourceGroup().location
-param rsvName string
 param backupPolicyName string
 
-resource recoveryServicesVault 'Microsoft.RecoveryServices/vaults@2023-01-01' = {
-  name: rsvName
-  location: location
-  tags: {
-    OpsTeam: 'IT-Drift'
-    CostCenter: 'Dinel'
-    Envrionment: 'Dev'
-  }
-  identity: {
-    type: 'SystemAssigned'
-  }
-  sku: {
-    name: 'RS0'
-    tier: 'Standard'
-  }
-  properties: {
-    publicNetworkAccess: 'Disabled'
-    securitySettings: {
-      immutabilitySettings: {
-        state: 'Disabled'
-      }
-    }
-  }
-}
+
+// Denne vil have nogle udfordringer ... Property paren: recoveryServicesVault vil ikke fungere eftersom denne er oprettet via et andet modul
 
 // Backup Policy som styrer hvordan backup laves. Relateret til Recovery Services ovenfor
 resource backupPolicy 'Microsoft.RecoveryServices/vaults/backupPolicies@2022-04-01' = {
@@ -77,6 +51,6 @@ resource backupPolicy 'Microsoft.RecoveryServices/vaults/backupPolicies@2022-04-
       scheduleRunFrequency: 'Hourly'
       weeklySchedule: null
     }
-    timeZone: 'UTC'
+    timeZone: 'UTC'             // kunne måske også være 'Romance Standard Time'
   }
 }

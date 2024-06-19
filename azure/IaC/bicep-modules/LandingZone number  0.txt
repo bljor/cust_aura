@@ -1,0 +1,40 @@
+LandingZone number  0
+Development	= 
+Test		= 
+Pre-prod	= 
+Production	= 10.192.0.0/22
+
+
+
+LandingZone number = 13
+Development	= 10.245.128.0/22
+Test		= 10.229.128.0/22
+Pre-prod	= 10.213.128.0/22
+Production	= 10.197.128.0/22
+
+
+Dokument i DevOps skal opdateres, men jeg mangler rettigheder til det. Nedenstående tabel skal overskrive den eksisterende:
+
+| Landingszone           | LZ nummer | 
+|------------------------|----------:|
+| `skyggedatabase`       | 11        |
+| `iac-test-zone`        | 12        |
+| `smile-fsintegration`  | 13        |
+
+
+
+BESKRIVELSE AF BRUGEN AF LANDINGZONE 13 ADRESSER
+
+Hele IP-scope lægges in på "Address space" for VNET
+
+
+- på VNET oprettes 3 subnets med følgende karakteristika
+
+  Name: General-Purpose-subnet
+  IPv4:	10.245.128.0/24
+
+  Name: Container-App-Subnet
+  IPv4: 10.245.130.0/23
+
+  Name: LockedFor_AGW_VPNSNAT
+  IPv4: 10.245.129.240/28

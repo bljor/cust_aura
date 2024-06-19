@@ -1,0 +1,23 @@
+{
+  "subnets": [
+     {
+         "name": "subnet1",
+         "prefix": 10.0.1.0/24,
+         "status": "available",
+         "used-by-subscription": "smile-fsintegration-sub-nonproduction-dinel",
+         "used-by-vnet": "smile-fsintegration-vnet-001-d-dinel"},
+     {
+         "name": "subnet2",
+         "prefix": 10.0.2.0/24,
+         "status": "in-use",
+         "used-by-subscription": "smile-fsintegration-sub-nonproduction-dinel",
+         "used-by-vnet": "smile-fsintegration-vnet-001-d-dinel"},
+     {
+         "name": "subnet3",
+         "prefix": 10.0.3.0/24,
+         "status": "in-use",
+         "used-by-subscription": "smile-fsintegration-sub-nonproduction-dinel",
+         "used-by-vnet": "smile-fsintegration-vnet-001-d-dinel"
+     }
+  ]
+}

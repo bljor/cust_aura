@@ -7,12 +7,13 @@ resource kvsecrets 'Microsoft.KeyVault/vaults@2023-07-01' = {
     enabledForDeployment: false
     enabledForDiskEncryption: false
     enabledForTemplateDeployment: false
+    enableRbacAuthorization: true
     tenantId: subscription().tenantId
     enableSoftDelete: true
     softDeleteRetentionInDays: 90
-    accessPolicies: [
-
-    ]
+//    accessPolicies: [
+//
+//    ]
     sku: {
       name: 'standard'
       family: 'A'

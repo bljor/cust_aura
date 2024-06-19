@@ -1,16 +1,11 @@
 // Recovery Services Vault til lagring og opbevaring af backup, der konfigureres for virtuelle maskiner
-
-param location string = resourceGroup().location
-param rsvName string
-param backupPolicyName string
-
 resource recoveryServicesVault 'Microsoft.RecoveryServices/vaults@2023-01-01' = {
-  name: rsvName
-  location: location
+  name: 'rv-extbjo'
+  location: resourceGroup().location
   tags: {
     OpsTeam: 'IT-Drift'
     CostCenter: 'Dinel'
-    Envrionment: 'Dev'
+    Environment: 'Dev'
   }
   identity: {
     type: 'SystemAssigned'
@@ -21,18 +16,13 @@ resource recoveryServicesVault 'Microsoft.RecoveryServices/vaults@2023-01-01' = 
   }
   properties: {
     publicNetworkAccess: 'Disabled'
-    securitySettings: {
-      immutabilitySettings: {
-        state: 'Disabled'
-      }
-    }
   }
 }
 
 // Backup Policy som styrer hvordan backup laves. Relateret til Recovery Services ovenfor
 resource backupPolicy 'Microsoft.RecoveryServices/vaults/backupPolicies@2022-04-01' = {
 
-  name: backupPolicyName
+  name: 'extbjo-backup-policy'
   location: resourceGroup().location
 
   tags: {

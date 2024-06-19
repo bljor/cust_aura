@@ -1,0 +1,145 @@
+Ny Sandbox landinzone til FS Integration
+
+
+Step 0: Decide on a landingzone name
+-------------------
+Navn = smile-fsintegration-sub-sandbox-dinel
+
+
+
+Step 1: Create Subscription(s)
+-------------------
+Der findes et script til oprettelsen (Subscription-CreateNew.ps1) - men det understøtter ikke oprettelse af en Sandbox. Det kan kun bruges til at oprette production og non-production landingzones.
+
+Kører scriptet Subscription-CreateNew.ps1 manuelt (linje for linje)
+
+
+==========
+
+az login
+
+$landingzonename = "smile-fsintegration"
+$environmenttype = "sandbox"
+$organization = "dinel"
+
+$subscriptionName = "$landingZoneName-sub-$environmentType-$organization"
+
+# Obtain login credential to crayon from keyvault
+$itDriftSecretVault = "itdriftsecrets-kv-p-aura"
+$clientIdRequest = az keyvault secret show --vault-name $itDriftSecretVault --name CrayonApiUser-ClientId | convertfrom-json
+$clientSecretRequest = az keyvault secret show --vault-name $itDriftSecretVault --name CrayonApiUser-ClientSecret | convertfrom-json
+$usernameRequest = az keyvault secret show --vault-name $itDriftSecretVault --name CrayonApiUser-Username | convertfrom-json
+$passwordRequest = az keyvault secret show --vault-name $itDriftSecretVault --name CrayonApiUser-Password | convertfrom-json
+
+$clientIdSecret = "$($clientIdRequest.value):$($clientsecretRequest.value)"
+$authHeader = "Basic $([System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($clientIdSecret)))"
+
+$body = @{
+    grant_type = 'password'
+    username = $usernameRequest.value
+    password = $passwordRequest.value
+    scope = "CustomerApi"    
+}
+$contentType = 'application/x-www-form-urlencoded' 
+$headers = @{
+    Accept = "application/json"
+    Authorization = $authHeader
+}
+$tokenRequest = Invoke-WebRequest `
+    -Method "POST" `
+    -Uri "https://api.crayon.com/api/v1/connect/token/" `
+    -Header $headers `
+    -body $body `
+    -ContentType $contentType | ConvertFrom-Json
+
+# Create the subscription
+Write-Host "Creates subscription '$subscriptionName'"
+
+$subscriptionBody = @{
+    name = $subscriptionName
+} | ConvertTo-Json -Compress
+
+Invoke-WebRequest `
+    -UseBasicParsing `
+    -Uri "https://api.crayon.com/api/v1/AzurePlans/269323/azureSubscriptions" `
+    -Method "POST" `
+    -Headers @{
+        "method" = "POST"
+        "accept" = "*/*"
+        "authorization" = "Bearer $($tokenRequest.AccessToken)"
+    } `
+    -ContentType "application/json" `
+    -Body $subscriptionBody
+
+# Afslutningsvist på scriptet burde det kalde Subscription-EnsureExists.ps1 $subscriptionName
+# men det script findes ikke...
+
+
+
+Step 2: Move subscriptions to correct management group
+-------------------
+
+$onlineorcorporate="corp"
+
+$managementGroupName = "dinel-sandboxes"
+
+ az account management-group subscription add --name $managementGroupName --subscription $subscriptionName
+
+
+Step 3: Set up DEVELOPER, READER, PIMREADER, CONTRIBUTOR, PIMCONTRIBUTOR security groups for each environment.
+-------------------
+
+# $subscriptionname bruges i stedet for alle parametre:
+
+$subscription = $subscriptionname
+
+# Set active subscription to the desired landingzones (mostly to verify the it exists)
+az account set --subscription $subscription
+if ($LastExitCode -ne 0) {
+    return $false;
+}
+
+
+# Aktiver PIM rollen "Groups administrator"
+
+az login
+
+
+# Create groups
+###########################################
+$developerGroup = "AZ-LANDINGZONE-DA-U-DEVELOPER-$landingzoneName"
+$readerGroup = "AZ-LANDINGZONE-DA-U-READER-$landingzoneName-$environment"
+$contributorGroup = "AZ-LANDINGZONE-DA-U-CONTRIBUTOR-$landingzoneName-$environment"
+$pimReaderGroup = "AZ-LANDINGZONE-DA-U-PIMREADER-$landingzoneName-$environment"
+$pimContributorGroup = "AZ-LANDINGZONE-DA-U-PIMCONTRIBUTOR-$landingzoneName-$environment"
+
+$environment="developer"
+
+.\SecurityGroups-EnsureExists.ps1 `
+    $subscription `
+    $environment `
+    $developerGroup `
+    $readerGroup `
+    $contributorGroup `
+    $pimReaderGroup `
+    $pimContributorGroup
+
+
+
+Step 4: Create V-NET resource groups for landingzone.
+-------------------
+Delvist sprunget over denne del... De scripts der findes tildeler IP scopes forkert, og tager ikke hensyn til at der
+findes sandboxes.
+
+Oprettet resource groups via et nyt Bicep script - og deployet dette via 
+
+az deployment sub create --location 'westeurope' --name 'Create-resource-groups' --template-file .\smile-sandbox-subscription.bicep
+
+
+
+Tilføjet gruppen "AZ-LANDINGZONE-DA-U-DEVELOPER-smile-fsintegration-sub-sandbox-dinel" manuelt til subscription med Owner
+rettigheder.
+
+Tilføjet medlemmer til gruppen "AZ-LANDINGZONE-DA-U-DEVELOPER-smile-fsintegration-sub-sandbox-dinel" (Rasmus, Frederik, Christian, Martin)
+
+

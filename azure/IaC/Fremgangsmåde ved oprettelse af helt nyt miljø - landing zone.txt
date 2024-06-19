@@ -1,0 +1,93 @@
+1. Fastsæt navn på ny landingzone
+
+- landingzone name 	= smile-fsintegration
+  organization		= dinel						[kan være enten dinel eller aura]
+  target		= corp						[kan være enten corp eller online]
+  [variable]		= [sandbox,nonproduction,production]
+
+
+2. Opret subscriptions
+
+Regel for navngivning:
+
+[variable] - der dannes ét subscription pr. værdi i listen til højre [sandbox,nonproduction,production]
+
+	$landingzonename-sub-[variable]-$organization
+
+- smile-fsintegration-sub-sandbox-dinel
+- smile-fsintegration-sub-nonproduction-dinel
+- smile-fsintegration-sub-production-dinel
+
+
+
+3. Flyt subscriptions til den rigtige Management Group
+
+Regel for navngivning:
+
+	$organization-[variable]
+
+- smile-fsintegration-sub-sandbox-dinel		--> dinel-sandboxes
+- smile-fsintegration-sub-nonproduction-dinel	--> dinel-landingzones\dinel-corp\dinel-corp-non-prod
+- smile-fsintegration-sub-production-dinel	--> dinel-landingzones\dinel-corp\conel-corp-prod
+
+
+4. Opret grupper i Entra ID
+
+- AZ-LANDINGZONE-DA-U-RBAC-Administrator-smile-fsintegration-sub-sandbox-dinel
+- AZ-LANDINGZONE-DA-U-RBAC-Administrator-smile-fsintegration-sub-nonproduction-dinel
+- AZ-LANDINGZONE-DA-U-RBAC-Administrator-smile-fsintegration-sub-prouction-dinel
+- AZ-LANDINGZONE-DA-U-Reader-smile-fsintegration-sub-sandbox-dinel
+- AZ-LANDINGZONE-DA-U-Reader-smile-fsintegration-sub-nonproduction-dinel
+- AZ-LANDINGZONE-DA-U-Reader-smile-fsintegration-sub-production-dinel
+- AZ-LANDINGZONE-DA-U-PimReader-smile-fsintegration-sub-sandbox-dinel
+- AZ-LANDINGZONE-DA-U-PimReader-smile-fsintegration-sub-nonproduction-dinel
+- AZ-LANDINGZONE-DA-U-PimReader-smile-fsintegration-sub-production-dinel
+- AZ-LANDINGZONE-DA-U-PimContributor-smile-fsintegration-sub-sandbox-dinel
+- AZ-LANDINGZONE-DA-U-PimContributor-smile-fsintegration-sub-nonproduction-dinel
+- AZ-LANDINGZONE-DA-U-PimContributor-smile-fsintegration-sub-production-dinel
+- AZ-LANDINGZONE-DA-U-Contributor-smile-fsintegration-sub-sandbox-dinel
+- AZ-LANDINGZONE-DA-U-Contributor-smile-fsintegration-sub-nonproduction-dinel
+- AZ-LANDINGZONE-DA-U-Contributor-smile-fsintegration-sub-production-dinel
+- AZ-LANDINGZONE-DA-U-Developer-smile-fsintegration-sub-sandbox-dinel
+- AZ-LANDINGZONE-DA-U-Developer-smile-fsintegration-sub-nonproduction-dinel
+- AZ-LANDINGZONE-DA-U-Developer-smile-fsintegration-sub-production-dinel
+
+5. Allokér IP scopes til brug for landingzone
+
+Hvorfor lave al det djøfferi omkring IP adresser? Lav et 'register' med alle IP scopes (klasse C adresse scopes),
+når man skriver sin deployment allokerer man adresse scopes som man har behov for, og sørger selv for at der laves
+peering.
+
+Tilsvarende skal der også skrives kode for eventuelle firewall regler og andre ændringer der skal laves.
+
+
+6. Opret Resource Groups i de enkelte subscriptions, tilføj rettighedsgrupper (fra punkt 4) til resource groups.
+
+smile-fsintegration-sub-sandbox-dinel
+---------------------------------
+* infrastructure-rg-smile-fsintegration-sub-sandbox-dinel
+* rg-smile-fsintegration-sub-sandbox-dinel
+
+
+smile-fsintegration-sub-nonproduction-dinel
+---------------------------------
+* infrastructure-rg-smile-fsintegration-sub-nonproduction-dinel
+* rg-smile-fsintegration-sub-nonproduction-dinel
+
+smile-fsintegration-sub-production-dinel
+---------------------------------
+* infrastructure-rg-smile-fintegration-sub-production-dinel
+* rg-smile-fsintegration-sub-production-dinel
+
+
+7. Tilføj brugere til rettighedsgrupperne der er oprettet under punkt 4.
+
+
+8. Opret eventuelle App Registrations
+
+
+9. Opret Service Connection fra Azure DevOps
+
+
+10. Skal der evt. oprettes et Azure DevOps projekt til subscription?
+

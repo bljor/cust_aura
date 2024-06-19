@@ -1,0 +1,39 @@
+Hvilke ressourcer oprettes:
+
+- Storage Account
+- Key Vault
+- Recovery Services Vault
+- Backup Policy
+- Network Security Group
+- Virtual Network
+- Network Interface Card (nic)
+- Route Table
+- Virtual Machine (vm)
+- Schedule for VM (autoShutdownConfig)
+- VM Extension (Azure AD user authentication)
+
+- ManagedIdentity1 (læse certifikater fra den oprettede Key Vault)
+- ManagedIdentity2 (læse secrets fra den oprettede Key Vault)
+
+- privDns1 (DNS zone for dev.fs.api.private.aura.dk)
+- privDns2 (DNS for privatelink.azurecr.io)
+- privDns3 (DNS for poudmushroom-089db104.westeurope.azcontainerapps.io)
+
+
+variabler:
+
+
+STORAGE ACCOUNT:
+
+storageAccountName	Navn på ressourcen i Azure (følg Aura standard)
+location		Træk lokationen fra den resource group der deployes til (bør som udgangspunkt være identisk for alle ressourcer)
+
+
+
+KEY VAULT:
+
+keyVaultName		Navnet på ressourcen i Azure (følg Aura standard)
+location		Træk lokationen fra den resource group der deployes til (bør som udgangspunkt være identisk for alle ressourcer)
+
+
+
