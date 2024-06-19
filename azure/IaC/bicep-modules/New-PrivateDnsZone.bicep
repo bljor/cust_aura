@@ -1,9 +1,9 @@
 
 
-var storageAccountName = 'private dns zone name'
-var tagCostCenter = ''
-var tagOpsTeam = ''
-var tagEnvironment = ''
+var storageAccountName = 'wipe.dev.brian'
+var tagCostCenter = 'Dinel'
+var tagOpsTeam = 'IT-Drift'
+var tagEnvironment = 'Dev'
 
 resource privateDnsZone 'Microsoft.Network/privateDnsZones@2020-06-01' = {
   name: storageAccountName
