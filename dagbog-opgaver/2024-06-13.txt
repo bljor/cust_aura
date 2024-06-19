@@ -18,7 +18,6 @@ Opgaver til SMILE:
 
    Client Secret name:	FS-Integration-API-Secret
    - Expires:		Recommended: 180 days (6 months)
-   - Value:		WaX8Q~TtY5diF1xj19qE-g_RYOgPtuk-78Puubg0
    - Secret ID:		6413dfcd-f361-4120-b014-df59b2beee55
 
    Client ID:		449e6599-b12b-4b6f-b291-e79dc60e1578
