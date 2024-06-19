@@ -468,7 +468,7 @@ resource routetable001 'Microsoft.Network/routeTables@2023-11-01' = {
 
 // Oprettele af den første private DNS zone til dev.api.private.aura.dk
 resource privDns01 'Microsoft.Network/privateDnsZones@2020-06-01' = {
-  name: 'dev.fs.api.private.aura.dk'
+  name: 'dev.api.aura.dk'
   location: 'global'
   tags: {
     costCenter: tagCostCenter
