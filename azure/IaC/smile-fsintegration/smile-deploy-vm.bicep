@@ -156,6 +156,12 @@ resource vmExtension 'Microsoft.Compute/virtualMachines/extensions@2022-03-01' =
   parent: vm
   name: extensionName
   location: location
+  tags: {
+    opsTeam: tagOpsTeam
+    costCenter: tagCostCenter
+    Environment: tagEnvironment
+    ExceptionToPolicyRequireBackup: 'True'
+  }
   properties: {
     publisher: extensionPublisher
     type: extensionType
