@@ -1,0 +1,37 @@
+HEALTH PROBE
+
+
+Smile-FsIntegration-Probe
+
+Protocol:
+HTTPS
+
+Pick host name from backend settings:
+Yes
+
+Pick port from backend settings:
+Yes
+
+Path:
+/alive
+
+Interval (seconds):
+60
+
+Timeout (seconds):
+30
+
+Unhealthy threshold:
+3
+
+Use probe matching conditions:
+Yes
+
+HTTP response status code match:
+200-399
+
+HTTP response body match:
+Healthy
+
+Backend settings:
+AGW-BackendSettings-SmileFsIntegration-

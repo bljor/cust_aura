@@ -1,0 +1,23 @@
+RULES
+
+Rule name:
+AGW-Rule-SmileFsIntegration-FsEventHandler
+
+
+Priority:
+9008
+
+Listener:
+AGW-PublicListener-SmileFsIntegration-FsEventHandler
+
+Backend targets
+Target type:
+Backend pool
+
+Backend target:
+AGW-BP-SmileFsIntegration-FsEventHandler
+
+Backend settings:
+AGW-BackSettings-SmileFsIntegration-FsEventHandler
+
+

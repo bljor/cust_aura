@@ -1,0 +1,45 @@
+BACKEND SETTINGS
+
+Name:	AGW-BackSettings-SmileFsIntegration-FsEventHandler
+
+Backend protocol:
+HTTPS
+
+Backend port:
+443
+
+Backend server's certificate is issued by a well-known CA:
+Yes
+
+Additional settings
+
+Cookie-based affinity:
+Enable
+
+Affinity cookie name:
+ApplicationGatewayAffinity
+
+Connection draining:
+Enable
+
+Drain timeout (seconds):
+60
+
+Request time-out (seconds):
+120
+
+Override backend path:
+(empty)
+
+Host name:
+Override with new host name:
+Yes
+
+Host name override:
+Pick host name from backend target
+
+Use custom probe:
+Yes
+
+Custom probe:
+Smile-FsIntegration-Probe

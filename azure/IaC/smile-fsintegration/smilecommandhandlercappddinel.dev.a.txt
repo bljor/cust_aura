@@ -1,0 +1,17 @@
+smilecommandhandlercappddinel.dev.api.aura.dk
+
+smilefseventhandlercappddinel.dev.api.aura.dk
+- 10.245.131.182
+
+
+
+
+
+Public DNS:
+
+smilefseventhandler.dev.api.aura.dk
+- 104.40.226.57
+
+
+
+
