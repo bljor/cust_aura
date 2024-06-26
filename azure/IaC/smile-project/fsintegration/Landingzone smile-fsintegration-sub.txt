@@ -1,0 +1,115 @@
+Dette dokument indeholder løse noter og stikord til hvad der skal dokumenteres for denne landingzone og procedurer for at genskabe etc.
+
+
+Landingzone smile-fsintegration-sub-nonproduction-dinel
+
+Purpose:
+The landingzone contains the solution for Field Service Integration.
+
+
+
+Resource Groups and their purpose:
+
+fsintegration-rg-d-dinel:
+Components created by developers but managed by IT Operations.
+
+The resource group contains the following components:
+
+- Container registry:		fsacrddinel
+- Container Apps Envrionment:	smile-fsdevelopment-cappenv-d-dinel
+  - added Custom DNS suffix:	dev.api.aura.dk
+  - Wildcard certificate:	configured managed identity
+  - Identity:			added secretreader-smile-fsintegration-kv-id-d-dinel and certreader-smile-fsintegration-kv-id-d-dinel
+				as User assigned identities
+- Service Bus Namespace:	smile-fsserviceBus-sbq-d-dinel
+- Log Analytics workspace:	smile-ManagedEnvironments-logaws-d-dinel
+- Container App:		extbjo-sample-002
+- Container App:		smilefseventhandlercappddinel
+- Container App:		smilerefeedcappddinel
+- Container App:		smilereplycappddinel
+- Container App:		smileworkorderhandlercappddinel
+- Container App:		smileworkorderscappddinel
+- Log Analytics workspace:	workspace-fsintegrationrgddinelCwLL
+- Log Analytics workspace:	workspace-fsintegrationrgddinelKcbh
+
+
+
+fsintegration-infrastructure-rg-d-dinel:
+Components created and managed by IT Operations.
+
+The resource group contains the following components:
+
+- Key vault:			smile-fsi-001-kv-d-dinel
+  Used to hold credentials, secrets and passwords used by the container apps
+  This Key vault does not contain any kind of credentials used by the infrastructure
+
+- Managed Identity:		certreader-smile-fsintegation-kv-id-d-dinel
+  Used to grant access to read certificates from the Key vault
+
+- Managed Identity:		secretreader-smile-fsintegration-kv-id-d-dinel
+  Used to grant access to read secrets from the Key vault
+
+- Private DNS zone:		dev.api.aura.dk
+  -- alle container apps skal registreres i denne DNS zone
+
+- Private DNS zone:		dev.fs.api.private.aura.dk
+- Private DNS zone:		privatelink.azurecr.io
+- Private DNS zone:		proudmushroom-089bd104.westeurope.azcontainerapps.io
+
+- Recovery Services vault:	smile-fsi-rv-d-dinel
+  Should not be created.
+
+- Route table:			smile-fsintegration-ft-hub-d-aura
+- Storage account:		stfsintegdaura
+- Virtual machine:		fs-integra1
+- Virtual network:		smile-fsintegration-vnet-001-d-dinel
+
+
+
+
+
+Changes made to the landingzone platform:
+
+- peering of vnet			(between rg.platform-connectivity-rg.hub-vnet-001-p-aura <-> rg.fsintegration-infrastructure-rg-d-dinel.smile-fsintegration-vnet-001-d-dinel
+- Application gateway			platform-gateway-agw-t-aura
+  - created 'Backend pool'		AGW-BP-SmileFsIntegration-smilefseventhandler
+  - created 'Backend settings'		AGW-BackSettings-SmileFsIntegration-FsEventHandler
+  - created 'Listener'			AGW-PublicListener-SmileFsIntegration-FsEventHandler
+  - created 'Rule'			AGW-Rule-SmileFsIntegration-FsEventHandler
+  - reference 'Health probe'		Use the generic probe: Smile-Health-Probe
+- Network Security group		platform-gateway-snet-001-nsg-t-aura
+  - created inbound security rule	AllwAnyHTTPSInbound
+
+
+
+
+
+
+Other changes:
+
+registrering af container apps i public og private DNS
+----
+Hostnavnet på hver container app skal registreres i både public og private DNS (sådan fungerer det hos Aura)
+
+De publiceres på zonen .dev.api.aura.dk
+
+
+
+
+
+
+
+
+
+Requirements for documentation (IT Operations):
+
+- Description of installation and start/stop routines
+- Overview of relevant monitoring
+- Description of security roles, user management and governance/compliance applied
+- Description of applied logging, backup, and contingency
+
+
+Further (decided by IT Operations, STH and BJO):
+- infrastructure drawing with integrations to platform subscription
+
+

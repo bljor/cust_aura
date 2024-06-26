@@ -1,0 +1,89 @@
+
+Arkitekturen i løsningen der skal deployes er en container baseret løsning, som skal anvende Container Apps.
+
+Hver container app skal gøres offentligt tilgængelig på internet. I første omgang etableres der ingen begrænsninger på adgangen
+til endpoints.
+
+Services der udstilles i denne integration er beregnet på integration med Dynamics 365 Field Service, så på sigt kan det tænkes
+at der skal laves begrænsninger på trafik, således at der kun accepteres forbindelser fra Dynamics 365 Field Service (nb: Field
+Service afvikels i Azure infrastruktur - så de scopes der vil skulle åbnes er alle Azure public IP's).
+
+Endpoints skal kunne kommunikere med Smile hos KMD. Kommunikation med KMD foregår via Internet, og anvender mTLS som sikkerhed.
+
+Field Service integrationen etableres i sin egen landingzone, og forbindes til platform-landingzone. Platform landingzone er hub
+for al kommunikation ind og ud af Field Service landingzone.
+
+Kommunikationen til platform landingzone etablers vha. Peering.
+
+Der anvendes Network Security groups til at sætte regler for kommunikation på Vnet niveau.
+
+Regler for kommunikation mellem landingzones styres i Azure Firewall, som ligger i platform subcsription.
+
+Regler for kommunikation fra individuelle landingzones mod eksterne netværk styres også i Azure Firewall.
+
+
+
+
+
+
+Krav til dokumentation:
+
+Beskrivelse af hvordan løsningen installeres / deployes
+Installation af løsningen består af flere steps:
+
+1. Basal oprettelse af landingzone incl. oprettelse af subscription
+- før infrastrukturen kan deployes skal der oprettes subscription og landingzone i Azure. Dette oprettes via et PowerShell
+  script skrevet af Immeo.
+
+  Scriptet registrerer et nyt subscription via et API hos Crayon.
+
+  Yderligere så registreres standard providers på subscription (de providers som Aura typisk anvender).
+
+  Når disse ting er på plads, flyttes subscription til den korrekte Management Group, således at der bliver stemplet de korrekte
+  policies og settings i miljøet.
+
+
+2. Oprettelse af sikkerhedsgrupper og konfiguration af rettigheder
+- manuelt step: der køres et script som opretter de nødvendige sikkerhedsgrupper i Azure AD - og tildeler retttigheder til disse
+  grupper (rettigheder tildeles på subscription og resource groups).
+
+
+### FORTSÆT FRA README.MD step 3 Set up DEVELOPER,READER,PIMREADER,CONTRIBUTOR etc. etc.
+
+
+
+
+2. Deployment af infrastrukturen
+
+
+
+
+3. Deployment af ændringer til infrastrukturen i platform landingzone
+
+
+4. 
+
+
+Beskrivelse af start/stop routiner
+
+
+Overblik over relevant overvågning
+
+
+Beskrivelse af sikkerhedsroller, brugerstyring og hvilken governance/compliance der er i brugerstyring
+
+
+Beskrivelse af hvilke former for logning der er anvendt
+
+
+Beskrivelse af hvordan der tages backup af løsningen
+
+
+Beskrivelse af beredskab / continuity
+
+
+Teknisk tegning af infrastrukturen og hvordan den hænger sammen med platform-subscription og eventuelt
+andre elementer.
+
+
+

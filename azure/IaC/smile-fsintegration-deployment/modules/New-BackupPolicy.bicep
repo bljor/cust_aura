@@ -1,7 +1,7 @@
 param backupPolicyName string
 
 
-// Denne vil have nogle udfordringer ... Property paren: recoveryServicesVault vil ikke fungere eftersom denne er oprettet via et andet modul
+// Denne vil have nogle udfordringer ... Property parent: recoveryServicesVault vil ikke fungere eftersom denne er oprettet via et andet modul
 
 // Backup Policy som styrer hvordan backup laves. Relateret til Recovery Services ovenfor
 resource backupPolicy 'Microsoft.RecoveryServices/vaults/backupPolicies@2022-04-01' = {
