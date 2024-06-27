@@ -1,5 +1,5 @@
 
-Arkitekturen i løsningen der skal deployes er en container baseret løsning, som skal anvende Container Apps.
+Arkitekturen i løsningen der skal deployes er en container baseret løsning, som skal anvende Azure Container Apps.
 
 Hver container app skal gøres offentligt tilgængelig på internet. I første omgang etableres der ingen begrænsninger på adgangen
 til endpoints.
