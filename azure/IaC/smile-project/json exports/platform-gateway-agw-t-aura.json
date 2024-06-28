@@ -1,0 +1,1665 @@
+{
+    "name": "platform-gateway-agw-t-aura",
+    "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura",
+    "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+    "type": "Microsoft.Network/applicationGateways",
+    "location": "westeurope",
+    "tags": {},
+    "identity": {
+        "type": "userAssigned"
+    },
+    "properties": {
+        "provisioningState": "Succeeded",
+        "resourceGuid": "39d6cd01-2329-4544-a816-2c285aba7708",
+        "sku": {
+            "name": "WAF_v2",
+            "tier": "WAF_v2",
+            "family": "Generation_2",
+            "capacity": 1
+        },
+        "operationalState": "Running",
+        "gatewayIPConfigurations": [
+            {
+                "name": "appGatewayIpConfig",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/gatewayIPConfigurations/appGatewayIpConfig",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "subnet": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg/providers/Microsoft.Network/virtualNetworks/hub-vnet-001-p-aura/subnets/platform-gateway-snet-001-t"
+                    }
+                },
+                "type": "Microsoft.Network/applicationGateways/gatewayIPConfigurations"
+            }
+        ],
+        "sslCertificates": [
+            {
+                "name": "frontendAgwCertificateName",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/sslCertificates/frontendAgwCertificateName",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "httpListeners": [
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/appGatewayHttpsPublicListener"
+                        }
+                    ]
+                },
+                "type": "Microsoft.Network/applicationGateways/sslCertificates"
+            },
+            {
+                "name": "Smile-HesIntegration-DevCert",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/sslCertificates/Smile-HesIntegration-DevCert",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "httpListeners": [
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PublicListener-SmileHesintegration-MDAS"
+                        },
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PrivateListener-SmileHesintegration-KamstrupCIM2Receiver"
+                        },
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PrivateListener-SmileHesintegration-KamstrupCIM3Receiver"
+                        },
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PrivateListener-SmileHesintegration-KamstrupCIM3Response"
+                        },
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PrivateListener-SmileHesintegration-KamstrupCIM2Response"
+                        },
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PublicListener-SmileHesIntegration-SMILE"
+                        },
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PublicListener-SmileFsIntegration-FsEventhandler"
+                        },
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PublicListener-SmileFsIntegration-WorkOrders"
+                        },
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PublicListener-SmileFsIntegration-Refeed"
+                        },
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PublicListener-SmileFsIntegration-Reply"
+                        },
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PublicListener-SmileFsIntegration-WorkOrderHandler"
+                        }
+                    ]
+                },
+                "type": "Microsoft.Network/applicationGateways/sslCertificates"
+            },
+            {
+                "name": "privatefrontend",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/sslCertificates/privatefrontend",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "httpListeners": [
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/appGatewayHttpsPrivateListener"
+                        }
+                    ]
+                },
+                "type": "Microsoft.Network/applicationGateways/sslCertificates"
+            }
+        ],
+        "frontendIPConfigurations": [
+            {
+                "name": "appGwPublicFrontendIp",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/frontendIPConfigurations/appGwPublicFrontendIp",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "type": "Microsoft.Network/applicationGateways/frontendIPConfigurations",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "privateIPAllocationMethod": "Dynamic",
+                    "publicIPAddress": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/publicIPAddresses/platform-gateway-pip-t-aura"
+                    },
+                    "httpListeners": [
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/appGatewayHttpsPublicListener"
+                        },
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PublicListener-SmileHesintegration-MDAS"
+                        },
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PublicListener-SmileHesIntegration-SMILE"
+                        },
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PublicListener-SmileFsIntegration-FsEventhandler"
+                        },
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PublicListener-SmileFsIntegration-WorkOrders"
+                        },
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PublicListener-SmileFsIntegration-Refeed"
+                        },
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PublicListener-SmileFsIntegration-Reply"
+                        },
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PublicListener-SmileFsIntegration-WorkOrderHandler"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "appGwPrivateFrontendIp",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/frontendIPConfigurations/appGwPrivateFrontendIp",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "type": "Microsoft.Network/applicationGateways/frontendIPConfigurations",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "privateIPAddress": "10.0.1.12",
+                    "privateIPAllocationMethod": "Static",
+                    "subnet": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg/providers/Microsoft.Network/virtualNetworks/hub-vnet-001-p-aura/subnets/platform-gateway-snet-001-t"
+                    },
+                    "httpListeners": [
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/appGatewayHttpsPrivateListener"
+                        },
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PrivateListener-SmileHesintegration-KamstrupCIM2Receiver"
+                        },
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PrivateListener-SmileHesintegration-KamstrupCIM3Receiver"
+                        },
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PrivateListener-SmileHesintegration-KamstrupCIM3Response"
+                        },
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PrivateListener-SmileHesintegration-KamstrupCIM2Response"
+                        }
+                    ]
+                }
+            }
+        ],
+        "frontendPorts": [
+            {
+                "name": "appGatewayHttpsFrontendPort",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/frontendPorts/appGatewayHttpsFrontendPort",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "port": 443,
+                    "httpListeners": [
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/appGatewayHttpsPublicListener"
+                        },
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/appGatewayHttpsPrivateListener"
+                        },
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PublicListener-SmileHesintegration-MDAS"
+                        },
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PrivateListener-SmileHesintegration-KamstrupCIM2Receiver"
+                        },
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PrivateListener-SmileHesintegration-KamstrupCIM3Receiver"
+                        },
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PrivateListener-SmileHesintegration-KamstrupCIM3Response"
+                        },
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PrivateListener-SmileHesintegration-KamstrupCIM2Response"
+                        },
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PublicListener-SmileHesIntegration-SMILE"
+                        },
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PublicListener-SmileFsIntegration-FsEventhandler"
+                        },
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PublicListener-SmileFsIntegration-WorkOrders"
+                        },
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PublicListener-SmileFsIntegration-Refeed"
+                        },
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PublicListener-SmileFsIntegration-Reply"
+                        },
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PublicListener-SmileFsIntegration-WorkOrderHandler"
+                        }
+                    ]
+                },
+                "type": "Microsoft.Network/applicationGateways/frontendPorts"
+            }
+        ],
+        "backendAddressPools": [
+            {
+                "name": "app-gateway-backend-pool-product-bc",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendAddressPools/app-gateway-backend-pool-product-bc",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "backendAddresses": [
+                        {
+                            "fqdn": "bc-product-api-app-t-aura.azurewebsites.net"
+                        }
+                    ],
+                    "pathRules": [
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/urlPathMaps/bc-routing-rule/pathRules/app-gateway-path-rule-product-bc"
+                        }
+                    ]
+                },
+                "type": "Microsoft.Network/applicationGateways/backendAddressPools"
+            },
+            {
+                "name": "app-gateway-backend-pool-agreement-bc",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendAddressPools/app-gateway-backend-pool-agreement-bc",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "backendAddresses": [
+                        {
+                            "fqdn": "bc-agreement-api-app-t-aura.azurewebsites.net"
+                        }
+                    ],
+                    "pathRules": [
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/urlPathMaps/bc-routing-rule/pathRules/app-gateway-path-rule-agreement-bc"
+                        }
+                    ]
+                },
+                "type": "Microsoft.Network/applicationGateways/backendAddressPools"
+            },
+            {
+                "name": "app-gateway-backend-pool-CUBS-adapter",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendAddressPools/app-gateway-backend-pool-CUBS-adapter",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "backendAddresses": [
+                        {
+                            "fqdn": "adapter-CUBS-api-app-t-aura.azurewebsites.net"
+                        }
+                    ],
+                    "pathRules": [
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/urlPathMaps/bc-routing-rule/pathRules/app-gateway-path-rule-CUBS-adapter"
+                        }
+                    ]
+                },
+                "type": "Microsoft.Network/applicationGateways/backendAddressPools"
+            },
+            {
+                "name": "app-gateway-backend-pool-Customer-bc",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendAddressPools/app-gateway-backend-pool-Customer-bc",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "backendAddresses": [
+                        {
+                            "fqdn": "bc-Customer-api-app-t-aura.azurewebsites.net"
+                        }
+                    ],
+                    "pathRules": [
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/urlPathMaps/bc-routing-rule/pathRules/app-gateway-path-rule-Customer-bc"
+                        }
+                    ]
+                },
+                "type": "Microsoft.Network/applicationGateways/backendAddressPools"
+            },
+            {
+                "name": "app-gateway-backend-pool-ConsumptionPoint-bc",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendAddressPools/app-gateway-backend-pool-ConsumptionPoint-bc",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "backendAddresses": [
+                        {
+                            "fqdn": "bc-ConsumptionPoint-api-app-t-aura.azurewebsites.net"
+                        }
+                    ],
+                    "pathRules": [
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/urlPathMaps/bc-routing-rule/pathRules/app-gateway-path-rule-ConsumptionPoint-bc"
+                        }
+                    ]
+                },
+                "type": "Microsoft.Network/applicationGateways/backendAddressPools"
+            },
+            {
+                "name": "default-backendpool",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendAddressPools/default-backendpool",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "backendAddresses": [],
+                    "urlPathMaps": [
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/urlPathMaps/bc-routing-rule"
+                        }
+                    ]
+                },
+                "type": "Microsoft.Network/applicationGateways/backendAddressPools"
+            },
+            {
+                "name": "AGW-BP-SmileHesIntegration-SMILE",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendAddressPools/AGW-BP-SmileHesIntegration-SMILE",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "backendAddresses": [
+                        {
+                            "fqdn": "smilecommandreceivercappddinel.dev.api.aura.dk"
+                        }
+                    ],
+                    "requestRoutingRules": [
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/requestRoutingRules/AGW-Rule-SmileHesintegration-SMILE"
+                        }
+                    ]
+                },
+                "type": "Microsoft.Network/applicationGateways/backendAddressPools"
+            },
+            {
+                "name": "app-gateway-backend-pool-ce-adapter",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendAddressPools/app-gateway-backend-pool-ce-adapter",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "backendAddresses": [
+                        {
+                            "fqdn": "ce-adapter-api-app-t-aura.azurewebsites.net"
+                        }
+                    ],
+                    "pathRules": [
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/urlPathMaps/bc-routing-rule/pathRules/app-gateway-path-rule-ce-adapter"
+                        }
+                    ]
+                },
+                "type": "Microsoft.Network/applicationGateways/backendAddressPools"
+            },
+            {
+                "name": "AGW-BP-SmileHesIntegration-MDAS",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendAddressPools/AGW-BP-SmileHesIntegration-MDAS",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "backendAddresses": [
+                        {
+                            "fqdn": "smilemdascappddinel.dev.api.aura.dk"
+                        }
+                    ],
+                    "requestRoutingRules": [
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/requestRoutingRules/AGW-Rule-SmileHesintegration-MDAS"
+                        }
+                    ]
+                },
+                "type": "Microsoft.Network/applicationGateways/backendAddressPools"
+            },
+            {
+                "name": "AGW-BP-SmileHesintegration-KamstrupCIM2Receiver",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendAddressPools/AGW-BP-SmileHesintegration-KamstrupCIM2Receiver",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "backendAddresses": [
+                        {
+                            "fqdn": "smilemreceivercim2cappddinel.dev.api.aura.dk"
+                        }
+                    ],
+                    "requestRoutingRules": [
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/requestRoutingRules/AGW-Rule-SmileHesintegration-KamstrupCIM2Receiver"
+                        }
+                    ]
+                },
+                "type": "Microsoft.Network/applicationGateways/backendAddressPools"
+            },
+            {
+                "name": "AGW-BP-SmileHesintegration-KamstrupCIM3Receiver",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendAddressPools/AGW-BP-SmileHesintegration-KamstrupCIM3Receiver",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "backendAddresses": [
+                        {
+                            "fqdn": "smilemreceivercim3cappddinel.dev.api.aura.dk"
+                        }
+                    ],
+                    "requestRoutingRules": [
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/requestRoutingRules/AGW-Rule-SmileHesintegration-KamstrupCIM3Receiver"
+                        }
+                    ]
+                },
+                "type": "Microsoft.Network/applicationGateways/backendAddressPools"
+            },
+            {
+                "name": "AGW-BP-SmileHesintegration-KamstrupCIM3Responder",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendAddressPools/AGW-BP-SmileHesintegration-KamstrupCIM3Responder",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "backendAddresses": [
+                        {
+                            "fqdn": "smilecim3responsecappddinel.dev.api.aura.dk"
+                        }
+                    ],
+                    "requestRoutingRules": [
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/requestRoutingRules/AGW-Rule-SmileHesintegration-KamstrupCIM3Response"
+                        }
+                    ]
+                },
+                "type": "Microsoft.Network/applicationGateways/backendAddressPools"
+            },
+            {
+                "name": "AGW-BP-SmileHesintegration-KamstrupCIM2Responder",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendAddressPools/AGW-BP-SmileHesintegration-KamstrupCIM2Responder",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "backendAddresses": [
+                        {
+                            "fqdn": "smilecim2responsecappddinel.dev.api.aura.dk"
+                        }
+                    ],
+                    "requestRoutingRules": [
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/requestRoutingRules/AGW-Rule-SmileHesintegration-KamstrupCIM2Response"
+                        }
+                    ]
+                },
+                "type": "Microsoft.Network/applicationGateways/backendAddressPools"
+            },
+            {
+                "name": "AGW-BP-SmileFsIntegration-smilefseventhandler",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendAddressPools/AGW-BP-SmileFsIntegration-smilefseventhandler",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "backendAddresses": [
+                        {
+                            "fqdn": "smilefseventhandlercappddinel.dev.api.aura.dk"
+                        }
+                    ],
+                    "requestRoutingRules": [
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/requestRoutingRules/AGW-Rule-SmileFsIntegration-FsEventHandler"
+                        }
+                    ]
+                },
+                "type": "Microsoft.Network/applicationGateways/backendAddressPools"
+            },
+            {
+                "name": "AGW-BP-SmileFsIntegration-smileworkorders",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendAddressPools/AGW-BP-SmileFsIntegration-smileworkorders",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "backendAddresses": [
+                        {
+                            "fqdn": "smileworkorderscappddinel.dev.api.aura.dk"
+                        }
+                    ],
+                    "requestRoutingRules": [
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/requestRoutingRules/AGW-Rule-SmileFsIntegration-FsWorkOrders"
+                        }
+                    ]
+                },
+                "type": "Microsoft.Network/applicationGateways/backendAddressPools"
+            },
+            {
+                "name": "AGW-BP-SmileFsIntegration-refeed",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendAddressPools/AGW-BP-SmileFsIntegration-refeed",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "backendAddresses": [
+                        {
+                            "fqdn": "smilerefeedcappddinel.dev.api.aura.dk"
+                        }
+                    ],
+                    "requestRoutingRules": [
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/requestRoutingRules/AGW-Rule-SmileFsIntegration-Refeed"
+                        }
+                    ]
+                },
+                "type": "Microsoft.Network/applicationGateways/backendAddressPools"
+            },
+            {
+                "name": "AGW-BP-SmileFsIntegration-smilereply",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendAddressPools/AGW-BP-SmileFsIntegration-smilereply",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "backendAddresses": [
+                        {
+                            "fqdn": "smilereplycappddinel.dev.api.aura.dk"
+                        }
+                    ],
+                    "requestRoutingRules": [
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/requestRoutingRules/AGW-Rule-SmileFsIntegration-Reply"
+                        }
+                    ]
+                },
+                "type": "Microsoft.Network/applicationGateways/backendAddressPools"
+            },
+            {
+                "name": "AGW-BP-SmileFsIntegration-smileworkorderhandler",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendAddressPools/AGW-BP-SmileFsIntegration-smileworkorderhandler",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "backendAddresses": [
+                        {
+                            "fqdn": "smileworkorderhandlercappddinel.dev.api.aura.dk"
+                        }
+                    ],
+                    "requestRoutingRules": [
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/requestRoutingRules/AGW-Rule-SmileFsIntegration-WorkOrderHandler"
+                        }
+                    ]
+                },
+                "type": "Microsoft.Network/applicationGateways/backendAddressPools"
+            }
+        ],
+        "backendHttpSettingsCollection": [
+            {
+                "name": "appGatewayBackendHttpSettings443",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendHttpSettingsCollection/appGatewayBackendHttpSettings443",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "port": 443,
+                    "protocol": "Https",
+                    "cookieBasedAffinity": "Enabled",
+                    "connectionDraining": {
+                        "enabled": true,
+                        "drainTimeoutInSec": 60
+                    },
+                    "pickHostNameFromBackendAddress": true,
+                    "affinityCookieName": "ApplicationGatewayAffinity",
+                    "path": null,
+                    "requestTimeout": 120,
+                    "probe": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/probes/bc-api-healthprobe"
+                    },
+                    "urlPathMaps": [
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/urlPathMaps/bc-routing-rule"
+                        }
+                    ],
+                    "pathRules": [
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/urlPathMaps/bc-routing-rule/pathRules/app-gateway-path-rule-product-bc"
+                        },
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/urlPathMaps/bc-routing-rule/pathRules/app-gateway-path-rule-agreement-bc"
+                        },
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/urlPathMaps/bc-routing-rule/pathRules/app-gateway-path-rule-CUBS-adapter"
+                        },
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/urlPathMaps/bc-routing-rule/pathRules/app-gateway-path-rule-Customer-bc"
+                        },
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/urlPathMaps/bc-routing-rule/pathRules/app-gateway-path-rule-ConsumptionPoint-bc"
+                        },
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/urlPathMaps/bc-routing-rule/pathRules/app-gateway-path-rule-ce-adapter"
+                        }
+                    ]
+                },
+                "type": "Microsoft.Network/applicationGateways/backendHttpSettingsCollection"
+            },
+            {
+                "name": "AGW-BackSettings-SmileHesintegration-SMILE",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendHttpSettingsCollection/AGW-BackSettings-SmileHesintegration-SMILE",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "port": 443,
+                    "protocol": "Https",
+                    "cookieBasedAffinity": "Enabled",
+                    "connectionDraining": {
+                        "enabled": true,
+                        "drainTimeoutInSec": 60
+                    },
+                    "pickHostNameFromBackendAddress": true,
+                    "affinityCookieName": "ApplicationGatewayAffinity",
+                    "path": "",
+                    "requestTimeout": 120,
+                    "probe": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/probes/Smile-Hesintration-Probe"
+                    },
+                    "requestRoutingRules": [
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/requestRoutingRules/AGW-Rule-SmileHesintegration-SMILE"
+                        },
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/requestRoutingRules/AGW-Rule-SmileHesintegration-MDAS"
+                        },
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/requestRoutingRules/AGW-Rule-SmileHesintegration-KamstrupCIM2Receiver"
+                        },
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/requestRoutingRules/AGW-Rule-SmileHesintegration-KamstrupCIM3Receiver"
+                        },
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/requestRoutingRules/AGW-Rule-SmileHesintegration-KamstrupCIM2Response"
+                        },
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/requestRoutingRules/AGW-Rule-SmileHesintegration-KamstrupCIM3Response"
+                        }
+                    ]
+                },
+                "type": "Microsoft.Network/applicationGateways/backendHttpSettingsCollection"
+            },
+            {
+                "name": "AGW-BackSettings-SmileHesintegration-Kamstrup",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendHttpSettingsCollection/AGW-BackSettings-SmileHesintegration-Kamstrup",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "port": 443,
+                    "protocol": "Https",
+                    "cookieBasedAffinity": "Disabled",
+                    "pickHostNameFromBackendAddress": false,
+                    "affinityCookieName": "ApplicationGatewayAffinity",
+                    "path": "",
+                    "requestTimeout": 20
+                },
+                "type": "Microsoft.Network/applicationGateways/backendHttpSettingsCollection"
+            },
+            {
+                "name": "AGW-BackSettings-SmileFsIntegration-FsEventHandler",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendHttpSettingsCollection/AGW-BackSettings-SmileFsIntegration-FsEventHandler",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "port": 443,
+                    "protocol": "Https",
+                    "cookieBasedAffinity": "Enabled",
+                    "connectionDraining": {
+                        "enabled": true,
+                        "drainTimeoutInSec": 60
+                    },
+                    "pickHostNameFromBackendAddress": true,
+                    "affinityCookieName": "ApplicationGatewayAffinity",
+                    "path": "",
+                    "requestTimeout": 120,
+                    "probe": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/probes/Smile-Health-Probe"
+                    },
+                    "requestRoutingRules": [
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/requestRoutingRules/AGW-Rule-SmileFsIntegration-FsEventHandler"
+                        }
+                    ]
+                },
+                "type": "Microsoft.Network/applicationGateways/backendHttpSettingsCollection"
+            },
+            {
+                "name": "AGW-BackSettings-SmileFsIntegration-WorkOrders",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendHttpSettingsCollection/AGW-BackSettings-SmileFsIntegration-WorkOrders",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "port": 443,
+                    "protocol": "Https",
+                    "cookieBasedAffinity": "Enabled",
+                    "connectionDraining": {
+                        "enabled": true,
+                        "drainTimeoutInSec": 60
+                    },
+                    "pickHostNameFromBackendAddress": true,
+                    "affinityCookieName": "ApplicationGatewayAffinity",
+                    "path": "",
+                    "requestTimeout": 120,
+                    "probe": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/probes/Smile-Health-Probe"
+                    },
+                    "requestRoutingRules": [
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/requestRoutingRules/AGW-Rule-SmileFsIntegration-FsWorkOrders"
+                        }
+                    ]
+                },
+                "type": "Microsoft.Network/applicationGateways/backendHttpSettingsCollection"
+            },
+            {
+                "name": "AGW-BackSettings-SmileFsIntegration-Refeed",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendHttpSettingsCollection/AGW-BackSettings-SmileFsIntegration-Refeed",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "port": 443,
+                    "protocol": "Https",
+                    "cookieBasedAffinity": "Enabled",
+                    "connectionDraining": {
+                        "enabled": true,
+                        "drainTimeoutInSec": 60
+                    },
+                    "pickHostNameFromBackendAddress": true,
+                    "affinityCookieName": "ApplicationGatewayAffinity",
+                    "path": "",
+                    "requestTimeout": 120,
+                    "probe": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/probes/Smile-Health-Probe"
+                    },
+                    "requestRoutingRules": [
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/requestRoutingRules/AGW-Rule-SmileFsIntegration-Refeed"
+                        }
+                    ]
+                },
+                "type": "Microsoft.Network/applicationGateways/backendHttpSettingsCollection"
+            },
+            {
+                "name": "AGW-BackSettings-SmileFsIntegration-Reply",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendHttpSettingsCollection/AGW-BackSettings-SmileFsIntegration-Reply",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "port": 443,
+                    "protocol": "Https",
+                    "cookieBasedAffinity": "Enabled",
+                    "connectionDraining": {
+                        "enabled": true,
+                        "drainTimeoutInSec": 60
+                    },
+                    "pickHostNameFromBackendAddress": true,
+                    "affinityCookieName": "ApplicationGatewayAffinity",
+                    "path": "",
+                    "requestTimeout": 120,
+                    "probe": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/probes/Smile-Health-Probe"
+                    },
+                    "requestRoutingRules": [
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/requestRoutingRules/AGW-Rule-SmileFsIntegration-Reply"
+                        }
+                    ]
+                },
+                "type": "Microsoft.Network/applicationGateways/backendHttpSettingsCollection"
+            },
+            {
+                "name": "AGW-BackSettings-SmileFsIntegration-WorkOrderHandler",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendHttpSettingsCollection/AGW-BackSettings-SmileFsIntegration-WorkOrderHandler",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "port": 443,
+                    "protocol": "Https",
+                    "cookieBasedAffinity": "Enabled",
+                    "connectionDraining": {
+                        "enabled": true,
+                        "drainTimeoutInSec": 60
+                    },
+                    "pickHostNameFromBackendAddress": true,
+                    "affinityCookieName": "ApplicationGatewayAffinity",
+                    "path": "",
+                    "requestTimeout": 120,
+                    "probe": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/probes/Smile-Health-Probe"
+                    },
+                    "requestRoutingRules": [
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/requestRoutingRules/AGW-Rule-SmileFsIntegration-WorkOrderHandler"
+                        }
+                    ]
+                },
+                "type": "Microsoft.Network/applicationGateways/backendHttpSettingsCollection"
+            }
+        ],
+        "httpListeners": [
+            {
+                "name": "appGatewayHttpsPublicListener",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/appGatewayHttpsPublicListener",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "frontendIPConfiguration": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/frontendIPConfigurations/appGwPublicFrontendIp"
+                    },
+                    "frontendPort": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/frontendPorts/appGatewayHttpsFrontendPort"
+                    },
+                    "protocol": "Https",
+                    "sslCertificate": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/sslCertificates/frontendAgwCertificateName"
+                    },
+                    "requireServerNameIndication": false,
+                    "requestRoutingRules": [
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/requestRoutingRules/bc-routingrule-public"
+                        }
+                    ]
+                },
+                "type": "Microsoft.Network/applicationGateways/httpListeners"
+            },
+            {
+                "name": "appGatewayHttpsPrivateListener",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/appGatewayHttpsPrivateListener",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "frontendIPConfiguration": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/frontendIPConfigurations/appGwPrivateFrontendIp"
+                    },
+                    "frontendPort": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/frontendPorts/appGatewayHttpsFrontendPort"
+                    },
+                    "protocol": "Https",
+                    "sslCertificate": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/sslCertificates/privatefrontend"
+                    },
+                    "requireServerNameIndication": false,
+                    "requestRoutingRules": [
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/requestRoutingRules/bc-routingrule-private"
+                        }
+                    ]
+                },
+                "type": "Microsoft.Network/applicationGateways/httpListeners"
+            },
+            {
+                "name": "AGW-PublicListener-SmileHesintegration-MDAS",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PublicListener-SmileHesintegration-MDAS",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "frontendIPConfiguration": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/frontendIPConfigurations/appGwPublicFrontendIp"
+                    },
+                    "frontendPort": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/frontendPorts/appGatewayHttpsFrontendPort"
+                    },
+                    "protocol": "Https",
+                    "sslCertificate": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/sslCertificates/Smile-HesIntegration-DevCert"
+                    },
+                    "hostName": "smilemdascappddinel.dev.api.aura.dk",
+                    "requireServerNameIndication": true,
+                    "requestRoutingRules": [
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/requestRoutingRules/AGW-Rule-SmileHesintegration-MDAS"
+                        }
+                    ]
+                },
+                "type": "Microsoft.Network/applicationGateways/httpListeners"
+            },
+            {
+                "name": "AGW-PrivateListener-SmileHesintegration-KamstrupCIM2Receiver",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PrivateListener-SmileHesintegration-KamstrupCIM2Receiver",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "frontendIPConfiguration": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/frontendIPConfigurations/appGwPrivateFrontendIp"
+                    },
+                    "frontendPort": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/frontendPorts/appGatewayHttpsFrontendPort"
+                    },
+                    "protocol": "Https",
+                    "sslCertificate": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/sslCertificates/Smile-HesIntegration-DevCert"
+                    },
+                    "hostName": "smilemreceivercim2cappddinel.dev.api.aura.dk",
+                    "requireServerNameIndication": true,
+                    "requestRoutingRules": [
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/requestRoutingRules/AGW-Rule-SmileHesintegration-KamstrupCIM2Receiver"
+                        }
+                    ]
+                },
+                "type": "Microsoft.Network/applicationGateways/httpListeners"
+            },
+            {
+                "name": "AGW-PrivateListener-SmileHesintegration-KamstrupCIM3Receiver",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PrivateListener-SmileHesintegration-KamstrupCIM3Receiver",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "frontendIPConfiguration": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/frontendIPConfigurations/appGwPrivateFrontendIp"
+                    },
+                    "frontendPort": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/frontendPorts/appGatewayHttpsFrontendPort"
+                    },
+                    "protocol": "Https",
+                    "sslCertificate": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/sslCertificates/Smile-HesIntegration-DevCert"
+                    },
+                    "hostName": "smilemreceivercim3cappddinel.dev.api.aura.dk",
+                    "requireServerNameIndication": true,
+                    "requestRoutingRules": [
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/requestRoutingRules/AGW-Rule-SmileHesintegration-KamstrupCIM3Receiver"
+                        }
+                    ]
+                },
+                "type": "Microsoft.Network/applicationGateways/httpListeners"
+            },
+            {
+                "name": "AGW-PrivateListener-SmileHesintegration-KamstrupCIM3Response",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PrivateListener-SmileHesintegration-KamstrupCIM3Response",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "frontendIPConfiguration": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/frontendIPConfigurations/appGwPrivateFrontendIp"
+                    },
+                    "frontendPort": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/frontendPorts/appGatewayHttpsFrontendPort"
+                    },
+                    "protocol": "Https",
+                    "sslCertificate": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/sslCertificates/Smile-HesIntegration-DevCert"
+                    },
+                    "hostName": "smilecim3responsecappddinel.dev.api.aura.dk",
+                    "requireServerNameIndication": true,
+                    "requestRoutingRules": [
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/requestRoutingRules/AGW-Rule-SmileHesintegration-KamstrupCIM3Response"
+                        }
+                    ]
+                },
+                "type": "Microsoft.Network/applicationGateways/httpListeners"
+            },
+            {
+                "name": "AGW-PrivateListener-SmileHesintegration-KamstrupCIM2Response",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PrivateListener-SmileHesintegration-KamstrupCIM2Response",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "frontendIPConfiguration": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/frontendIPConfigurations/appGwPrivateFrontendIp"
+                    },
+                    "frontendPort": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/frontendPorts/appGatewayHttpsFrontendPort"
+                    },
+                    "protocol": "Https",
+                    "sslCertificate": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/sslCertificates/Smile-HesIntegration-DevCert"
+                    },
+                    "hostName": "smilecim2responsecappddinel.dev.api.aura.dk",
+                    "requireServerNameIndication": true,
+                    "requestRoutingRules": [
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/requestRoutingRules/AGW-Rule-SmileHesintegration-KamstrupCIM2Response"
+                        }
+                    ]
+                },
+                "type": "Microsoft.Network/applicationGateways/httpListeners"
+            },
+            {
+                "name": "AGW-PublicListener-SmileHesIntegration-SMILE",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PublicListener-SmileHesIntegration-SMILE",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "frontendIPConfiguration": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/frontendIPConfigurations/appGwPublicFrontendIp"
+                    },
+                    "frontendPort": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/frontendPorts/appGatewayHttpsFrontendPort"
+                    },
+                    "protocol": "Https",
+                    "sslCertificate": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/sslCertificates/Smile-HesIntegration-DevCert"
+                    },
+                    "hostName": "smile.dev.api.aura.dk",
+                    "requireServerNameIndication": true,
+                    "requestRoutingRules": [
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/requestRoutingRules/AGW-Rule-SmileHesintegration-SMILE"
+                        }
+                    ]
+                },
+                "type": "Microsoft.Network/applicationGateways/httpListeners"
+            },
+            {
+                "name": "AGW-PublicListener-SmileFsIntegration-FsEventhandler",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PublicListener-SmileFsIntegration-FsEventhandler",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "frontendIPConfiguration": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/frontendIPConfigurations/appGwPublicFrontendIp"
+                    },
+                    "frontendPort": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/frontendPorts/appGatewayHttpsFrontendPort"
+                    },
+                    "protocol": "Https",
+                    "sslCertificate": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/sslCertificates/Smile-HesIntegration-DevCert"
+                    },
+                    "hostName": "smilefseventhandler.dev.api.aura.dk",
+                    "requireServerNameIndication": true,
+                    "requestRoutingRules": [
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/requestRoutingRules/AGW-Rule-SmileFsIntegration-FsEventHandler"
+                        }
+                    ]
+                },
+                "type": "Microsoft.Network/applicationGateways/httpListeners"
+            },
+            {
+                "name": "AGW-PublicListener-SmileFsIntegration-WorkOrders",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PublicListener-SmileFsIntegration-WorkOrders",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "frontendIPConfiguration": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/frontendIPConfigurations/appGwPublicFrontendIp"
+                    },
+                    "frontendPort": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/frontendPorts/appGatewayHttpsFrontendPort"
+                    },
+                    "protocol": "Https",
+                    "sslCertificate": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/sslCertificates/Smile-HesIntegration-DevCert"
+                    },
+                    "hostName": "smileworkorderscappddinel.dev.api.aura.dk",
+                    "requireServerNameIndication": true,
+                    "requestRoutingRules": [
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/requestRoutingRules/AGW-Rule-SmileFsIntegration-FsWorkOrders"
+                        }
+                    ]
+                },
+                "type": "Microsoft.Network/applicationGateways/httpListeners"
+            },
+            {
+                "name": "AGW-PublicListener-SmileFsIntegration-Refeed",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PublicListener-SmileFsIntegration-Refeed",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "frontendIPConfiguration": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/frontendIPConfigurations/appGwPublicFrontendIp"
+                    },
+                    "frontendPort": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/frontendPorts/appGatewayHttpsFrontendPort"
+                    },
+                    "protocol": "Https",
+                    "sslCertificate": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/sslCertificates/Smile-HesIntegration-DevCert"
+                    },
+                    "hostName": "smilerefeedcappddinel.dev.api.aura.dk",
+                    "requireServerNameIndication": true,
+                    "requestRoutingRules": [
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/requestRoutingRules/AGW-Rule-SmileFsIntegration-Refeed"
+                        }
+                    ]
+                },
+                "type": "Microsoft.Network/applicationGateways/httpListeners"
+            },
+            {
+                "name": "AGW-PublicListener-SmileFsIntegration-Reply",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PublicListener-SmileFsIntegration-Reply",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "frontendIPConfiguration": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/frontendIPConfigurations/appGwPublicFrontendIp"
+                    },
+                    "frontendPort": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/frontendPorts/appGatewayHttpsFrontendPort"
+                    },
+                    "protocol": "Https",
+                    "sslCertificate": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/sslCertificates/Smile-HesIntegration-DevCert"
+                    },
+                    "hostName": "smilereplycappddinel.dev.api.aura.dk",
+                    "requireServerNameIndication": true,
+                    "requestRoutingRules": [
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/requestRoutingRules/AGW-Rule-SmileFsIntegration-Reply"
+                        }
+                    ]
+                },
+                "type": "Microsoft.Network/applicationGateways/httpListeners"
+            },
+            {
+                "name": "AGW-PublicListener-SmileFsIntegration-WorkOrderHandler",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PublicListener-SmileFsIntegration-WorkOrderHandler",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "frontendIPConfiguration": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/frontendIPConfigurations/appGwPublicFrontendIp"
+                    },
+                    "frontendPort": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/frontendPorts/appGatewayHttpsFrontendPort"
+                    },
+                    "protocol": "Https",
+                    "sslCertificate": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/sslCertificates/Smile-HesIntegration-DevCert"
+                    },
+                    "hostName": "smileworkorderhandlercappddinel.dev.api.aura.dk",
+                    "requireServerNameIndication": true,
+                    "requestRoutingRules": [
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/requestRoutingRules/AGW-Rule-SmileFsIntegration-WorkOrderHandler"
+                        }
+                    ]
+                },
+                "type": "Microsoft.Network/applicationGateways/httpListeners"
+            }
+        ],
+        "urlPathMaps": [
+            {
+                "name": "bc-routing-rule",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/urlPathMaps/bc-routing-rule",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "defaultBackendAddressPool": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendAddressPools/default-backendpool"
+                    },
+                    "defaultBackendHttpSettings": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendHttpSettingsCollection/appGatewayBackendHttpSettings443"
+                    },
+                    "pathRules": [
+                        {
+                            "name": "app-gateway-path-rule-product-bc",
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/urlPathMaps/bc-routing-rule/pathRules/app-gateway-path-rule-product-bc",
+                            "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                            "properties": {
+                                "provisioningState": "Succeeded",
+                                "paths": [
+                                    "/product/*"
+                                ],
+                                "backendAddressPool": {
+                                    "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendAddressPools/app-gateway-backend-pool-product-bc"
+                                },
+                                "backendHttpSettings": {
+                                    "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendHttpSettingsCollection/appGatewayBackendHttpSettings443"
+                                }
+                            },
+                            "type": "Microsoft.Network/applicationGateways/urlPathMaps/pathRules"
+                        },
+                        {
+                            "name": "app-gateway-path-rule-agreement-bc",
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/urlPathMaps/bc-routing-rule/pathRules/app-gateway-path-rule-agreement-bc",
+                            "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                            "properties": {
+                                "provisioningState": "Succeeded",
+                                "paths": [
+                                    "/agreement/*"
+                                ],
+                                "backendAddressPool": {
+                                    "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendAddressPools/app-gateway-backend-pool-agreement-bc"
+                                },
+                                "backendHttpSettings": {
+                                    "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendHttpSettingsCollection/appGatewayBackendHttpSettings443"
+                                }
+                            },
+                            "type": "Microsoft.Network/applicationGateways/urlPathMaps/pathRules"
+                        },
+                        {
+                            "name": "app-gateway-path-rule-CUBS-adapter",
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/urlPathMaps/bc-routing-rule/pathRules/app-gateway-path-rule-CUBS-adapter",
+                            "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                            "properties": {
+                                "provisioningState": "Succeeded",
+                                "paths": [
+                                    "/CUBS/*"
+                                ],
+                                "backendAddressPool": {
+                                    "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendAddressPools/app-gateway-backend-pool-CUBS-adapter"
+                                },
+                                "backendHttpSettings": {
+                                    "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendHttpSettingsCollection/appGatewayBackendHttpSettings443"
+                                }
+                            },
+                            "type": "Microsoft.Network/applicationGateways/urlPathMaps/pathRules"
+                        },
+                        {
+                            "name": "app-gateway-path-rule-Customer-bc",
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/urlPathMaps/bc-routing-rule/pathRules/app-gateway-path-rule-Customer-bc",
+                            "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                            "properties": {
+                                "provisioningState": "Succeeded",
+                                "paths": [
+                                    "/Customer/*"
+                                ],
+                                "backendAddressPool": {
+                                    "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendAddressPools/app-gateway-backend-pool-Customer-bc"
+                                },
+                                "backendHttpSettings": {
+                                    "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendHttpSettingsCollection/appGatewayBackendHttpSettings443"
+                                }
+                            },
+                            "type": "Microsoft.Network/applicationGateways/urlPathMaps/pathRules"
+                        },
+                        {
+                            "name": "app-gateway-path-rule-ConsumptionPoint-bc",
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/urlPathMaps/bc-routing-rule/pathRules/app-gateway-path-rule-ConsumptionPoint-bc",
+                            "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                            "properties": {
+                                "provisioningState": "Succeeded",
+                                "paths": [
+                                    "/ConsumptionPoint/*"
+                                ],
+                                "backendAddressPool": {
+                                    "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendAddressPools/app-gateway-backend-pool-ConsumptionPoint-bc"
+                                },
+                                "backendHttpSettings": {
+                                    "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendHttpSettingsCollection/appGatewayBackendHttpSettings443"
+                                }
+                            },
+                            "type": "Microsoft.Network/applicationGateways/urlPathMaps/pathRules"
+                        },
+                        {
+                            "name": "app-gateway-path-rule-ce-adapter",
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/urlPathMaps/bc-routing-rule/pathRules/app-gateway-path-rule-ce-adapter",
+                            "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                            "properties": {
+                                "provisioningState": "Succeeded",
+                                "paths": [
+                                    "/ce/*"
+                                ],
+                                "backendAddressPool": {
+                                    "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendAddressPools/app-gateway-backend-pool-ce-adapter"
+                                },
+                                "backendHttpSettings": {
+                                    "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendHttpSettingsCollection/appGatewayBackendHttpSettings443"
+                                }
+                            },
+                            "type": "Microsoft.Network/applicationGateways/urlPathMaps/pathRules"
+                        }
+                    ],
+                    "requestRoutingRules": [
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/requestRoutingRules/bc-routingrule-private"
+                        },
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/requestRoutingRules/bc-routingrule-public"
+                        }
+                    ]
+                },
+                "type": "Microsoft.Network/applicationGateways/urlPathMaps"
+            }
+        ],
+        "requestRoutingRules": [
+            {
+                "name": "AGW-Rule-SmileHesintegration-SMILE",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/requestRoutingRules/AGW-Rule-SmileHesintegration-SMILE",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "ruleType": "Basic",
+                    "httpListener": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PublicListener-SmileHesIntegration-SMILE"
+                    },
+                    "backendAddressPool": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendAddressPools/AGW-BP-SmileHesIntegration-SMILE"
+                    },
+                    "backendHttpSettings": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendHttpSettingsCollection/AGW-BackSettings-SmileHesintegration-SMILE"
+                    }
+                },
+                "type": "Microsoft.Network/applicationGateways/requestRoutingRules"
+            },
+            {
+                "name": "AGW-Rule-SmileHesintegration-MDAS",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/requestRoutingRules/AGW-Rule-SmileHesintegration-MDAS",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "ruleType": "Basic",
+                    "httpListener": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PublicListener-SmileHesintegration-MDAS"
+                    },
+                    "backendAddressPool": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendAddressPools/AGW-BP-SmileHesIntegration-MDAS"
+                    },
+                    "backendHttpSettings": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendHttpSettingsCollection/AGW-BackSettings-SmileHesintegration-SMILE"
+                    }
+                },
+                "type": "Microsoft.Network/applicationGateways/requestRoutingRules"
+            },
+            {
+                "name": "AGW-Rule-SmileHesintegration-KamstrupCIM2Receiver",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/requestRoutingRules/AGW-Rule-SmileHesintegration-KamstrupCIM2Receiver",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "ruleType": "Basic",
+                    "httpListener": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PrivateListener-SmileHesintegration-KamstrupCIM2Receiver"
+                    },
+                    "backendAddressPool": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendAddressPools/AGW-BP-SmileHesintegration-KamstrupCIM2Receiver"
+                    },
+                    "backendHttpSettings": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendHttpSettingsCollection/AGW-BackSettings-SmileHesintegration-SMILE"
+                    }
+                },
+                "type": "Microsoft.Network/applicationGateways/requestRoutingRules"
+            },
+            {
+                "name": "AGW-Rule-SmileHesintegration-KamstrupCIM3Receiver",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/requestRoutingRules/AGW-Rule-SmileHesintegration-KamstrupCIM3Receiver",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "ruleType": "Basic",
+                    "httpListener": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PrivateListener-SmileHesintegration-KamstrupCIM3Receiver"
+                    },
+                    "backendAddressPool": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendAddressPools/AGW-BP-SmileHesintegration-KamstrupCIM3Receiver"
+                    },
+                    "backendHttpSettings": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendHttpSettingsCollection/AGW-BackSettings-SmileHesintegration-SMILE"
+                    }
+                },
+                "type": "Microsoft.Network/applicationGateways/requestRoutingRules"
+            },
+            {
+                "name": "AGW-Rule-SmileHesintegration-KamstrupCIM2Response",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/requestRoutingRules/AGW-Rule-SmileHesintegration-KamstrupCIM2Response",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "ruleType": "Basic",
+                    "httpListener": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PrivateListener-SmileHesintegration-KamstrupCIM2Response"
+                    },
+                    "backendAddressPool": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendAddressPools/AGW-BP-SmileHesintegration-KamstrupCIM2Responder"
+                    },
+                    "backendHttpSettings": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendHttpSettingsCollection/AGW-BackSettings-SmileHesintegration-SMILE"
+                    }
+                },
+                "type": "Microsoft.Network/applicationGateways/requestRoutingRules"
+            },
+            {
+                "name": "AGW-Rule-SmileHesintegration-KamstrupCIM3Response",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/requestRoutingRules/AGW-Rule-SmileHesintegration-KamstrupCIM3Response",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "ruleType": "Basic",
+                    "httpListener": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PrivateListener-SmileHesintegration-KamstrupCIM3Response"
+                    },
+                    "backendAddressPool": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendAddressPools/AGW-BP-SmileHesintegration-KamstrupCIM3Responder"
+                    },
+                    "backendHttpSettings": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendHttpSettingsCollection/AGW-BackSettings-SmileHesintegration-SMILE"
+                    }
+                },
+                "type": "Microsoft.Network/applicationGateways/requestRoutingRules"
+            },
+            {
+                "name": "AGW-Rule-SmileFsIntegration-FsEventHandler",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/requestRoutingRules/AGW-Rule-SmileFsIntegration-FsEventHandler",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "ruleType": "Basic",
+                    "httpListener": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PublicListener-SmileFsIntegration-FsEventhandler"
+                    },
+                    "backendAddressPool": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendAddressPools/AGW-BP-SmileFsIntegration-smilefseventhandler"
+                    },
+                    "backendHttpSettings": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendHttpSettingsCollection/AGW-BackSettings-SmileFsIntegration-FsEventHandler"
+                    }
+                },
+                "type": "Microsoft.Network/applicationGateways/requestRoutingRules"
+            },
+            {
+                "name": "AGW-Rule-SmileFsIntegration-FsWorkOrders",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/requestRoutingRules/AGW-Rule-SmileFsIntegration-FsWorkOrders",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "ruleType": "Basic",
+                    "httpListener": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PublicListener-SmileFsIntegration-WorkOrders"
+                    },
+                    "backendAddressPool": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendAddressPools/AGW-BP-SmileFsIntegration-smileworkorders"
+                    },
+                    "backendHttpSettings": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendHttpSettingsCollection/AGW-BackSettings-SmileFsIntegration-WorkOrders"
+                    }
+                },
+                "type": "Microsoft.Network/applicationGateways/requestRoutingRules"
+            },
+            {
+                "name": "AGW-Rule-SmileFsIntegration-Refeed",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/requestRoutingRules/AGW-Rule-SmileFsIntegration-Refeed",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "ruleType": "Basic",
+                    "httpListener": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PublicListener-SmileFsIntegration-Refeed"
+                    },
+                    "backendAddressPool": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendAddressPools/AGW-BP-SmileFsIntegration-refeed"
+                    },
+                    "backendHttpSettings": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendHttpSettingsCollection/AGW-BackSettings-SmileFsIntegration-Refeed"
+                    }
+                },
+                "type": "Microsoft.Network/applicationGateways/requestRoutingRules"
+            },
+            {
+                "name": "AGW-Rule-SmileFsIntegration-Reply",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/requestRoutingRules/AGW-Rule-SmileFsIntegration-Reply",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "ruleType": "Basic",
+                    "httpListener": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PublicListener-SmileFsIntegration-Reply"
+                    },
+                    "backendAddressPool": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendAddressPools/AGW-BP-SmileFsIntegration-smilereply"
+                    },
+                    "backendHttpSettings": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendHttpSettingsCollection/AGW-BackSettings-SmileFsIntegration-Reply"
+                    }
+                },
+                "type": "Microsoft.Network/applicationGateways/requestRoutingRules"
+            },
+            {
+                "name": "AGW-Rule-SmileFsIntegration-WorkOrderHandler",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/requestRoutingRules/AGW-Rule-SmileFsIntegration-WorkOrderHandler",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "ruleType": "Basic",
+                    "httpListener": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/AGW-PublicListener-SmileFsIntegration-WorkOrderHandler"
+                    },
+                    "backendAddressPool": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendAddressPools/AGW-BP-SmileFsIntegration-smileworkorderhandler"
+                    },
+                    "backendHttpSettings": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendHttpSettingsCollection/AGW-BackSettings-SmileFsIntegration-WorkOrderHandler"
+                    }
+                },
+                "type": "Microsoft.Network/applicationGateways/requestRoutingRules"
+            },
+            {
+                "name": "bc-routingrule-private",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/requestRoutingRules/bc-routingrule-private",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "ruleType": "PathBasedRouting",
+                    "httpListener": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/appGatewayHttpsPrivateListener"
+                    },
+                    "urlPathMap": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/urlPathMaps/bc-routing-rule"
+                    }
+                },
+                "type": "Microsoft.Network/applicationGateways/requestRoutingRules"
+            },
+            {
+                "name": "bc-routingrule-public",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/requestRoutingRules/bc-routingrule-public",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "ruleType": "PathBasedRouting",
+                    "httpListener": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/httpListeners/appGatewayHttpsPublicListener"
+                    },
+                    "urlPathMap": {
+                        "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/urlPathMaps/bc-routing-rule"
+                    }
+                },
+                "type": "Microsoft.Network/applicationGateways/requestRoutingRules"
+            }
+        ],
+        "probes": [
+            {
+                "name": "bc-api-healthprobe",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/probes/bc-api-healthprobe",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "protocol": "Https",
+                    "path": "/health/internal",
+                    "interval": 60,
+                    "timeout": 60,
+                    "unhealthyThreshold": 3,
+                    "pickHostNameFromBackendHttpSettings": true,
+                    "minServers": 0,
+                    "match": {
+                        "body": "",
+                        "statusCodes": [
+                            "200-399"
+                        ]
+                    },
+                    "backendHttpSettings": [
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendHttpSettingsCollection/appGatewayBackendHttpSettings443"
+                        }
+                    ]
+                },
+                "type": "Microsoft.Network/applicationGateways/probes"
+            },
+            {
+                "name": "Smile-Hesintration-Probe",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/probes/Smile-Hesintration-Probe",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "protocol": "Https",
+                    "path": "/alive",
+                    "interval": 60,
+                    "timeout": 30,
+                    "unhealthyThreshold": 3,
+                    "pickHostNameFromBackendHttpSettings": true,
+                    "minServers": 0,
+                    "match": {
+                        "body": "Healthy",
+                        "statusCodes": [
+                            "200-399"
+                        ]
+                    },
+                    "backendHttpSettings": [
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendHttpSettingsCollection/AGW-BackSettings-SmileHesintegration-SMILE"
+                        }
+                    ]
+                },
+                "type": "Microsoft.Network/applicationGateways/probes"
+            },
+            {
+                "name": "Smile-Hesintegration-Kamstrup",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/probes/Smile-Hesintegration-Kamstrup",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "protocol": "Https",
+                    "path": "/alive",
+                    "interval": 30,
+                    "timeout": 30,
+                    "unhealthyThreshold": 3,
+                    "pickHostNameFromBackendHttpSettings": true,
+                    "minServers": 0,
+                    "match": {
+                        "body": "",
+                        "statusCodes": [
+                            "200-399"
+                        ]
+                    }
+                },
+                "type": "Microsoft.Network/applicationGateways/probes"
+            },
+            {
+                "name": "Smile-Health-Probe",
+                "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/probes/Smile-Health-Probe",
+                "etag": "W/\"43d369a4-6cdd-4fce-86ce-37ebb638373b\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "protocol": "Https",
+                    "path": "/alive",
+                    "interval": 60,
+                    "timeout": 30,
+                    "unhealthyThreshold": 3,
+                    "pickHostNameFromBackendHttpSettings": true,
+                    "minServers": 0,
+                    "match": {
+                        "body": "Healthy",
+                        "statusCodes": [
+                            "200-399"
+                        ]
+                    },
+                    "backendHttpSettings": [
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendHttpSettingsCollection/AGW-BackSettings-SmileFsIntegration-FsEventHandler"
+                        },
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendHttpSettingsCollection/AGW-BackSettings-SmileFsIntegration-WorkOrders"
+                        },
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendHttpSettingsCollection/AGW-BackSettings-SmileFsIntegration-Refeed"
+                        },
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendHttpSettingsCollection/AGW-BackSettings-SmileFsIntegration-Reply"
+                        },
+                        {
+                            "id": "/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg-t/providers/Microsoft.Network/applicationGateways/platform-gateway-agw-t-aura/backendHttpSettingsCollection/AGW-BackSettings-SmileFsIntegration-WorkOrderHandler"
+                        }
+                    ]
+                },
+                "type": "Microsoft.Network/applicationGateways/probes"
+            }
+        ],
+        "redirectConfigurations": [],
+        "webApplicationFirewallConfiguration": {
+            "enabled": true,
+            "firewallMode": "Prevention",
+            "ruleSetType": "OWASP",
+            "ruleSetVersion": "3.2",
+            "disabledRuleGroups": []
+        }
+    }
+}
