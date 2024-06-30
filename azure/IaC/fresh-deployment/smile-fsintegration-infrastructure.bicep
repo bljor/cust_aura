@@ -1,14 +1,37 @@
-// version pr. 04-06-2024 deployer uden fejl ...
+/*
+    Hvad laves i denne deployment
 
-// TODO:
-//
-// Opgaver i fs-integration subscription
-// -
+    Følgende ressourcer oprettes:
+    - Storage Account
+    - Key Vault
+    - Secret                                  (VM local admin users password)
+    - Network Security Group
+    - Route Table
+    - Virtual Network
+    - Subnet 1                                General Purpose subnet
+    - Subnet 2                                Container subnet
+    - Subnet 3                                AGW subnet
+    - Network Interface                       for the VM
+    - Virtual Machine
+    - Disk                                    OS disk for the VM
+    - Auto Shutdown Config                    for the VM
+    - AAD Login extension                     for the VM
+    - Assign user role                        for the developers to logon to the VM (VM User Login)
+    - Assign admin role                       for administrators to logon to the VM (VM Admin Login)
+    - Managed Identity                        for reading certificates from the Key Vault (granted Key Vault Certificates User role)
+    - Managed Identity                        for reading secrets from the Key Vault (granted Key Vault Secrets Admin role)
+    - Grant developers access                 developers group granted access to read certificates from the Key Vault (granted Key Vault Certificates User role)
+    - Grant developers access                 developers group granted access to read secrets from the Key Vault (granted Key Vault Secrets User role)
+    - Grant developers access                 developers group granted Contributor access to resource group for Container environment
+    - Grant developers access                 developers group granted RBAC Admin access to resource group for Container environment
+    - Private DNS zone                        for local DNS records
+    - Create peering to hub vnet              Created in the new subscription
+    - Create peering from the hub vnet        Created in the hub subscription
+*/
 
-// Opgaver i platform subscription
-// - der skal laves firewall regler til fsintegration platformen
-// - der skal laves konfiguration af app gateway
-// - der skal laves DNS records i Private DNS i hes-sandbox subscription (den skal flyttes fra hes-sandbox til platform)
+// Hvad skal ændres inden deployment hos Aura
+// vmSize
+// 
 
 
 @description('Password for the Virtual Machine.')
@@ -16,41 +39,44 @@
 @secure()
 param adminPassword string
 
-
+@description('Resource Group to which Developers should be granted contributor + RBAC administrator roles')
+param developersResourceGroup string
 
 // Delte variable på tværs af ressourcer
-var location = resourceGroup().location
+var location = resourceGroup().location                    // location hvor ressourcer oprettes
 var tagCostCenter = 'Dinel'
 var tagOpsTeam = 'IT-Drift'
 var tagEnvironment = 'Dev'
 
-
-//var addressPrefix = '10.0.0.0/16'
-//var subnetName = 'Subnet'
-//var subnetPrefix = '10.0.0.0/24'
-
 // Variabler til oprettelse af Network Security Group
-var networkSecurityGroupName = 'smile-fsintegration-nsg-001-d-dinel'
+var networkSecurityGroupName = 'smile-fsintegration-nsg-001-d-dinel'                  // modify this
 
-
-// Variabler til oprettelse af VNET
-var virtualNetworkName = 'smile-fsintegration-vnet-001-d-dinel'
-var addressPrefix = '10.245.128.0/22'
-var remotePrefix = '10.0.0.0/22'
-
-
-// Variabler til Peering af VNet til HUb-vnet i Platform subscription
-
-
-// Variabler til oprettelse af Network Interface Card (nic)
-var nicName = 'fs-integra1-nic01'
+// Variabler til oprettelse af VNET, subnets og peerings
+var hubVnetAddressPrefix = '10.0.0.0/16'                                              // prefix for netværket i hub netværk, bruges til peering, ændres sjældent
+var virtualNetworkName = 'smile-fsintegration-vnet-001-d-dinel'                       // modify this
+var newVnewAddressPrefix = '10.245.128.0/22'                                          // modify this
+var vnetSubnet1Name = 'General-Purpose-subnet'                                        // modify this
+var vnetSubnet1AddressPrefix = '10.245.128.0/24'                                      // modify this
+var vnetSubnet2Name = 'Container-App-Subnet'                                          // modify this
+var vnetSubnet2AddressPrefix = '10.245.130.0/23'                                      // modify this
+var vnetSubnet3Name = 'LockedFor_AGW_VPNSNAT'                                         // modify this
+var vnetSubnet3AddressPrefix = '10.245.129.240/28'                                    // modify this
 
 
 // Variabler til oprettelse af VM
-var vmName = 'fs-integra1'
+var vmName = 'fs-integra1'                                                            // modify this
 var securityType = 'TrustedLaunch'          // skal være enten TrustedLaunch eller Standard
-var vmSize = 'Standard_D2as_v5'             // Størrelse / opsætning på den VM der skal oprettes
-var adminUsername = 'adminbjo'              // Navn på den admin-bruger konto der oprettes på VM'en
+
+// Variabler til oprettelse af Network Interface Card (nic)
+var nicName = '${vmName}-nic01'
+
+// Brug i wipe.dk                                                                     // modify this
+var vmSize = 'Standard_B2s'
+
+// Brug nedenstående hos Aura
+// var vmSize = 'Standard_D2as_v5'             // Størrelse / opsætning på den VM der skal oprettes
+
+var adminUsername = 'useradmin'              // Navn på den admin-bruger konto der oprettes på VM'en
 var securityProfileJson = {                 // Sikkerhedsprofil, der styrer Secure Boot og TPM chip
   uefiSettings: {
     secureBootEnabled: true
@@ -63,27 +89,28 @@ var extensionPublisher = 'Microsoft.Azure.ActiveDirectory'
 var extensionVersion = '1.0'
 var extensionType = 'AADLoginForWindows'
 
+var VmUserGroupId = 'a94dffa9-4bc6-495a-a91e-34a126024a84'              // ID of Entra ID group to grant Login User access to the VM
+var VmAdminGroupId = '20ba48d0-9822-442e-9053-c3fca3546ead'             // ID of Entra ID group to grant Login Admin access to the VM
 
 // Variabler til oprettelse af Key Vault
-var keyVaultName = 'smile-fsi-sub-kv-d-dinel'
+var keyVaultName = 'temp-wipedk-20240630-001'                                          // modify this
 
-
-// Variabler til oprettelse af Recovery Vault
-var recoveryVaultName = 'smile-fsi-sub-rv-d-dinel'
-
-
-// Variabler til oprettelse af backup policy
-var backupPolicyName = 'smile-fsi-backuppolicy-d-dinel'
-
-
-// Variabler til backup vault
-var backupFabric = 'Azure'
-var protectionContainer = 'iaasvmcontainer;iaasvmcontainerv2;${resourceGroup().name};${vmName}'
-var protectedItem = 'vm;iaasvmcontainerv2;${resourceGroup().name};${vmName}'
-
+var roleKeyVaultCertUser = 'db79e9a7-68ee-4b58-9aeb-b90e7c24fcba'
+var roleKeyVaultSecretUser = '4633458b-17de-408a-b874-0445c86b69e6'
+var keyVaultDevelopersId = '35b37b21-57a3-4dbc-a047-4da7da12a477'       // ID of Entra ID group to grant Key Vault Secrets Users and Key Vault Cert Users access to the Key Vault
 
 // Variabler til oprettelse af Storage Account
-var storageAccountName = 'stfsintegdaura'
+
+// Brug til wipe.dk
+var storageAccountName = 'wipedktmp0001'                                               // modify this
+
+// Brug hos Aura
+//var storageAccountName = 'stfsintegdaura'
+
+var mgIdentity001name = 'certreader-smile-fsintegration-kv-id-d-dinel'
+var mgIdentity002name = 'secretreader-smile-fsintegration-kv-id-d-dinel'
+
+var privDns01name = 'dev.api.aura.dk'
 
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2022-05-01' = {
@@ -94,7 +121,6 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2022-05-01' = {
   }
   kind: 'Storage'
 }
-
 
 // Key Vault til opbevaring af certifikater og nøgler
 resource keyvaultcerts 'Microsoft.KeyVault/vaults@2023-07-01' = {
@@ -108,20 +134,6 @@ resource keyvaultcerts 'Microsoft.KeyVault/vaults@2023-07-01' = {
     tenantId: subscription().tenantId
     enableSoftDelete: true
     softDeleteRetentionInDays: 90
-//    accessPolicies: [
-//      {
-//        objectId: '8dc62288-6290-45de-8fa6-bfcf91eaa884'
-//        tenantId: subscription().tenantId
-//        permissions: {
-//          keys: [
-//            'list'
-//          ]          
-//          secrets: [
-//            'list'
-//          ] 
-//        }
-//      }
-//    ]
     sku: {
       name: 'standard'
       family: 'A'
@@ -133,80 +145,14 @@ resource keyvaultcerts 'Microsoft.KeyVault/vaults@2023-07-01' = {
   }
 }
 
-
-// Recovery Services Vault til lagring og opbevaring af backup, der konfigureres for virtuelle maskiner
-resource recoveryServicesVault 'Microsoft.RecoveryServices/vaults@2022-01-01' = {
-  name: recoveryVaultName
-  location: location
-  tags: {
-    OpsTeam: 'IT-Drift'
-    CostCenter: 'Dinel'
-    Environment: 'Dev'
-  }
-  identity: {
-    type: 'SystemAssigned'
-  }
-  sku: {
-    name: 'RS0'
-    tier: 'Standard'
-  }
-  properties: {}
-}
-
-
-// UDKOMMENTERET, FOR AT KUNNE SLETTE RECOVERY VAULT IGEN UDEN DER HÆNGER GAMLE DATA OG SPÆRRER FOR SLETNING
-// Backup Policy som styrer hvordan backup laves. Relateret til Recovery Services ovenfor
-resource backupPolicy 'Microsoft.RecoveryServices/vaults/backupPolicies@2022-04-01' = {
-
-  name: backupPolicyName
-  location: resourceGroup().location
-
-  tags: {
-    OpsTeam: 'IT-Drift'
-    CostCenter: 'Dinel'
-    Environment: 'Dev'
-  }
-  parent: recoveryServicesVault
-
+// Gem VM local admin username and password in the Key Vault
+resource secret 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
+  parent: keyvaultcerts
+  name: adminUsername
   properties: {
-    backupManagementType: 'AzureIaasVM'
-    
-    instantRPDetails: {
-      azureBackupRGNamePrefix: null
-      azureBackupRGNameSuffix: null
-    }
-    instantRpRetentionRangeInDays: 2
-    policyType: 'V2'
-    
-    retentionPolicy: {
-      retentionPolicyType: 'LongTermRetentionPolicy'
-      dailySchedule: {
-        retentionDuration: {
-          count: 30
-          durationType: 'Days'
-        }
-        retentionTimes: ['2024-06-04T19:00:00+00:00']
-      }
-      monthlySchedule: null
-      weeklySchedule: null
-      yearlySchedule: null
-    }
-    
-    schedulePolicy: {
-      dailySchedule: null
-      hourlySchedule: {
-        interval: 4
-        scheduleWindowDuration: 12
-        scheduleWindowStartTime: '2024-06-04T19:00:00+00:00'
-      }
-      schedulePolicyType: 'SimpleSchedulePolicyV2'
-      scheduleRunFrequency: 'Hourly'
-      weeklySchedule: null
-    }
-    timeZone: 'UTC'             // kunne måske også være 'Romance Standard Time'
+    value: adminPassword
   }
 }
-
 
 // Network Security Group - bliver brugt af nedenstående virtualNetwork
 resource networkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2022-05-01' = {
@@ -234,22 +180,54 @@ resource networkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2022-05-0
 }
 
 
+
+// Oprettelse af Route Tables, relateret til 
+resource routetable001 'Microsoft.Network/routeTables@2023-11-01' = {
+  name: 'smile-fsintegration-ft-hub-d-dinel'
+  location: location
+  tags: {
+    costCenter: tagCostCenter
+    opsTeam: tagOpsTeam
+    Environment: tagEnvironment
+  }
+  properties: {
+    routes: [
+      {
+        name: 'the-first-route'
+        properties: {
+          addressPrefix: '158.125.1.48/32'
+          hasBgpOverride: false
+          nextHopIpAddress: ''
+          nextHopType: 'Internet'
+        }
+      }
+    ]
+  }
+}
+
+
+
 // Virtual network - refererer til både Network Security Group defineret ovenfor,
 // samt route table nedenfor
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2022-05-01' = {
   name: virtualNetworkName
   location: location
+  tags : {
+    costCenter: tagCostCenter
+    opsTeam: tagOpsTeam
+    Environment: tagEnvironment
+  }
   properties: {
     addressSpace: {
     addressPrefixes: [
-    addressPrefix
+    newVnewAddressPrefix
       ]
     }
     subnets: [
       {
-        name: 'General-Purpose-subnet'
+        name: vnetSubnet1Name
         properties: {
-          addressPrefix: '10.245.128.0/24'
+          addressPrefix: vnetSubnet1AddressPrefix
           networkSecurityGroup: {
             id: networkSecurityGroup.id
           }
@@ -259,17 +237,18 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2022-05-01' = {
         }
       }
       {
-        name: 'Container-App-Subnet'
+        name: vnetSubnet2Name
         properties: {
-          addressPrefix: '10.245.130.0/23'
+          addressPrefix: vnetSubnet2AddressPrefix
           networkSecurityGroup: {
             id: networkSecurityGroup.id
           }
           routeTable: {
             id: routetable001.id
           }
-          delegations: [        // Skal udfyldes nedenfor ... denne del med delegations er ikke testet endnu
+          delegations: [
             {
+              name: 'AppDelegations'
               properties: {
                 serviceName: 'Microsoft.App/environments'
               }
@@ -278,9 +257,9 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2022-05-01' = {
         }
       }
       {
-       name: 'LockedFor_AGW_VPNSNAT'
+       name: vnetSubnet3Name
        properties: {
-         addressPrefix: '10.245.129.240/28'
+         addressPrefix: vnetSubnet3AddressPrefix
          networkSecurityGroup: {
            id: networkSecurityGroup.id
          }
@@ -289,13 +268,16 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2022-05-01' = {
     ]
   }
 }
-output vnetID string = virtualNetwork.id
-
 
 // Network Interface - relateret til ovenstående Virtual Network
 resource nic 'Microsoft.Network/networkInterfaces@2022-05-01' = {
   name: nicName
   location: location
+  tags: {
+    CostCenter: tagCostCenter
+    opsTeam: tagOpsTeam
+    Environment: tagEnvironment
+  }
   properties: {
     ipConfigurations: [
       {
@@ -304,17 +286,13 @@ resource nic 'Microsoft.Network/networkInterfaces@2022-05-01' = {
           privateIPAllocationMethod: 'Dynamic'
           privateIPAddressVersion: 'IPv4'
           subnet: {
-            id: resourceId('Microsoft.Network/virtualNetworks/subnets', virtualNetworkName, 'General-Purpose-subnet')
+            id: resourceId('Microsoft.Network/virtualNetworks/subnets', virtualNetwork.name, 'General-Purpose-subnet')
           }
         }
       }
     ]
   }
-  dependsOn: [
-    virtualNetwork
-  ]
 }
-
 
 // Oprettelse af den virtuelle maskine, afhænger af ovenstående Network Interface
 resource vm 'Microsoft.Compute/virtualMachines@2022-03-01' = {
@@ -409,21 +387,36 @@ resource vmExtension 'Microsoft.Compute/virtualMachines/extensions@2022-03-01' =
 }
 
 
-// UDKOMMENTERET, FOR AT KUNNE SLETTE RECOVERY VAULT IGEN UDEN DER HÆNGER GAMLE DATA OG SPÆRRER FOR SLETNING
-// Opret vault til lagring af
-resource recoveryVaultName_backupFabric_protectionContainer_protectedItem 'Microsoft.RecoveryServices/vaults/backupFabrics/protectionContainers/protectedItems@2024-04-01' = {
-  name: '${recoveryServicesVault.name}/${backupFabric}/${protectionContainer}/${protectedItem}'
+// Tildel rettigheder til VM'en
+// fb879df8-f326-4884-b1cf-06f3ad86be52     Virtual Machine User Login role
+// 'a94dffa9-4bc6-495a-a91e-34a126024a84'   ID of the Entra ID group vmUsers
+
+// 1c0163c0-47e6-4577-8991-ea5c82e286e4     Virtual Machine Administrator Login role
+// '20ba48d0-9822-442e-9053-c3fca3546ead'   ID of the Entra ID group vmAdmins
+
+resource roleAssignmentVMUser 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(resourceGroup().id, vm.id, VmUserGroupId,'VirtualMachineUserLogin')
+  scope: vm
   properties: {
-    protectedItemType: 'Microsoft.Compute/virtualMachines'
-    policyId: '${recoveryServicesVault.id}/backupPolicies/${backupPolicy.name}'
-    sourceResourceId: vm.id
+    roleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions','fb879df8-f326-4884-b1cf-06f3ad86be52')  // Virtual Machine User Login
+    principalId: VmUserGroupId
+    principalType: 'Group'
   }
-} 
+}
 
+resource roleAssignmentVMAdmin 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(resourceGroup().id, vm.id, VmAdminGroupId,'VirtualMachineAdministratorLogin')
+  scope: vm
+  properties: {
+    roleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions','1c0163c0-47e6-4577-8991-ea5c82e286e4')  // Virtual Machine Administrator Login
+    principalId: VmAdminGroupId
+    principalType: 'Group'
+  }
+}
 
-// Oprettelse af managed identity som giver adgang til at læse certifikater i key vault
+// Oprettelse af managed identity som skal have adgang til at læse certifikater i key vault
 resource managedidentity001 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
-  name: 'certreader-smile-fsintegration-kv-id-d-dinel'
+  name: mgIdentity001name
   location: location
   tags: {
     costCenter: tagCostCenter
@@ -432,49 +425,96 @@ resource managedidentity001 'Microsoft.ManagedIdentity/userAssignedIdentities@20
   }
 }
 
-
-// Oprettelse af managed identity som giver adgang til at læse secrets i key vault
-resource managedidentity002 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
-  name: 'secretreader-smile-fsintegration-kv-id-d-dinel'
-  location: location
-  tags: {
-    costCenter: tagCostCenter
-    opsTeam: tagOpsTeam
-    Environment: tagEnvironment
-  }
-}
-
-
-// Oprettelse af Route Tables, relateret til 
-resource routetable001 'Microsoft.Network/routeTables@2023-11-01' = {
-  name: 'smile-fsintegration-ft-hub-d-aura'
-  location: location
-  tags: {
-    costCenter: tagCostCenter
-    opsTeam: tagOpsTeam
-    Environment: tagEnvironment
-  }
+// Give managed identity adgang til Key Vault som Key Vault Certificate User
+resource roleAssignment001 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(resourceGroup().id, keyvaultcerts.id, managedidentity001.id, 'KeyVaultCertificateUser')
+  scope: keyvaultcerts
   properties: {
-    routes: [
-      {
-        id: 'route-id-0001'
-        name: 'the-first-route'
-        properties: {
-          addressPrefix: '158.125.1.48/32'
-          hasBgpOverride: false
-          nextHopIpAddress: ''
-          nextHopType: 'Internet'
-        }
-        type: 'string'
-      }
-    ]
+    roleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions', 'db79e9a7-68ee-4b58-9aeb-b90e7c24fcba') // Key Vault Certificate User
+    principalId: managedidentity001.properties.principalId
+    principalType: 'ServicePrincipal'
+  }
+}
+
+// Give developers access to Key Vault as Key Vault Certificate User
+resource roleAssignment001b 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(resourceGroup().id, keyvaultcerts.id, keyVaultDevelopersId, 'KeyVaultCertificateUser')
+  scope: keyvaultcerts
+  properties: {
+    roleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions',roleKeyVaultCertUser)
+    principalId: keyVaultDevelopersId
+    principalType: 'Group'
+  }
+}
+
+
+
+// Oprettelse af managed identity som skal have adgang til at læse secrets i key vault
+resource managedidentity002 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
+  name: mgIdentity002name
+  location: location
+  tags: {
+    costCenter: tagCostCenter
+    opsTeam: tagOpsTeam
+    Environment: tagEnvironment
+  }
+}
+
+// Giv managed identity 002 adgang til Key Vault
+resource roleAssignment002 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(resourceGroup().id, keyvaultcerts.id, managedidentity002.id, 'KeyVaultReader')
+  scope: keyvaultcerts
+  properties: {
+    roleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions', roleKeyVaultSecretUser) // Key Vault Secrets User
+    principalId: managedidentity002.properties.principalId
+    principalType: 'ServicePrincipal'
+  }
+}
+
+// Give developers access to Key Vault as Key Vault Secrets User
+resource roleAssignment002b 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(resourceGroup().id, keyvaultcerts.id, keyVaultDevelopersId, 'KeyVaultReader')
+  scope: keyvaultcerts
+  properties: {
+    roleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions', roleKeyVaultSecretUser)
+    principalId: keyVaultDevelopersId
+    principalType: 'Group'
+  }
+}
+
+var roleContributor = 'b24988ac-6180-42a0-ab88-20f7382dd24c'
+var roleRbacAdministrator = 'f58310d9-a9f6-439a-9e8d-f62e7b41a168'
+
+
+// Give developers contributor access to resource group in parameter developersResourceGroup
+module roleAssignmentResourceGroup1 'roleAssignment.bicep' = {
+  name: guid(developersResourceGroup, keyVaultDevelopersId, 'Contributor')
+  scope: resourceGroup(developersResourceGroup)
+
+  params: {
+    roleAssignmentName: guid(resourceGroup().id, developersResourceGroup, keyVaultDevelopersId, 'Contributor')
+    targetPrincipalId: keyVaultDevelopersId
+    targetPrincipalType: 'Group'
+    targetRoleId: roleContributor
+  }
+}
+
+// Grant the developers rbac admin access t oresource group in parameter developersResourceGroup
+module roleAssignmentResourceGroup2 'roleAssignment.bicep' = {
+  name: guid(developersResourceGroup, keyVaultDevelopersId, 'RbacAdmin')
+  scope: resourceGroup(developersResourceGroup)
+  params: {
+    roleAssignmentName: guid(resourceGroup().id, developersResourceGroup, keyVaultDevelopersId, 'RbacAdmin')
+    targetPrincipalId: keyVaultDevelopersId
+    targetPrincipalType: 'Group'
+    targetRoleId: roleRbacAdministrator
   }
 }
 
 
 // Oprettele af den første private DNS zone til dev.api.private.aura.dk
 resource privDns01 'Microsoft.Network/privateDnsZones@2020-06-01' = {
-  name: 'dev.api.aura.dk'
+  name: privDns01name
   location: 'global'
   tags: {
     costCenter: tagCostCenter
@@ -485,66 +525,37 @@ resource privDns01 'Microsoft.Network/privateDnsZones@2020-06-01' = {
 }
 
 
-// Oprettelse af den anden private DNS zone til Container Registry
-resource privDns02 'Microsoft.Network/privateDnsZones@2020-06-01' = {
-  name: 'privatelink.azurecr.io'
-  location: 'global'
-  tags: {
-    costCenter: tagCostCenter
-    opsTeam: tagOpsTeam
-    Environment: tagEnvironment
-  }
-  properties: {  }
-}
+// Create the peering to the hub vnet in the hub subscription
+// remote vnet id:  /subscriptions/35bb3b04-a290-4f1a-a6c4-b86e154947f1/resourceGroups/hub-subscription/providers/Microsoft.Network/virtualNetworks/hub-platform-vnet-001
 
+var hubVnetId = '/subscriptions/35bb3b04-a290-4f1a-a6c4-b86e154947f1/resourceGroups/hub-subscription/providers/Microsoft.Network/virtualNetworks/hub-platform-vnet-001'
 
-// Oprettelse af den tredje private DNS zone til Container Instances (navngivning skal sikkert ændres ift. de reelt oprettede
-// container instances)
-resource privDns03 'Microsoft.Network/privateDnsZones@2020-06-01' = { 
-  name: 'proudmushroom-089bd104.westeurope.azcontainerapps.io'
-  location: 'global'
-  tags: {
-    costCenter: tagCostCenter
-    opsTeam: tagOpsTeam
-    Environment: tagEnvironment
-  }
-  properties: {  }
-}
-
-
-// Lavet som et module, for at kunne deploye til et andet subscription (ved oprettelse af peering02. Peering01 som oprettes, oprettes i
-// smile-fsintegration-sub-nonproduction-dinel subscription (altså det aktulle subscription))
-var hubVnetId = '/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg/providers/Microsoft.Network/virtualNetworks/hub-vnet-001-p-aura'
-
-module peering01 './smile-fsintegration-create-hub-vnet-peering.bicep' = {
-  scope: resourceGroup()
-
-  name: 'Peering-to-Hub-vnet'
-
+module peering001 'vnet-peering.bicep' = {
+  name: 'peering001'
   params: {
-    peeringName: '${virtualNetwork.name}-To-Hub'
+    peeringName: 'toHubVnet'
     vnetName: virtualNetwork.name
-    localPrefix: addressPrefix
-    remotePrefix: remotePrefix
+    localPrefix: newVnewAddressPrefix
+    remotePrefix: hubVnetAddressPrefix
     remoteVnetID: hubVnetId
   }
 }
 
 
-// Opret peering i Hub subscription
-var hubVnetSubscriptionID = '0d742875-267e-4db3-8a2b-10891ce92a5c'
-var hubVnetResourceGroup = 'platform-connectivity-rg'
-var hubVnetName = 'hub-vnet-001-p-aura'
+// DEPLOY CHANGES TO HUB-SUBSCRIPTION
 
-module peering02 './smile-fsintegration-create-hub-vnet-peering.bicep' = {
-  name: 'Peering-From-Hub-vnet-to-${virtualNetwork.name}'
-  scope: resourceGroup(hubVnetSubscriptionID, hubVnetResourceGroup)
+var hubSubscriptionId = '35bb3b04-a290-4f1a-a6c4-b86e154947f1'
+var hubResourceGroupName = 'hub-subscription'
+var hubVnetName = 'hub-platform-vnet-001'
 
+module peering002 'vnet-peering.bicep' = {
+  name: 'peering002'
+  scope: resourceGroup(hubSubscriptionId, hubResourceGroupName)
   params: {
-    peeringName: 'Hub-to-${virtualNetwork.name}'
+    peeringName: 'fromHubVnet'
     vnetName: hubVnetName
-    localPrefix: remotePrefix
-    remotePrefix: addressPrefix
+    localPrefix: hubVnetAddressPrefix
+    remotePrefix: newVnewAddressPrefix
     remoteVnetID: virtualNetwork.id
   }
 }
