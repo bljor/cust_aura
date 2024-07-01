@@ -12,14 +12,14 @@
 
 #>
 
-$newLandingZoneId = "dbdf41de-2e24-433f-9062-1087a44de89e"              // ID på subscription der skal deployes til
-$hubLandingZoneId = "0d742875-267e-4db3-8a2b-10891ce92a5c"              // ID på hub subscription (hvortil der laves peering)
+$newLandingZoneId = "dbdf41de-2e24-433f-9062-1087a44de89e"               # ID på subscription der skal deployes til
+$hubLandingZoneId = "0d742875-267e-4db3-8a2b-10891ce92a5c"               # ID på hub subscription (hvortil der laves peering)
 
-$resgroupName = "container"                                             //
-$resgroupExtension = "-rg-d-dinel"                                      // extension på resource group name (jf. navngivningsstandard)
-$resLocation = "westeurope"                                             // alt infrasturktur hos Aura/Dinel deployes til westeurope
+$resgroupName = "container"                                              # noget?
+$resgroupExtension = "-rg-d-dinel"                                       # extension på resource group name (jf. navngivningsstandard)
+$resLocation = "westeurope"                                              # alt infrasturktur hos Aura/Dinel deployes til westeurope
 # $adminPassword = -join([char[]](40..122) | Get-Random -Count 24)
-$adminPassword = "123afdshjirqerqy874#%jkadsSJAKJ"                      // administrator password til VM
+$adminPassword = "123afdshjirqerqy874#%jkadsSJAKJ"                       # administrator password til VM
 
 
 # switch to new subscription
