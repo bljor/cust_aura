@@ -36,7 +36,10 @@ az deployment group create --resource-group "$resgroupName-infrastructure$resgro
 # switch to hub subscription        (Wipe.dk - Dev Subscription, 35bb3b04-a290-4f1a-a6c4-b86e154947f1)
 az account set --subscription $hubLandingZoneId
 
+# the smile-fsintegration-platform.bicep is currently empty - contains nothing to deploy
 # az deployment group create --resource-group "hub-subscription" --template-file .\smile-fsintegration-platform.bicep
 
-
+# switch back to new subscription
 az account set --subscription $newLandingZoneId
+
+
