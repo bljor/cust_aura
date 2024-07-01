@@ -1,4 +1,8 @@
-// Modul der anvendes til at oprette vnet peering mellem landing zones
+/*
+
+  Anvendes til at oprette vnet peering mellem landing zones
+
+*/
 
 param peeringName string
 param vnetName string

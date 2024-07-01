@@ -1,3 +1,9 @@
+/*
+
+  Anvendes til at tildele RBAC roller
+
+*/
+
 @description('Navn på role assingment')
 param roleAssignmentName string
 @description('ID på den RBAC rolle der skal tildeles identiteten')

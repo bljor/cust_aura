@@ -8,6 +8,7 @@
     - app gateway skal konfigureres (men før det kan ske, skal der være deployet kode til containers)
     - der skal laves DNS records i Private DNS central landing zone (nuværende hes-sandbox) (den skal flyttes fra hes-sandbox til platform)
     - disse kan først laves når der er deployet container app kode og nødvendige hostnavne er kendt
+    - DNS konfiguration kan laves 
 
 #>
 
