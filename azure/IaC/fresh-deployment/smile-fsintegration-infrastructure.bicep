@@ -286,7 +286,7 @@ resource nic 'Microsoft.Network/networkInterfaces@2022-05-01' = {
           privateIPAllocationMethod: 'Dynamic'
           privateIPAddressVersion: 'IPv4'
           subnet: {
-            id: resourceId('Microsoft.Network/virtualNetworks/subnets', virtualNetwork.name, 'General-Purpose-subnet')
+            id: resourceId('Microsoft.Network/virtualNetworks/subnets', virtualNetwork.name, vnetSubnet1Name)
           }
         }
       }
@@ -398,7 +398,7 @@ resource roleAssignmentVMUser 'Microsoft.Authorization/roleAssignments@2022-04-0
   name: guid(resourceGroup().id, vm.id, VmUserGroupId,'VirtualMachineUserLogin')
   scope: vm
   properties: {
-    roleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions','fb879df8-f326-4884-b1cf-06f3ad86be52')  // Virtual Machine User Login
+    roleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions',VmUserGroupId)  // Virtual Machine User Login
     principalId: VmUserGroupId
     principalType: 'Group'
   }
@@ -408,7 +408,7 @@ resource roleAssignmentVMAdmin 'Microsoft.Authorization/roleAssignments@2022-04-
   name: guid(resourceGroup().id, vm.id, VmAdminGroupId,'VirtualMachineAdministratorLogin')
   scope: vm
   properties: {
-    roleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions','1c0163c0-47e6-4577-8991-ea5c82e286e4')  // Virtual Machine Administrator Login
+    roleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions',VmAdminGroupId)  // Virtual Machine Administrator Login
     principalId: VmAdminGroupId
     principalType: 'Group'
   }
@@ -446,8 +446,6 @@ resource roleAssignment001b 'Microsoft.Authorization/roleAssignments@2022-04-01'
     principalType: 'Group'
   }
 }
-
-
 
 // Oprettelse af managed identity som skal have adgang til at læse secrets i key vault
 resource managedidentity002 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
@@ -528,7 +526,7 @@ resource privDns01 'Microsoft.Network/privateDnsZones@2020-06-01' = {
 // Create the peering to the hub vnet in the hub subscription
 // remote vnet id:  /subscriptions/35bb3b04-a290-4f1a-a6c4-b86e154947f1/resourceGroups/hub-subscription/providers/Microsoft.Network/virtualNetworks/hub-platform-vnet-001
 
-var hubVnetId = '/subscriptions/35bb3b04-a290-4f1a-a6c4-b86e154947f1/resourceGroups/hub-subscription/providers/Microsoft.Network/virtualNetworks/hub-platform-vnet-001'
+var hubVnetId = '/subscriptions/0d742875-267e-4db3-8a2b-10891ce92a5c/resourceGroups/platform-connectivity-rg/providers/Microsoft.Network/virtualNetworks/hub-vnet-001-p-aura'
 
 module peering001 'vnet-peering.bicep' = {
   name: 'peering001'
@@ -544,9 +542,9 @@ module peering001 'vnet-peering.bicep' = {
 
 // DEPLOY CHANGES TO HUB-SUBSCRIPTION
 
-var hubSubscriptionId = '35bb3b04-a290-4f1a-a6c4-b86e154947f1'
-var hubResourceGroupName = 'hub-subscription'
-var hubVnetName = 'hub-platform-vnet-001'
+var hubSubscriptionId = '0d742875-267e-4db3-8a2b-10891ce92a5c'
+var hubResourceGroupName = 'platform-connectivity-rg'
+var hubVnetName = 'hub-vnet-001-p-aura'
 
 module peering002 'vnet-peering.bicep' = {
   name: 'peering002'
