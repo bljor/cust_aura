@@ -28,8 +28,12 @@ az account set --subscription $newLandingZoneId
 az group create --name "$resgroupName-infrastructure$resgroupExtension" --location $resLocation --tags Environment="Dev" CostCenter="Dinel" OpsTeam="IT-Drift"
 az group create --name "$resgroupName$resgroupExtension" --location $resLocation --tags Environment="Dev" CostCenter="Dinel" OpsTeam="IT-Drift"
 
+# 2. deploy the custom role for granting access to join subnets
+az deployment sub create --location $resLocation --name "Deploy-custom-role-AURA-Network-VirtualNetworks-Subnets-Join" --template-file "smile-custom-roles.bicep"
 
-# 2. deploy the infrastructure
+
+
+# 3. deploy the infrastructure
 az deployment group create --resource-group "$resgroupName-infrastructure$resgroupExtension" --template-file .\smile-fsintegration-infrastructure.bicep --parameters adminPassword=$adminPassword developersResourceGroup="$resgroupName$resgroupExtension"
 
 
