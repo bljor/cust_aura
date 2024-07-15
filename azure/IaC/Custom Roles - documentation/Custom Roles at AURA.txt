@@ -1,0 +1,124 @@
+Custom Roles
+
+
+
+Role name:	[AURA] Network-VirtualNetworks-Subnets-Join
+Description:	Grants access to join subnets in a virtual network
+
+Actions:								What does it do
+Microsoft.Network/virtualNetworks/subnets/join/action			Ensures that the principal with the role, has permissions to join a subnet (e.g. for Container Environment deployments)
+
+NotActions:
+(none)
+
+DataActions:
+(none)
+
+NotDataActions:
+(none)
+
+
+Reason for creation:
+Necessary in the SMILE project, where developers deploy the container environment. The developers have contributor to a separate resource group, which contains their objects - and then connects to the virtual network which is stored in another resource group (to which the developers only has reader access).
+Assigning the role to the developers, on the virtual network which they should connect to, will ensure that they are indeed allowed to connect.
+
+------
+
+Role name:	[AURA] Subscription-Owner
+Description:	Delegated role for subscription owner generated from subscription Owner role
+
+Actions:
+(none)
+
+NotActions:								What does it do
+Microsoft.Authorization/*/write						
+Microsoft.Network/vpnGateways/*						
+Microsoft.Network/expressRouteCircuits/*				
+Microsoft.Network/routeTables/write					
+Microsoft.Network/vpnSites/*						
+
+DataActions:
+(none)
+
+NotDataActions:
+(none)
+
+
+Reason for creation:
+???
+
+
+------
+
+Role name:	[AURA] Security-Operations
+Description:	Security Administrator role with a horizontal view across the entire Azure estate and the Azure Key Vault purge policy.
+
+Actions:								What does it do
+*/read									
+*/register/action							
+Microsoft.PolicyInsights/*						
+Microsoft.Authorization/policyAssignments/*				
+Microsoft.Authorization/policyDefinitions/*				
+Microsoft.Authorization/policyExemptions/*				
+Microsoft.Authorization/policySetDefinitions/*				
+Microsoft.Insights/alertRules/*						
+Microsoft.Resources/deployments/*					
+Microsoft.Security/*							
+Microsoft.Support/*							
+
+NotActions:
+(none)
+
+DataActions:
+(none)
+
+NotDataActions:
+(none)
+
+Reason for creation:
+???
+
+
+------
+
+Role name:	[AURA] Network-Management
+Description:	Platform-wide global connectivity management: virtual networks, UDRs, NSGs, NVAs, VPN, Azure ExpressRoute, and others
+
+Actions:								What does it do
+*/read									
+Microsoft.Network/*							
+Microsoft.Resources/deployments/*					
+Microsoft.Support/*							
+
+NotActions:
+(none)
+ 
+DataActions:
+(none)
+
+NotDataActions:
+(none)
+
+Reason for creation:
+???
+
+
+------
+
+Role name:	[AURA] Application-Owners
+Description:	Contributor role granted for application/operations team at resource group level
+
+Actions:								What does it do
+*									
+
+NotActions:
+Microsoft.Authorization/*/write						
+Microsoft.Network/publicIPAddresses/write				
+Microsoft.Network/virtualNetworks/write					
+Microsoft.KeyVault/locations/deletedVaults/purge/action
+
+DataActions:
+(none)
+
+NotDataActions:
+(none)
