@@ -1,5 +1,4 @@
 - fixing SCCM client issues on PC-00187
-- installing aura trusted root certificate on Mac (fra CHKI)
 - script til advisering om udløb af password i dinel.local (#INC-14595)				(Dinel domain controller: 172.21.1.14)
 - SMILE - tildele data write adgang til cosmos db for azure devops/service principal		(fra Rasmus)
 

@@ -1,0 +1,4 @@
+- SMILE - tildele data write adgang til cosmos db for azure devops/service principal		(fra Rasmus)
+- script til advisering om udløb af password i dinel.local (#INC-14595)				(Dinel domain controller: 172.21.1.14)
+- ssh og remote restart af samtlige Raspberry enheder (#INC-14556)
+- SMILE opfølgning med Steffen
