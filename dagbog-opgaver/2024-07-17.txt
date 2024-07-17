@@ -1,0 +1,3 @@
+- SMILE - tildele data write adgang til cosmos db for azure devops/service principal		(fra Rasmus)
+- ssh og remote restart af samtlige Raspberry enheder (#INC-14556)
+- SMILE opfølgning med Steffen
