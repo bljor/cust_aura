@@ -1,0 +1,4 @@
+- SMILE - fejl på service connection i DevOps				(fra Rasmus)
+- ssh og remote restart af samtlige Raspberry enheder 			(#INC-14556)		Problem med auto logoff af brugere
+- script til advisering om udløb af password i dinel.local (#INC-14595)				(Dinel domain controller: 172.21.1.14)
+

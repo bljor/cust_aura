@@ -1,0 +1,3 @@
+- SMILE - oprettelse af Grafana Workspace				(fra Rasmus)
+- ssh og remote restart af samtlige Raspberry enheder 			(#INC-14556)
+- SMILE - problemer med pipeline og push til registry			(fra Rasmus)
