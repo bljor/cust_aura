@@ -1,0 +1,46 @@
+$org_url = "https://dev.azure.com/tfsaura"
+$find_project = "SMILE Integrations"
+
+Write-Host 'Checking and validating project' $find_project
+
+# Authenticate to the necessary scopes
+# az login --scope https://graph.microsoft.com//.default
+# az login --scope https://management.core.windows.net//.default
+
+
+# Get list of projects from DevOps
+Write-Host "Retrieving list of projects for organization" $org_url "from Azure DevOps"
+$projects = az devops project list --organization $org_url | ConvertFrom-Json | select-object -expand value
+
+# Get a list of service principals from Entra ID
+Write-Host "Retrieving list of service principals from Entra ID"
+$apps = az ad app list --all | ConvertFrom-Json
+
+ForEach ($proj in $projects) {
+  If ($proj.name -eq $find_project) {
+    Write-Host 'Identifying service principals used by project' $proj.name 'with ID:' $proj.id
+    $connections = az devops service-endpoint list --organization $org_url --project $proj.id | ConvertFrom-Json
+    $spids = $connections.authorization.parameters.serviceprincipalid
+    ForEach ($sp in $spids) {
+      $apps = az ad app list --app-id $sp | ConvertFrom-Json
+      If ($apps.count -gt 1) {
+        Write-Host "Check app registration:" $app.displayname
+      } else {
+        Write-Host $apps.appid ':    ' $apps.displayname
+      }
+    }
+  }
+}
+
+
+# az ad app list --display-name $app.displayname
+
+
+# For at bruge az ad app list --all, så skal der først logges på med:
+# az login --scope https://graph.microsoft.com//.default
+# $apps = az ad app list --all
+
+
+# foreach ($app in $apps) {
+#   write-host $app.appid ":" $app.displayname
+# }
