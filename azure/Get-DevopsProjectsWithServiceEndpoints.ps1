@@ -5,6 +5,7 @@
 $projects = az devops project list --organization https://dev.azure.com/tfsaura | convertfrom-json | select-object -expand value
 
 foreach ($proj in $projects) {
+  write-host "Retrieving service-endpoints from project" $proj.name
   $connections = az devops service-endpoint list --organization https://dev.azure.com/tfsaura --project $proj.id | convertfrom-json
   $spids = $spids + $connections.authorization.parameters.serviceprincipalid
 }
@@ -12,13 +13,17 @@ foreach ($proj in $projects) {
 
 # Get all app registrations from Entra ID
 $all_apps = az ad app list --all | convertfrom-json | select appid,displayname
+write-host "Retrieved" $all_apps.count "App Registrations from Entra ID - of these" ($all_apps | Sort-Object -Property displayName -Unique).count "are unique"
 
+write-host "Identifying App Registrations that are used in DevOps and exists multiple times in Entra ID under the same name"
 foreach ($app in $all_apps) {
-  $appid = $app.id
+  $appid = $app.appid
   if ($spids -contains $appid) {
-    write-host $app.displayname 'is used by DevOps'
-  } else {
-    write-host $app.displayname 'NOT USED BY DEVOPS'
+    $count_apps = (az ad app list --display-name $app.displayname | convertfrom-json).count
+    if ($count_apps -gt 1) {
+      write-host $app.displayname "is used by DevOps. Found" $count_apps "copies of the App Registration in Entra ID"
+#      write-host $app.displayname "der findes" $count_apps "registrerede apps i Entra ID med dette navn"
+    }
   }
 }
 
