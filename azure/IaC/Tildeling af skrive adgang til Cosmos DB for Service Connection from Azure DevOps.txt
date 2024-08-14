@@ -1,0 +1,41 @@
+Tildeling af skrive adgang til Cosmos Db fra Azure DevOps Pipeline
+
+
+
+hvad skal man vide først?
+
+- DevOps projekt navn
+- CosmosDb ressource navn
+- Resource group navn (hvor cosmosdb ressourcen ligger)
+- subscription kan findes ud fra ressource-group / cosmosdb ressourcen
+
+
+
+
+Den principal der skal gives adgang til (hvis det er en Service Principal der anvendes fra DevOps), skal være 
+Object ID på den enterprise application som hører til "service principal".
+
+E.g.
+
+Service Principal						= bee12ba6-6f8d-42d3-a845-2332cf4a914b
+så skal du bruge Enterprise Application med Object ID		= 6cd076c3-e29d-438b-99f8-75934bc70db3
+
+- beskriv hvordan du kommer fra den første til den næste... Det er den første du kan finde i Azure DevOps.
+
+
+
+
+
+az ad sp list --filter "id eq '6cd076c3-e29d-438b-99f8-75934bc70db3'" | convertfrom-json | select id,displayname,appid
+
+
+
+
+Pseudo kode:
+
+Cosmos Db subscription
+Cosmos Db account name
+Cosmos Db resource group name
+Azure DevOps Project name
+
+

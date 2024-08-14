@@ -1,0 +1,72 @@
+# Definer hvilket objekt du skal have fat i
+# Den Service Principal som anvendes til service connection i Azure DevOps skal have tildelt rettigheder på DevOps databasen, så afhængigt af om service connection
+# i DevOps er konfigureret med en Service Principal eller en Managed Identity - så er det dén der skal have adgang tildelt.
+
+
+$devops_baseurl = "https://dev.azure.com/tfsaura"
+$devops_project = "SMILE Integrations"
+$subscription = "smile-fsintegration-sub-nonproduction-dinel"
+$rg = "fsintegration-rg-d-dinel"
+$cosmosdb = "smile-fs-int-cosmos-d-dinel"
+$role_name = "Cosmos DB Built-in Data Contributor"
+# $principal_type = "spn" or "mid"		# skal der gives adgang til enten Service Principal eller til Managed Identity
+$principal_id = ""
+
+
+# Login til de rette scopes
+az login --scope https://management.core.windows.net//.default
+az login --scope https://graph.microsoft.com//.default
+
+
+# List roles der findes på Cosmos Db elementet
+$role_id = az cosmosdb sql role definition list --account-name $cosmosdb --resource-group $rg | convertfrom-json | where-object {$_.roleName -eq $role_name} | select id
+
+
+# Skal gerne returnere følgende roller:
+# Cosmos DB Built-in Data Reader
+# Cosmos DB Built-in Data Contributor
+# det er den sidste der skal bruges, for at Service Principal får rettigheder til at skrive til dokumenter i databasen.
+
+$project = az devops project show -p $devops_project | convertfrom-json
+
+$connections = az devops service-endpoint list --organization $devops_baseurl --project $project.id | ConvertFrom-Json
+
+foreach ($conn in $connections) {
+  if ($conn.name -eq $subscription) {
+    $principal_id = $conn.authorization.parameters.serviceprincipalid
+    $ad_sp = az ad sp show --id $principal_id | convertfrom-json
+    Write-Host "Service Connection:" $conn.name "is using Service Principal" $principal_id "   " $ad_sp.displayname
+  }
+}
+
+
+
+# az cosmosdb sql role assignment create --account-name $ad_sp.displayname --resource-group $rg --scope "/" --principal-id $principal_id --role-definition-id $role_id
+
+
+
+$role_assignments = az cosmosdb sql role assignment list --account-name $cosmosdb --resource-group $rg | convertfrom-json
+
+foreach ($ra in $role_assignments) {
+  $filter = "appid eq '" + $ra.principalid + "'"
+  $splist = az ad sp list --filter $filter
+  if ($splist.count -gt 0) {
+    $sp_info = az ad sp show --id $ra.principalId | convertfrom-json
+    foreach ($inf in $sp_info) {
+      write-host "AppId: " $inf.displayname $ra.displayname
+    }
+  }
+  $filter = "id eq '" + $ra.principalid + "'"
+  $splist = az ad user list --filter $filter
+  if ($splist.count -gt 0) {
+    $sp_info = az ad user show --id $ra.principalId | convertfrom-json
+    foreach ($inf in $sp_info) {
+      write-host "User: " $inf.displayname $ra.displayname
+    }
+  }
+
+  $sp_info = az ad group show --group $ra.principalid | convertfrom-json
+  foreach ($inf in $sp_info) {
+    write-host "Group" $inf.displayname $ra.displayname
+  }
+}

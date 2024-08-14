@@ -18,9 +18,11 @@ $apps = az ad app list --all | ConvertFrom-Json
 
 ForEach ($proj in $projects) {
   If ($proj.name -eq $find_project) {
+    Write-Host "Project ID" $proj.id
     Write-Host 'Identifying service principals used by project' $proj.name 'with ID:' $proj.id
     $connections = az devops service-endpoint list --organization $org_url --project $proj.id | ConvertFrom-Json
     $spids = $connections.authorization.parameters.serviceprincipalid
+    Write-Host "Connection name: " $connections.authorization.parameters.name
     ForEach ($sp in $spids) {
       $apps = az ad app list --app-id $sp | ConvertFrom-Json
       If ($apps.count -gt 1) {

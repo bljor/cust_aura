@@ -1,0 +1,31 @@
+Etablere nyt miljø (test / pre-prod / prod)
+
+- skal der oprettes nyt subscription?
+- opret ny landing zone
+- allokering af IP scopes (hvis ikke de er allokeret ved oprettelse af første miljø)
+- identifikation af tidligere allokeret IP scope (fra Azure DevOps Wiki)
+- oprette ressource grupper (infrastruktur + udvikleres)
+- 
+
+
+
+
+
+
+
+
+- merge bicep kode (udviklernes og infrastruktur)
+
+
+
+Udviklerne opretter følgende ressourcer:
+- Container registry
+- Container Apps Environment
+- Container Apps (multiple)
+- Service Bus Namespace
+- Azure Cosmos DB account
+
+
+
+Managed Grafana - oprettes indtil videre, hvis der så centralt laves en Enterprise Grafana - så migreres
+dashboards til Enterprise i stedet. Og disse managed grafana enheder kan nedlægges.
