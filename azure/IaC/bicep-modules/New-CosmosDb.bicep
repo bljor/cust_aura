@@ -8,6 +8,11 @@ Service Connection (der anvendes til deployment)
 Der skulle være nogle muligheder:
 https://stackoverflow.com/questions/76515887/how-to-programmatically-get-current-azure-devops-pipeline-object-id-in-order-to
 
+
+Hvis Graph Extension skal bruges i Bicep - så husk, at property uniqueName skal udfyldes på grupper i forvejen.
+
+
+
 */
 
 
