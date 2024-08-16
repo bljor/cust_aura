@@ -1,9 +1,26 @@
+/*
+
+Opret Cosmos Db ressource
+Tildel den indbyggede 'Azure Cosmos DB Built-in Data Contributor' rolle til den principal der er oplyst. Principal skal være
+Object ID på den Enterprise Application som er relateret til den service principal, der er konfigureret i Azure DevOps
+Service Connection (der anvendes til deployment)
+
+Der skulle være nogle muligheder:
+https://stackoverflow.com/questions/76515887/how-to-programmatically-get-current-azure-devops-pipeline-object-id-in-order-to
+
+*/
+
+
+var roleCosmosDataContributorId = ''       // ID of the Cosmos Db Build-in Data Contributor role
+var serviceConnectionSpid = 'a5125e3f-94dd-478d-907f-1c35d0b8bb12'
+
+
 @description('Specifies the name of the Cosmos DB account.')
 param databaseAccounts_cosmos_name string
  
 @description('Specifies the location for all resources.')
 param location string = resourceGroup().location // Location of the resources
- 
+
 // Parameters for resource tagging
 @description('Cost center tag')
 param TagCostCenter string = 'DinEl'
@@ -93,5 +110,16 @@ resource databaseAccounts_smile_cosmos_d_dinel_name_BuildInfo_Events 'Microsoft.
         kind: 'Hash'
       }
     }
+  }
+}
+
+
+// Grant "Azure Cosmos DB Built-in Data Contributor" role to the enterprise app references in the service connection in Azure DevOps
+resource roleAssignment01 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid('Role Assignment - let developers access cosmosdb - (Role: Build-in Data Contributor)')
+  properties: {
+    roleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions', roleCosmosDataContributorId)
+    principalId: serviceConnectionSpid
+    principalType: 'ServicePrincipal'
   }
 }
