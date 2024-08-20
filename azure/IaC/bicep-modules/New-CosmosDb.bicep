@@ -18,18 +18,8 @@ Hvis Graph Extension skal bruges i Bicep - så husk, at property uniqueName skal
 @description('Specifies the name of the Cosmos DB account.')
 //param databaseAccounts_cosmos_name string
 var databaseAccounts_cosmos_name = 'extbjo-cosmos-d-dinel'
-
-// subscription ID = 692a57dc-fed3-4ff6-a5d7-7ed5a11a2240
-
-//   /subscriptions/692a57dc-fed3-4ff6-a5d7-7ed5a11a2240/resourceGroups/bjo-sample-deploy-rg-d-dinel/providers/Microsoft.DocumentDB/databaseAccounts/extbjo-cosmos-d-dinel/sqlRoleDefinitions/00000000-0000-0000-0000-000000000002
-//var roleCosmosDataContributorId = '/subscriptions/692a57dc-fed3-4ff6-a5d7-7ed5a11a2240/resourceGroups/bjo-sample-deploy-rg-d-dinel/providers/Microsoft.DocumentDB/databaseAccounts/extbjo-cosmos-d-dinel/sqlRoleDefinitions/00000000-0000-0000-0000-000000000002'
-//var roleCosmosDataContributorId = '/subscriptions/692a57dc-fed3-4ff6-a5d7-7ed5a11a2240/resourceGroups/bjo-sample-deploy-rg-d-dinel/providers/Microsoft.DocumentDB/databaseAccounts/extbjo-cosmos-d-dinel/sqlRoleDefinitions/00000000-0000-0000-0000-000000000002'
-//var roleCosmosDataContributorId = '/subscriptions/${subscription().id}/resourceGroups/${resourceGroup().name}/providers/Microsoft.DocumentDB/databaseAccounts/${databaseAccounts_cosmos_name}/sqlRoleDefinitions/00000000-0000-0000-0000-000000000002'       // ID of the Cosmos Db Build-in Data Contributor role
-//var roleCosmosDataContributorId = '00000000-0000-0000-0000-000000000002'
-
-var roleCosmosDataContributorId = '/subscriptions/692a57dc-fed3-4ff6-a5d7-7ed5a11a2240/resourceGroups/bjo-sample-deploy-rg-d-dinel/providers/Microsoft.DocumentDB/databaseAccounts/extbjo-cosmos-d-dinel/sqlRoleDefinitions/00000000-0000-0000-0000-000000000002'
-
 var serviceConnectionSpid = 'a5125e3f-94dd-478d-907f-1c35d0b8bb12'    // The Object ID of the Enterprise Application matching the Service Principal used by Azure DevOps Service Connection
+var roleCosmosDataContributor = '/subscriptions/692a57dc-fed3-4ff6-a5d7-7ed5a11a2240/resourceGroups/bjo-sample-deploy-rg-d-dinel/providers/Microsoft.DocumentDB/databaseAccounts/extbjo-cosmos-d-dinel/sqlRoleDefinitions/00000000-0000-0000-0000-000000000002'
 
  
 @description('Specifies the location for all resources.')
@@ -128,6 +118,9 @@ resource databaseAccounts_smile_cosmos_d_dinel_name_BuildInfo_Events 'Microsoft.
 }
 
 /*
+
+// Retrieve the role definition ID of the "Cosmos DB Build-in Data Contributor" role
+// can it be done?
 resource roleDefinition 'Microsoft.DocumentDB/databaseAccounts/sqlRoleDefinitions@2024-05-15' existing = {
   name: 'Cosmos DB Built-in Data Contributor'
   properties: {}
@@ -141,9 +134,8 @@ resource roleAssignment01 'Microsoft.DocumentDB/databaseAccounts/sqlRoleAssignme
   parent: databaseAccounts_resource
 
   properties: {
-    principalId: 'a5125e3f-94dd-478d-907f-1c35d0b8bb12'
-    roleDefinitionId: '/subscriptions/692a57dc-fed3-4ff6-a5d7-7ed5a11a2240/resourceGroups/bjo-sample-deploy-rg-d-dinel/providers/Microsoft.DocumentDB/databaseAccounts/extbjo-cosmos-d-dinel/sqlRoleDefinitions/00000000-0000-0000-0000-000000000002'
+    principalId: serviceConnectionSpid
+    roleDefinitionId: roleCosmosDataContributor
     scope: databaseAccounts_resource.id
   }
-
 }
