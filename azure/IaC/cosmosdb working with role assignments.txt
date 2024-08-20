@@ -1,0 +1,8 @@
+$cosmos_account = "extbjo-cosmos-d-dinel"
+$rg = "bjo-sample-deploy-rg-d-dinel"
+
+az cosmosdb sql role assignment list --account-name $cosmos_account --resource-group $rg
+az cosmosdb sql role assignment create --account-name $cosmos_account --resource-group $rg --principal-id a5125e3f-94dd-478d-907f-1c35d0b8bb12 --scope "/"
+
+az cosmosdb sql role definition list --account-name $cosmos_account --resource-group $rg
+

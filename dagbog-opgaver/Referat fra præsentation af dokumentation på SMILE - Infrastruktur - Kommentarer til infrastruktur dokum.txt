@@ -1,0 +1,117 @@
+Kommentarer til infrastruktur dokumentation - SMILE miljøer
+
+
+Målgruppen for dokumentationen er Infrastruktur / drift hos AURA.
+
+
+Ressource grupper:
+- tilføj beskrivelse af den der oprettes af Load Balanceren fra Container App miljøet
+
+
+Rettigheder:
+- ingen kommentarer indledningsvist
+
+
+Overall LandingZone Security Groups:
+- ingen kommentarer indledningsvist
+
+
+Virtual Network:
+- skriv ind om hub vnet at det svarer til Platform (så det er mere tydeligt).
+- generelt er der kendskab til at det er lavet som hub / spoke miljø
+
+
+Private DNS zones:
+- tilføj beskrivelse af den ekstra zone, der kommer ifm. skift mellem miljøer
+
+
+Key Vault
+- skal der kun findes en central, eller skal der oprettes flere? Hvem skal afklare?
+
+
+Managed Identities:
+- ingen kommentarer
+
+
+Cosmos Db
+- der findes også en anden Cosmos Db i udviklingen, denne er kun til diverse logning (som allerede beskrevet i dokumentationen)
+
+
+Managed Grafana
+- ingen kommentarer
+
+
+Virtual Machines:
+- tilføj kommentar om at de kun kan bruges af én bruger af gangen
+- der har været udfordringer med at "interne AURA brugere" ikke har kunnet tilgå dem,
+  det skal vi følge op på om det er løst eller ej.
+
+
+Site-to-Site VPN Connections (S2S)
+- Vi anvender source NAT fordi der er lidt overlap af IP scopes i begge ender
+- der skal tilføjes flere detaljer, så de sidste detaljer der mangler
+- der skal laves noget beskrivelser af hvilke former for kryptering der er lavet til
+  de forskellige leverandører (L+G, Kamstrup)… Og det skal afklares med JJ hvor sådann
+  oplysninger skal gemmes.
+
+
+Azure Firewall
+- ingen kommentarer
+
+
+Application Gateway
+- ingen kommentarer
+
+
+
+
+
+Generelle kommentarer:
+- 
+
+
+Frederik:
+- det vigtige for mig er, at det her dokument skal skrives på en måde, så det kan afleveres i IT-driften, og de
+  så kan tage over når BJO / STH ikke er her.
+  Jacob skal sige OK til, at dokumentationen er som det skal være.
+- Jacob & Co, skal tage et internt review med IT-Drift
+
+- savner en overordnet guide for - hvordan sætter man det i gang. Hvor starter man, hvis man står med en helt
+  ren Azure - hvordan kommer jeg så i gang. En manual.
+
+- der skal også stå en proces for vedligeholdelse af det her. Hvordan sikrer vi os, at dokumentationen bliver
+  opdateret hvis der sker ændringer "nogen steder"?
+
+- Opdeling af "non-production" og "produktionsmiljøer", skulle man opdele det mere læsbart.
+
+- start dokumentet med en indledning fremfor en kompliceret tegning. Her kunne der også være en forklaring
+  til hvorfor strukturen er som den er.
+
+
+Rasmus:
+- i forlængelse af Frederiks feedback
+
+1. hvad gør man hvis tingene ændrer sig, eks. hvis en IP adresse ændrer sig hos Kamstrup, hvor skal jeg så ind og
+opdatere det? IP adresserne er bare ét eksempel. Måske vil det ske, at man kun får ændret IP adressen ét sted.
+
+2. De certifikater der ligger i Key Vault - er der stemplet en udløbsdato på dem, så den selv adviserer?
+
+
+STH: Opdater dokumentationen med fiktive IP adresser, og vedligehold så IP adresser i Bicep koden.
+
+2. Link / referer til Bicep koden derfra hvor der det er relevant i dokumentationen.
+
+
+
+
+Dennis:
+- det meste dokumentation er på plads, måske strukturen kan optimeres.
+- et "bootstrap" dokument
+- hvor er faldgrupperne
+- hvor kan vi se fejlene og hvilke fejl skal vi være opmærksomme på
+
+
+Jacob:
+- folkene fra driften, skal også kigge på dokumentationen og "bekræfte" at de kan bruge det.
+- 
+
