@@ -1,0 +1,26 @@
+smile-hes-int-cosmos-d-dinel
+
+smile-hesintegration-infrastructure-rg-d-dinel
+
+
+
+SP object ID:	a5125e3f-94dd-478d-907f-1c35d0b8bb12
+
+00000000-0000-0000-0000-000000000002
+
+
+
+
+
+
+Developer gruppens ID:		bc7e4dc5-b9a4-4948-be41-03c8176eaebf
+
+AZ-LANDINGZONE-DA-U-CONTRIBUTOR-smile-hesintegration-sub-nonproduction-dinel-development
+
+
+
+
+
+
+
+Service connection:	smile-hesintegration-dinel-development

@@ -115,3 +115,13 @@ Jacob:
 - folkene fra driften, skal også kigge på dokumentationen og "bekræfte" at de kan bruge det.
 - 
 
+
+BJO / STH:
+- vi skal afklare med Infrastruktur hvordan vi skal håndtere løbende opdatering / vedligehold af virtuelle maskiner
+-- der findes VM'er til udviklerne, som de bruger til test af kommunikation.
+-- hvis der skal installeres software på dem, skal det så ske via Intune?
+-- hvordan sikrer vi løbende refresh af image? Maskiner deployes med miljøet, hvis ikke miljøet nedlægges jævnligt - så bliver
+   image ikke opdateret (der kan selvfølgelig køre Windows Updates på - som enhver anden klient), men man kunne også
+   implementere en form for "hvis ikke en VM har været tændt i eks. 7 dage, så slettes den - og kan deployes igen, når
+   der er behov for den.
+
