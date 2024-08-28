@@ -17,9 +17,13 @@ Hvis Graph Extension skal bruges i Bicep - så husk, at property uniqueName skal
 
 @description('Specifies the name of the Cosmos DB account.')
 //param databaseAccounts_cosmos_name string
-var databaseAccounts_cosmos_name = 'extbjo-cosmos-d-dinel'
+var databaseAccounts_cosmos_name = 'extbjo01-cosmos-d-dinel'
 var serviceConnectionSpid = 'a5125e3f-94dd-478d-907f-1c35d0b8bb12'    // The Object ID of the Enterprise Application matching the Service Principal used by Azure DevOps Service Connection
-var roleCosmosDataContributor = '/subscriptions/692a57dc-fed3-4ff6-a5d7-7ed5a11a2240/resourceGroups/bjo-sample-deploy-rg-d-dinel/providers/Microsoft.DocumentDB/databaseAccounts/extbjo-cosmos-d-dinel/sqlRoleDefinitions/00000000-0000-0000-0000-000000000002'
+var roleCosmosDataContributor = '/subscriptions/692a57dc-fed3-4ff6-a5d7-7ed5a11a2240/resourceGroups/bjo-sample-rg-d-dinel/providers/Microsoft.DocumentDB/databaseAccounts/extbjo-cosmos-d-dinel/sqlRoleDefinitions/00000000-0000-0000-0000-000000000002'
+
+///subscriptions/3336ebfa-a1f5-4920-a951-78ad5d6b73ec/resourceGroups/bjo-sample-rg-d-dinel/providers/Microsoft.DocumentDB/databaseAccounts/extbjo-cosmos-t-dinel/
+///subscriptions/3336ebfa-a1f5-4920-a951-78ad5d6b73ec/resourceGroups/bjo-sample-rg-d-dinel/providers/Microsoft.DocumentDB/databaseAccounts/extbjo-cosmos-t-dinel/sqlRoleDefinitions/00000000-0000-0000-0000-000000000002
+//var roleCosmosDataContributor = '/subscriptions/${subscription().subscriptionId}/resourceGroups/${resourceGroup().name}/providers/Microsoft.DocumentDB/databaseAccounts/${databaseAccounts_cosmos_name}/sqlRoleDefinitions/00000000-0000-0000-0000-000000000002}'
 
  
 @description('Specifies the location for all resources.')
