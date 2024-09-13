@@ -1,0 +1,75 @@
+@description('Specifies the name of the Splitter container app.')
+param SplitterContainerApps_name string
+ 
+@description('Specifies the name of the blobServices container.')
+param Container_Name string
+ 
+@description('Specifies the name of the Storage Account')
+param StorageAccount_name string
+ 
+@description('Specifies the name of heartbeat Cosmos db.')
+param HeartbeatDatabaseAccounts_cosmos_name string
+ 
+@description('Specifies the resource group name where the heartbeat Cosmos DB account resides.')
+param HeartbeaDatabaseAccountstResourceGroupName string
+ 
+@description('Location for the resources, defaulting to the resource group\'s location')
+param location string = resourceGroup().location
+ 
+@description('Specifies the name of the managed environment for the container app')
+param managedEnvironments_name string
+ 
+@description('Specifies the name of the ServiceBus')
+param ServiceBus_name string
+ 
+// Module for setting up Splitter container apps
+module SplitterContainerApps './nested_SplitterContainerApps.bicep' = {
+  name: 'SplitterContainerApps'
+  params: {
+    SplitterContainerApps_name: SplitterContainerApps_name // Container app name
+    location: location // Location parameter
+    managedEnvironments_name: managedEnvironments_name // Name of managed environments
+  }
+}
+ 
+//Assigne Splitter StorageBlobData write role
+module SplitterStorageBlobDatanWrite  './../../StorageBlobData/nested_StorageBlobRoleAssignment.bicep' = {
+  name: 'StorageBlobData-role-assignment-write-Splitter'
+  params: {
+    Container_Name: Container_Name
+    StorageAccount_name: StorageAccount_name
+    principalId: SplitterContainerApps.outputs.id_managed_identitySplitterContainerApp
+    roleId: 'ba92f5b4-2d11-453d-a403-e96b0029c9fe'
+  }
+  dependsOn: [
+    SplitterContainerApps
+  ]
+}
+ 
+// module for role assignment to servicesbus, Data sender 
+module serviceBusRoleAssignmentDataSender './../../ServiceBus/nested_ServicebusRoleAssignment.bicep' = {
+  name: 'Servicebus-role-assignment-DataSender-Spiltter'
+  params: {
+    serviceBusName: ServiceBus_name
+    roleId: '69a216fc-b8fb-44d8-bc22-1f3c2cd27a39' // Azure Service Bus Data sender    
+    principalId: SplitterContainerApps.outputs.id_managed_identitySplitterContainerApp
+  }
+  dependsOn: [
+    SplitterContainerApps
+  ]
+}
+ 
+ 
+// Assign Heartbeat Cosmos DB Built-in Data Reader role
+module CosmosRoleAssignmentHeartbeatSplitter  './../../Cosmos/nested_CosmosRoleAssignment.bicep' = {
+  name: 'Cosmos-role-assignment-HeartbeatSplitter'
+  scope: resourceGroup(HeartbeaDatabaseAccountstResourceGroupName)
+  params: {
+    databaseAccounts_cosmos_name: HeartbeatDatabaseAccounts_cosmos_name
+    roleName: '00000000-0000-0000-0000-000000000001' // Cosmos DB Built in Data Reader RoleId  
+    principalId: SplitterContainerApps.outputs.id_managed_identitySplitterContainerApp
+  }
+  dependsOn: [
+    serviceBusRoleAssignmentDataSender
+  ]
+}
