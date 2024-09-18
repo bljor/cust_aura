@@ -1,0 +1,80 @@
+DEPLOYMENT OF BRAND NEW ENVIRONMENT FOR SMILE
+
+
+PREREQUISITES
+
+- Azure CLI
+Azure CLI is the command line interface to Azure, you can read instructions on how to download it (and download the client) from this link.
+
+
+- Landing zone and subcriptions
+  - Calculate IP scopes for the landing zone  
+
+  - Create the landing zone (subscription name: smile-sandbox-sub-nonproduction-dinel)
+
+  - Ensure that necessary custom roles on the subscription:
+    - [AURA] Network-VirtualNetwork-Subnet-Join
+    - [AURA] Manage Private DNS A-records
+
+  - Create resource groups
+    - sandbox-infrastructure-rg-d-dinel ??
+    - sandbox-rg-d-dinel ??
+
+- Ensure you have access to Azure tenant (owner access to subscription)
+- Ensure you have access to Azure DevOps
+
+- Create a Service Connection from Azure DevOps to the smile-sandbox-sub-nonproduction-dinel subscription
+
+- Activate the PIM role "Application Administrator"
+
+- Create necessary groups in Entra ID
+  - AZ-LANDINGZONE-DA-U-RBAC-Administrator-smile-sandbox-sub-nonproduction-dinel-dev ??
+  - AZ-LANDINGZONE-DA-U-CONTRIBUTOR-smile-sandbox-sub-nonproduction-dinel-dev ??
+
+- Add necessary members to the groups (e.g. Developers)
+
+
+
+- Download source code from Azure DevOps
+
+- Update variable names etc. in Bicep source file
+  - vmUserGroupId = (should correspond to the ID of the group named AZ-LANDINGZONE-DA-U-RBAC-Administrator-smile-sandbox-sub-nonproduction-dinel-dev)
+  - keyVaultDeveloperGroupId = (should correspond to the ID of the group named AZ-LANDINGZONE-DA-U-CONTRIBUTOR-smile-sandbox-sub-nonproduction-dinel-dev)
+  - serviceConnectionSpid = should correspond to the Object ID of the Enterprise App created for the DevOps service connection
+
+- Start the deployment process
+  - az login
+  - az account set --subscription smile-sandbox-sub-nonproduction-dinel
+  - az deployment group create --resource-group sandbox-infrastructure-rg-d-dinel --template-file .\smile-sandbox-infrastructure.bicep
+
+- Create App Registration for authenticating to services
+  - Create-AppRegistration.ps1 -NewAppName "smile-sandbox-api-authentication" -NewAppDescription "App registration used to authenticate to services in the sandbox" -RedirectUris https://localhost:44368/signin-oidc,https://mdas.sandbox.aura.dk:44369/signin-oidc -KeyVaultName "smile-sbox-001-kv-d-dinel"
+
+- Create Service Connection from Azure DevOps to Container Registry
+  - Service connection type: Docker Registry (Azure Container Registry)
+  - Authentication Type = Service principal
+  - Subscription = smile-sandbox-sub-nonproduction-dinel
+  - Container Registry = smilesandboxcrddinel
+  - Service connection name = smile-sandbox-sub-nonproduction-docker
+  - Description = "Created + d.d. + "smile-sandbox-api-authentication"
+  - Grant access permissions to all pipelines
+
+
+- Populate the Key Vault
+  - secrets from the template key vault
+  - api keys from the template key vault
+  - certificates from the template key vault
+
+- Logon to the Virtual Machine and ensure that it can connect to SMILE
+
+
+
+This service connection is using a App Registration / Enterprise Application to connect to Azure. You need the object ID of the Enterprise Application, so that this service principal can be granted access to the Container Registry that is being created during deployment.
+
+This principal should also be granted the “Cosmos Db Build-in Data Contributor” role to the Cosmos Db account being created during the deployment. The Principal ID should be updated in the Bicep file before deploying.
+
+
+
+
+
+Check op på om der tildeles alle nødvendige rettigheder til brugere og systemer på de Key Vaults der oprettes - der var én mangel på seneste deployment.

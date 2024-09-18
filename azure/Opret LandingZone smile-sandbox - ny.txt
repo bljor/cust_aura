@@ -1,0 +1,287 @@
+1. OPRET NYT SUBSCRIPTION
+
+az login --tenant 3edc1f09-0806-41b0-af0b-50944799113a
+
+
+.\Subscription-CreateNew.ps1 -landingzonename smile-sandbox -environmenttype nonproduction -organization dinel
+
+Creates subscription 'smile-sandbox-sub-nonproduction-dinel'
+
+StatusCode        : 202
+StatusDescription : Accepted
+Content           : {}
+RawContent        : HTTP/1.1 202 Accepted
+                    Date: Wed, 18 Sep 2024 05:06:32 GMT
+                    Connection: keep-alive
+                    Server: Microsoft-IIS/10.0
+                    Request-Context: appId=cid-v1:da6c42b8-9815-48cb-a61e-7d3ff4b79106
+                    X-Correlation-ID: 54…
+Headers           : {[Date, System.String[]], [Connection, System.String[]], [Server, System.String[]], [Request-Contex
+                    t, System.String[]]…}
+RawContentLength  : 0
+RelationLink      : {}
+
+Subscription-CreateNew.ps1: The term '.\Subscription-EnsureExists.ps1' is not recognized as a name of a cmdlet, function, script file, or executable program.
+Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+
+
+Subscription-EnsureExists.ps1 findes ikke.
+
+Nyt subscription er oprettet i Azure.
+
+2. TILFØJ RESOURCE PROVIDERS
+
+Check for nødvendige Resource Providers.
+
+Følgende mangler:
+- Microsoft.Advisor
+- Microsoft.App
+- Microsoft.Capacity
+- Microsoft.ChangeAnalysis
+- Microsoft.Compute
+- Microsoft.ContainerInstance
+- Microsoft.GuestConfiguration
+- Microsoft.MarketplaceNotifications
+- Microsoft.Network
+- Microsoft.OperationalInsights
+- Microsoft.PolicyInsights
+- Microsoft.RecoveryServices
+- Microsoft.ResourceHealth
+- Microsoft.Security
+- Microsoft.insights
+
+
+Tilrette Subscription-Configure.ps1 og tilføjet dem der mangler (ovenstående).
+
+Kørt Subscription-Configure.ps1 scriptet - og afventer registrering
+.\Subscription-Configure.ps1 -subscriptionName smile-sandbox-sub-nonproduction-dinel
+
+
+3. FLYT SUBSCRIPTION TIL MANAGEMENT GROUP
+
+Gøres med scriptet MoveSubscription.ps1
+
+.\MoveSubscription.ps1
+-subscriptionName smile-sandbox-sub-nonproduction-dinel
+-environmentType non-prod
+-organization dinel
+-onlineOrCorporate corp
+
+Done...
+Moving 'smile-sandbox-sub-nonproduction-dinel' to 'dinel-corp-non-prod'
+{
+  "displayName": "smile-sandbox-sub-nonproduction-dinel",
+  "id": "/providers/Microsoft.Management/managementGroups/dinel-corp-non-prod/subscriptions/5be01197-f29d-4320-a577-01cc8a9184fb",
+  "name": "5be01197-f29d-4320-a577-01cc8a9184fb",
+  "parent": {
+    "id": "/providers/Microsoft.Management/managementGroups/dinel-corp-non-prod"
+  },
+  "state": "Active",
+  "tenant": "3edc1f09-0806-41b0-af0b-50944799113a",
+  "type": "Microsoft.Management/managementGroups/subscriptions"
+}
+
+
+
+4. OPRET SIKKERHEDSGRUPPER
+
+Gøres med scriptet SecurityGroups-CreateNew.ps1, men der mangler oprettelse af en nogle grupper:
+- AZ-LANDINGZONE-DA-U-RBAC-Administrator-smile-sandbox-sub-nonprod-dinel
+
+Tilføjet gruppen til scriptet (variablen $rbacAdministratorGroup).
+
+Tilrettet scriptet SecurityGroups-EnsureExists.ps1, så det accepterer parameteren $rbacAdministratorGroup, samt at den kaldes med EnsureGroupExists.
+
+
+Kørt scriptet:
+.\SecurityGroups-CreateNew.ps1 -landingzoneName smile-sandbox -subscription smile-sandbox-sub-nonproduction-dinel -environment development
+
+(script kørt flere gange, for at den ikke fejler pga. timeout og ting der endnu ikke er registreret rigtigt).
+
+Done.
+
+
+5. OPRET RESOURCE GROUPS
+
+$resgroupName = "smile-sandbox"
+$resgroupExtension = "-rg-d-dinel"
+$resLocation = "westeurope"
+
+az group create --name "$resgroupName-infrastructure$resgroupExtension" --location $resLocation --tags Environment="Dev" CostCenter="Dinel" OpsTeam="IT-Drift"
+{
+  "id": "/subscriptions/5be01197-f29d-4320-a577-01cc8a9184fb/resourceGroups/smile-sandbox-infrastructure-rg-d-dinel",
+  "location": "westeurope",
+  "managedBy": null,
+  "name": "smile-sandbox-infrastructure-rg-d-dinel",
+  "properties": {
+    "provisioningState": "Succeeded"
+  },
+  "tags": {
+    "CostCenter": "Dinel",
+    "Environment": "Dev",
+    "OpsTeam": "IT-Drift"
+  },
+  "type": "Microsoft.Resources/resourceGroups"
+}
+
+az group create --name "$resgroupName$resgroupExtension" --location $resLocation --tags Environment="Dev" CostCenter="Dinel" OpsTeam="IT-Drift"
+{
+  "id": "/subscriptions/5be01197-f29d-4320-a577-01cc8a9184fb/resourceGroups/smile-sandbox-rg-d-dinel",
+  "location": "westeurope",
+  "managedBy": null,
+  "name": "smile-sandbox-rg-d-dinel",
+  "properties": {
+    "provisioningState": "Succeeded"
+  },
+  "tags": {
+    "CostCenter": "Dinel",
+    "Environment": "Dev",
+    "OpsTeam": "IT-Drift"
+  },
+  "type": "Microsoft.Resources/resourceGroups"
+}
+
+
+
+
+6. BEREGN NETVÆRKS-SCOPES
+Med en del af Immeos script:
+
+
+$landingZoneName = "smile-sandbox"
+$costCenter = "Dinel"
+$opsTeam = "IT-Drift"
+$environment = "development"
+$organization = "dinel"
+$landingZoneNumber = 16
+$ipRangeExtension = $false
+$isSandbox = $false
+
+if (!$isSandbox) {
+    $environmentType = switch ($environment) {
+        "development"       { "nonproduction" }
+        "test"              { "nonproduction" }
+        "pre-production"    { "nonproduction" }
+        "production"        { "production" }
+    }
+} else {
+    $environmentType = "sandbox"
+}
+
+$landingZoneSubscription = "$landingZoneName-sub-$environmentType-$organization"
+
+
+# Calculate virtual network ip range 
+$octet1 = 10
+
+$octet2 = 128
+if ($organization -eq 'dinel') {
+    $octet2 += 64
+}
+
+switch ($environment) {
+    "development"       { $octet2 += 48 } # env = 3
+    "test"              { $octet2 += 32 } # env = 2
+    "pre-production"    { $octet2 += 16 } # env = 1
+    "production"        { $octet2 += 0 }  # env = 0
+}
+
+$lz1 = ($landingZoneNumber % 2) 
+$lz2 = (($landingZoneNumber -shr 1) % 2)
+$lz3 = (($landingZoneNumber -shr 2) % 2)
+$lz4 = (($landingZoneNumber -shr 3) % 2)
+$lz5 = (($landingZoneNumber -shr 4) % 2)
+$lz6 = (($landingZoneNumber -shr 5) % 2)
+
+$octet2 += $lz1*4 + $lz2*2 + $lz3
+$octet3 = $lz4*128 + $lz5*64 + $lz6*32
+$cidrRange = 22 - $ipRangeExtension
+
+$finalIpRange = "$octet1.$octet2.$octet3.0/$cidrRange"
+
+
+Write-Host $finalIpRange
+10.240.64.0/22
+
+
+6. TILFØJ SERVICE CONNECTION I AZURE DEVOPS
+
+Aktiver rolle "Application Administrator"
+
+
+7. TILRET BICEP
+Variabler / parametre:
+----------------------
+project_name
+company
+environment
+newVnetAddressPrefix
+vnetSubnet1AddressPrefix
+vnetSubnet2AddressPrefix
+
+vnetSubnet3Name			- slettet, da oprettelsen af vnettet skal slettes
+vnetSubnet3AddressPrefix	- slettet, da oprettelsen af vnettet skal slettes
+
+vmName
+storageAccountName
+vmUserGroupId
+keyVaultName
+keyVaultDeveloperGroupId
+
+privDns02name
+privDns02aRecordValue
+databaseAccounts_cosmos_name
+
+serviceConnectionSpid
+
+containerRegistryName
+
+Kode:
+-----
+Under resource virtualNetwork, slettet oprettelse af vnetSubnet3Name
+
+Tilføjet roleAssignment005 - som giver developers rollen [AURA] Manage Private DNS A-records
+
+Flyttet Cosmos Db oprettelsen til et modul, for at oprette den i Developers resource group
+
+
+8. DEPLOY BICEP
+
+az account set --subscription smile-sandbox-sub-nonproduction-dinel
+
+Valider template file med
+
+az deployment group validate --resource-group smile-sandbox-infrastructure-rg-d-dinel --template-file .\smileintegration-infrastructure-v2.bicep
+
+Når validering er successfuld, prøv at deploye
+
+az deployment group create --resource-group smile-sandbox-infrastructure-rg-d-dinel --template-file .\smileintegration-infrastructure-v2.bicep
+
+Fejler pga. for langt navn på Key Vault.
+Ændret navnet og kørt deployment igen (uden at slette tidligere oprettet)
+
+
+
+
+
+
+
+Checkliste:
+-----------
+opret resource groups						done
+
+slet VM i Entra ID		(fo-int*)			done
+slet peering i hub vnet						done
+slet Key Vault (incl. purge)					done
+
+Kør deployment igen						done
+
+Verificer at service connections i Azure DevOps virker		done
+Verificer at logon til VM virker (med MFA)			done
+Verificer at bastion RDP kommando fra DevOps virker		done
+Tilret rettigheder for PrivDns02				done
+Tilret rettigheder for Container Registry			done
+- service principal fra service connection har contributor
+  adgang. Det bør være nok.
+Opret hosts fil på VM						afventer deployment af Container Environment
+

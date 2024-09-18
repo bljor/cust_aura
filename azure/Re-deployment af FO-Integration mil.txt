@@ -1,0 +1,38 @@
+Re-deployment af FO-Integration miljøet efter fejl fra mig selv (slettede infrastruktur resource group ved en fejl)
+
+
+Navne på ressource grupper:
+---------------------------
+fointegration-infrastructure-rg-d-dinel
+fointegration-rg-d-dinel
+
+
+Kommandoer for oprettelse:
+--------------------------
+az group create --name fointegration-infrastructure-rg-d-dinel --location westeurope --tags Environment="Dev" CostCenter="Dinel" OpsTeam="IT-Drift"
+
+az group create --name fointegration-rg-d-dinel --location westeurope --tags Environment="Dev" CostCenter="Dinel" OpsTeam="IT-Drift"
+
+
+
+Checkliste:
+-----------
+opret resource groups						done
+
+slet VM i Entra ID		(fo-int*)			done
+slet peering i hub vnet						done
+slet Key Vault (incl. purge)					done
+
+Kør deployment igen						done
+
+Verificer at service connections i Azure DevOps virker		done
+Verificer at logon til VM virker (med MFA)			done
+Verificer at bastion RDP kommando fra DevOps virker		done
+Tilret rettigheder for PrivDns02				done
+Tilret rettigheder for Container Registry			done
+- service principal fra service connection har contributor
+  adgang. Det bør være nok.
+Opret hosts fil på VM						afventer deployment af Container Environment
+
+
+
