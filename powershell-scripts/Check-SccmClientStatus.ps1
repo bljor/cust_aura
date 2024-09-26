@@ -77,18 +77,20 @@ If ($local_status -eq 'Running') {
       If ($sccm_client_status -eq 'Running') {
 
         $sccm_client_version = (Get-WmiObject -NameSpace "root\ccm" -ComputerName $server.name -Class sms_client).ClientVersion
-
         $sccm_client = Get-WmiObject -ComputerName $server.name -list -NameSpace root\ccm -Class SMS_Client -ErrorAction SilentlyContinue
-
         $site = $sccm_client.getassignedsite().ssitecode
-
         $srv = [pscustomobject]@{ServerName=$server.name;ServerStatus="Responding";SccmStatus=$sccm_client_status;SccmVersion=$sccm_client_version;SccmSite=$site}
 
       } else {
-	$srv = [pscustomobject]@{ServerName=$server.name;ServerStatus="Responding";SccmStatus="Not installed"}
+
+	      $srv = [pscustomobject]@{ServerName=$server.name;ServerStatus="Responding";SccmStatus="Not installed"}
+
       }
+
     } else {
+      
       $srv = [pscustomobject]@{ServerName=$server.name;ServerStatus="Not responding"}
+
     }
     $output += $srv
 
@@ -97,12 +99,14 @@ If ($local_status -eq 'Running') {
     $sccm_client_version = ""
     $sccm_client = ""
     $site = ""
+    
   }
 } else {
+
   Write-Host "No SCCM client found on local computer"
+
 }
 
 If (Get-Item "Check-SccmClientStatus.csv" -ErrorAction SilentlyContinue) { Remove-Item "Check-SccmClientStatus.csv" }
 $output | Export-Csv -Path $OutFile -Delimiter $Delimiter -Encoding UTF8 -Force -NoTypeInformation
-5
 Stop-Transcript
