@@ -1,10 +1,59 @@
 <#
-
 .SYNOPSIS
+Check-SccmClientStatus-ps1 - Check SCCM klienter på servere.
 Script der checker alle servere fundet i AD'et for om der er installeret en SCCM klient, at den er kørende - og at den er forbundet
 til det rigtige site (det samme site, som dét site serveren scriptet afvikles fra er tilknyttet).
 
+.DESCRIPTION
+Dette script finder alle servere i Active Directory, forbinder til hver enkelt og checker om der er instealleret en SCCM agent på serveren.
+
+Resultatet skrives til en CSV-fil.
+
+.OUTPUTS
+Der vises en linje på skærmen for hver server der undersøges. Når alle servere er "analyseret" skrives resultatet for alle servere til en .CSV-fil.
+
+.PARAMETER OutFile
+Angiver hvilken fil resultatet skal skrives til. Hvis der ikke angives en fuld sti, så skrives der til samme folder som scriptet afvikles fra.
+
+Hvis parameter ikke angives, så skrives til Check-SccmClientStatus.csv
+
+.PARAMETER Delimiter
+Angiver hvilken seperator der anvendes til at adskille de forskellige værdier i eksporten.
+
+Hvis parameter ikke specificeres, så anvendes som standard semikolon (;)
+
+.PARAMETER Overwrite
+Angiver hvorvidt eksisterende output-fil skal overskrives.
+Hvis parameter ikke angives, og filen findes findes i forvejen - så vil der blive tilføjet data til den eksisterende. Inkluderende eventuelle kolonneoverskriver og andet indledende tekst.
+
+Transcript log-filen bliver ALTID slettet, inden en ny oprettes
+
+.EXAMPLE
+.\Check-SccmClientStatus.ps1 -outfile c:\temp\Sccm-Export.csv
+
+Her eksporters information til filen c:\temp\Sccm-Export.csv og anvender standard-adskiller som kolonne-adskiller i eksporten.
+
+.NOTES
+Version:	1.0
+Author:		Brian Lie Jørgensen (brian@wipe.dk)
+For:		  AURA
+Creation date:	18/09/2024
+Last update:	  26/09/2024
+
+Change Log:
+v1.0	18/09/2024		- NHC, Brian Lie Jørgensen
+v1.1  26/09/2024    - NHC, Brian Lie Jørgensen
+
 #>
+
+param (
+	[Parameter(Mandatory=$false)]
+	[string]$OutFile = "Check-SccmClientStatus.csv",
+	[Parameter(Mandatory=$false)]
+	[char]$Delimiter = ";",
+  [Parameter(Mandatory=$false)]
+  [switch]$Overwrite=$false
+)
 
 $output = @()
 
@@ -54,6 +103,6 @@ If ($local_status -eq 'Running') {
 }
 
 If (Get-Item "Check-SccmClientStatus.csv" -ErrorAction SilentlyContinue) { Remove-Item "Check-SccmClientStatus.csv" }
-$output | Export-Csv -Path Check-SccmClientStatus.csv -Delimiter ";" -Encoding UTF8 -Force -NoTypeInformation
-
+$output | Export-Csv -Path $OutFile -Delimiter $Delimiter -Encoding UTF8 -Force -NoTypeInformation
+5
 Stop-Transcript
