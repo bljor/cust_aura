@@ -1,18 +1,14 @@
 <#
 
 .SYNOPSIS
-Script der finder alle servere i AD'et, og efterfølgende forbinder til dem en for én, og checker hvorvidt der er installeret en SCCM
-klient på serveren.
-
-Hvis der er en klient, checkes status på klienten ligesom versionsnummeret på klienten bliver logget.
-
-Yderligere, logges hvilket SCCM site klienten er konfigureret til at bruge.
+Script der checker alle servere fundet i AD'et for om der er installeret en SCCM klient, at den er kørende - og at den er forbundet
+til det rigtige site (det samme site, som dét site serveren scriptet afvikles fra er tilknyttet).
 
 #>
 
 $output = @()
 
-Start-Transcript check-sccm-client-status.log
+Start-Transcript Check-SccmClientStatus.log
 
 $local_status = (Get-WmiObject Win32_Service -ErrorAction SilentlyContinue | Where-Object {$_.name -eq "ccmexec"}).State
 If ($local_status -eq 'Running') {
@@ -39,22 +35,25 @@ If ($local_status -eq 'Running') {
 
         $srv = [pscustomobject]@{ServerName=$server.name;ServerStatus="Responding";SccmStatus=$sccm_client_status;SccmVersion=$sccm_client_version;SccmSite=$site}
 
-        $output += $srv
-        $srv = ""
       } else {
 	$srv = [pscustomobject]@{ServerName=$server.name;ServerStatus="Responding";SccmStatus="Not installed"}
       }
     } else {
       $srv = [pscustomobject]@{ServerName=$server.name;ServerStatus="Not responding"}
-      $output += $srv
-      $srv = ""
     }
+    $output += $srv
+
+    $srv = ""
+    $sccm_client_status = ""
+    $sccm_client_version = ""
+    $sccm_client = ""
+    $site = ""
   }
 } else {
   Write-Host "No SCCM client found on local computer"
 }
 
 If (Get-Item "Check-SccmClientStatus.csv" -ErrorAction SilentlyContinue) { Remove-Item "Check-SccmClientStatus.csv" }
-$output | Export-Csv -Path Check-SccmClientStatus.csv -Delimiter ";" -Encoding UTF8 -Force
+$output | Export-Csv -Path Check-SccmClientStatus.csv -Delimiter ";" -Encoding UTF8 -Force -NoTypeInformation
 
 Stop-Transcript
