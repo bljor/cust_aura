@@ -12,6 +12,15 @@ Resultatet skrives til en CSV-fil.
 .OUTPUTS
 Der vises en linje på skærmen for hver server der undersøges. Når alle servere er "analyseret" skrives resultatet for alle servere til en .CSV-fil.
 
+.PARAMETER ClientType
+Angiver hvilken type klienter der skal undersøges.
+
+Mulige værdier er:
+
+  Servers          Finder servere i AD'et og rapporterer på dem
+  Clients          Finder Windows klienter i AD'et og rapporterer på dem
+  All		   Finder både servere og Windows klienter i AD'et og rapporterer på dem
+
 .PARAMETER OutFile
 Angiver hvilken fil resultatet skal skrives til. Hvis der ikke angives en fuld sti, så skrives der til samme folder som scriptet afvikles fra.
 
@@ -26,7 +35,7 @@ Hvis parameter ikke specificeres, så anvendes som standard semikolon (;)
 Angiver hvorvidt eksisterende output-fil skal overskrives.
 Hvis parameter ikke angives, og filen findes findes i forvejen - så vil der blive tilføjet data til den eksisterende. Inkluderende eventuelle kolonneoverskriver og andet indledende tekst.
 
-Transcript log-filen bliver ALTID slettet, inden en ny oprettes
+Transcript log-filen bliver ALTID slettet, inden en ny oprettes.
 
 .EXAMPLE
 .\Check-SccmClientStatus.ps1 -outfile c:\temp\Sccm-Export.csv
@@ -48,11 +57,14 @@ v1.1  26/09/2024    - NHC, Brian Lie Jørgensen
 
 param (
 	[Parameter(Mandatory=$false)]
+        [ValidateSet('servers','clients','all')]
+        [string]$ClientType = "Servers",
+        [Parameter(Mandatory=$false)]
 	[string]$OutFile = "Check-SccmClientStatus.csv",
 	[Parameter(Mandatory=$false)]
 	[char]$Delimiter = ";",
-  [Parameter(Mandatory=$false)]
-  [switch]$Overwrite=$false
+        [Parameter(Mandatory=$false)]
+        [switch]$Overwrite=$false
 )
 
 $output = @()
@@ -64,11 +76,21 @@ If ($local_status -eq 'Running') {
   $local_client = Get-WmiObject -List -NameSpace root\ccm -Class SMS_Client -ErrorAction SilentlyContinue
   $local_site = $local_client.getassignedsite().ssitecode
 
-  $servers = Get-AdComputer -Filter {operatingsystem -like '*server*'} -properties operatingsystem
+  # Determine the scope of investigations from the ClientType parameter
 
+  If ($ClientType -eq 'servers') {
+    $servers = Get-AdComputer -Filter {operatingsystem -like '*server*' -and enabled -eq $true} -properties operatingsystem,lastlogontimestamp
+  } elseif ($ClientType -eq 'clients') {
+    $servers = Get-AdComputer -Filter {operatingsystem -notlike '*server*' -and enabled -eq $true} -properties operatingsystem,lastlogontimestamp
+  } else {
+    $servers = Get-AdComputer -Filter {enabled -eq $true} -Properties operatingsystem,lastlogontimestamp
+  }
+
+  Write-Host "Performing check on" $servers.count devices "... this might take a while."
+	
   ForEach ($server in $servers) {
 
-    Write-Host "Checking server $server.name"
+    Write-Host "Checking device $server.name"
 
     If (Test-Connection -ComputerName $server.name -Count 1 -ErrorAction SilentlyContinue) {
 
@@ -77,20 +99,18 @@ If ($local_status -eq 'Running') {
       If ($sccm_client_status -eq 'Running') {
 
         $sccm_client_version = (Get-WmiObject -NameSpace "root\ccm" -ComputerName $server.name -Class sms_client).ClientVersion
+
         $sccm_client = Get-WmiObject -ComputerName $server.name -list -NameSpace root\ccm -Class SMS_Client -ErrorAction SilentlyContinue
+
         $site = $sccm_client.getassignedsite().ssitecode
-        $srv = [pscustomobject]@{ServerName=$server.name;ServerStatus="Responding";SccmStatus=$sccm_client_status;SccmVersion=$sccm_client_version;SccmSite=$site}
+
+        $srv = [pscustomobject]@{DeviceName=$server.name;ServerStatus="Responding";LastSeen=[datetime]::FromFileTime($server.lastlogontimestamp);SccmStatus=$sccm_client_status;SccmVersion=$sccm_client_version;SccmSite=$site}
 
       } else {
-
-	      $srv = [pscustomobject]@{ServerName=$server.name;ServerStatus="Responding";SccmStatus="Not installed"}
-
+	$srv = [pscustomobject]@{DeviceName=$server.name;ServerStatus="Responding";LastSeen=[datetime]::FromFileTime($server.lastlogontimestamp);SccmStatus="Not installed"}
       }
-
     } else {
-      
-      $srv = [pscustomobject]@{ServerName=$server.name;ServerStatus="Not responding"}
-
+      $srv = [pscustomobject]@{DeviceName=$server.name;ServerStatus="Not responding";LastSeen=[datetime]::FromFileTime($server.lastlogontimestamp)}
     }
     $output += $srv
 
@@ -99,14 +119,12 @@ If ($local_status -eq 'Running') {
     $sccm_client_version = ""
     $sccm_client = ""
     $site = ""
-    
   }
 } else {
-
   Write-Host "No SCCM client found on local computer"
-
 }
 
 If (Get-Item "Check-SccmClientStatus.csv" -ErrorAction SilentlyContinue) { Remove-Item "Check-SccmClientStatus.csv" }
 $output | Export-Csv -Path $OutFile -Delimiter $Delimiter -Encoding UTF8 -Force -NoTypeInformation
+5
 Stop-Transcript
