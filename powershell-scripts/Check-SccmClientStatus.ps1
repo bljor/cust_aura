@@ -126,5 +126,5 @@ If ($local_status -eq 'Running') {
 
 If (Get-Item "Check-SccmClientStatus.csv" -ErrorAction SilentlyContinue) { Remove-Item "Check-SccmClientStatus.csv" }
 $output | Export-Csv -Path $OutFile -Delimiter $Delimiter -Encoding UTF8 -Force -NoTypeInformation
-5
+
 Stop-Transcript

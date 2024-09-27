@@ -1,0 +1,26 @@
+**********************
+PowerShell transcript start
+Start time: 20240927132417
+Username: AURA\ext-bjo
+RunAs User: AURA\ext-bjo
+Configuration Name: 
+Machine: PC-00187 (Microsoft Windows NT 10.0.22621.0)
+Host Application: C:\Program Files\PowerShell\7\pwsh.dll
+Process ID: 5700
+PSVersion: 7.4.5
+PSEdition: Core
+GitCommitId: 7.4.5
+OS: Microsoft Windows 10.0.22621
+Platform: Win32NT
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1, 6.0, 7.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+WSManStackVersion: 3.0
+**********************
+Transcript started, output file is Get-EntraSigninInfo.log
+Retrieving all user accounts from Entra ID ...
+Writing 1833 user information to output file
+**********************
+PowerShell transcript end
+End time: 20240927132427
+**********************
